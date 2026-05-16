@@ -6,6 +6,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     let stateMachine = NotchStateMachine()
     private var windowController: NotchWindowController?
+    private var hotZone: HotZoneMonitor?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         let sm = stateMachine
@@ -13,6 +14,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             NotchShell(stateMachine: sm)
         }
         windowController?.show()
+
+        let monitor = HotZoneMonitor()
+        monitor.onEnter = { [weak self] in self?.stateMachine.send(.hoverEntered) }
+        monitor.onExit = { [weak self] in self?.stateMachine.send(.hoverExited) }
+        monitor.onEscape = { [weak self] in self?.stateMachine.send(.escapeKeyPressed) }
+        monitor.onClickOutside = { [weak self] in self?.stateMachine.send(.outsideClicked) }
+        monitor.start()
+        hotZone = monitor
 
         NotificationCenter.default.addObserver(
             forName: NSApplication.didChangeScreenParametersNotification,
