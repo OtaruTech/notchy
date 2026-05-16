@@ -10,7 +10,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         let sm = stateMachine
         windowController = NotchWindowController {
-            NotchPlaceholderView(stateMachine: sm)
+            NotchShell(stateMachine: sm)
         }
         windowController?.show()
 
@@ -20,19 +20,5 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         ) { [weak self] _ in
             Task { @MainActor in self?.windowController?.show() }
         }
-    }
-}
-
-/// Bare visualization used until NotchShell exists.
-struct NotchPlaceholderView: View {
-    let stateMachine: NotchStateMachine
-    var body: some View {
-        VStack {
-            Color.black
-                .frame(width: 210, height: 32)
-                .clipShape(.rect(bottomLeadingRadius: 18, bottomTrailingRadius: 18))
-            Spacer()
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
     }
 }
