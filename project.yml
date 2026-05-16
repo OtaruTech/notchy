@@ -1,0 +1,64 @@
+name: Notchy
+options:
+  bundleIdPrefix: tech.otaru
+  deploymentTarget:
+    macOS: "14.0"
+  developmentLanguage: en
+  createIntermediateGroups: true
+settings:
+  SWIFT_VERSION: "6.0"
+  SWIFT_STRICT_CONCURRENCY: complete
+  ENABLE_HARDENED_RUNTIME: YES
+  CODE_SIGN_STYLE: Automatic
+  MARKETING_VERSION: "0.1.0"
+  CURRENT_PROJECT_VERSION: "1"
+
+packages:
+  SnapshotTesting:
+    url: https://github.com/pointfreeco/swift-snapshot-testing
+    from: "1.17.0"
+
+targets:
+  Notchy:
+    type: application
+    platform: macOS
+    sources:
+      - Notchy
+    info:
+      path: Notchy/Info.plist
+      properties:
+        LSUIElement: true
+        NSBluetoothAlwaysUsageDescription: "Notchy reads connected AirPods battery levels to display them in the notch."
+        NSHumanReadableCopyright: "© 2026"
+    entitlements:
+      path: Notchy/Notchy.entitlements
+      properties:
+        com.apple.security.app-sandbox: false
+        com.apple.security.cs.allow-dyld-environment-variables: true
+        com.apple.security.cs.disable-library-validation: true
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: tech.otaru.Notchy
+      MACOSX_DEPLOYMENT_TARGET: "14.0"
+      ARCHS: arm64
+      VALID_ARCHS: arm64
+
+  NotchyTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources: [NotchyTests]
+    dependencies:
+      - target: Notchy
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: tech.otaru.NotchyTests
+      MACOSX_DEPLOYMENT_TARGET: "14.0"
+
+  NotchySnapshotTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources: [NotchySnapshotTests]
+    dependencies:
+      - target: Notchy
+      - package: SnapshotTesting
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: tech.otaru.NotchySnapshotTests
+      MACOSX_DEPLOYMENT_TARGET: "14.0"

@@ -8,6 +8,7 @@ DerivedData/
 *.xcodeproj/project.xcworkspace/xcuserdata/
 *.xcworkspace/xcuserdata/
 xcuserdata/
+*.xcodeproj/xcshareddata/xcschemes/
 
 # Swift Package Manager
 .swiftpm/
