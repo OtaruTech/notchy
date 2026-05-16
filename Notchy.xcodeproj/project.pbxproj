@@ -15,6 +15,7 @@
 		D1C05531A9C6AC2992F02AD1 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 697146552A7ABDF2F7002D2F /* SnapshotTesting */; };
 		D75585D988EBF9575F091BE8 /* Placeholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A477BB9F4F3C4290E5196ED /* Placeholder.swift */; };
 		DB3BC1673D33C876EDD8ADD3 /* NotchyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC3E0563BD6694DA94F039A /* NotchyApp.swift */; };
+		E5DD01A00973F5BE7459D7DB /* NotchWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CF68BED545BCBB3A8822B0 /* NotchWindowController.swift */; };
 		F29841C20EF81367D1331F67 /* ScreenGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB210D67BB9058034F788290 /* ScreenGeometryTests.swift */; };
 		FB8A981216B67649B07A7D4A /* Placeholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C48864F05F8FB04487850E /* Placeholder.swift */; };
 /* End PBXBuildFile section */
@@ -37,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		03CF68BED545BCBB3A8822B0 /* NotchWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchWindowController.swift; sourceTree = "<group>"; };
 		1A423F8D9BB22E46CA097007 /* NotchySnapshotTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NotchySnapshotTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2110AAECFFF10B27041EF2B3 /* NotchyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NotchyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		27C48864F05F8FB04487850E /* Placeholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Placeholder.swift; sourceTree = "<group>"; };
@@ -65,6 +67,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1E602BF86FB6C687744FA081 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				03CF68BED545BCBB3A8822B0 /* NotchWindowController.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
 		2C4F5505CACC63DD81CA3EAF /* State */ = {
 			isa = PBXGroup;
 			children = (
@@ -114,6 +124,7 @@
 				567B2D36795AD1D1E87789A1 /* Info.plist */,
 				3E25FC2C84830F4ECAEA0991 /* Notchy.entitlements */,
 				EEC3E0563BD6694DA94F039A /* NotchyApp.swift */,
+				1E602BF86FB6C687744FA081 /* App */,
 				96F0B6EFED0588E33C8DCF4A /* Features */,
 				2C4F5505CACC63DD81CA3EAF /* State */,
 				70635849FAB5CD4211B8F25D /* System */,
@@ -259,6 +270,7 @@
 				06F29F064FA18C158A92DB97 /* NotchIntent.swift in Sources */,
 				52F7BE5899E9B9BED6E4A3E7 /* NotchState.swift in Sources */,
 				0A19675515A4620A0B528D24 /* NotchStateMachine.swift in Sources */,
+				E5DD01A00973F5BE7459D7DB /* NotchWindowController.swift in Sources */,
 				DB3BC1673D33C876EDD8ADD3 /* NotchyApp.swift in Sources */,
 				622ED93051501AD7FA938E32 /* ScreenGeometry.swift in Sources */,
 			);
