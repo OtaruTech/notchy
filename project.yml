@@ -31,12 +31,11 @@ targets:
         LSUIElement: true
         NSBluetoothAlwaysUsageDescription: "Notchy reads connected AirPods battery levels to display them in the notch."
         NSHumanReadableCopyright: "© 2026"
-    entitlements:
-      path: Notchy/Notchy.entitlements
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: tech.otaru.Notchy
       MACOSX_DEPLOYMENT_TARGET: "14.0"
       ARCHS: arm64
+      CODE_SIGN_ENTITLEMENTS: Notchy/Notchy.entitlements
 
   NotchyTests:
     type: bundle.unit-test
