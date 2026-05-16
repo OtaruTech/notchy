@@ -8,8 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		06F29F064FA18C158A92DB97 /* NotchIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8A432C63FD5F5D5741DD0E /* NotchIntent.swift */; };
+		0A19675515A4620A0B528D24 /* NotchStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D122AD1F4DC763CB8C4850EF /* NotchStateMachine.swift */; };
 		52F7BE5899E9B9BED6E4A3E7 /* NotchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8947D82465DDF1474C3C2E4D /* NotchState.swift */; };
 		622ED93051501AD7FA938E32 /* ScreenGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3D7AB1CDC0C20683D95BE7 /* ScreenGeometry.swift */; };
+		B410B694159C4D693BB0B4A5 /* NotchStateMachineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F444436267456B4A7969E2BF /* NotchStateMachineTests.swift */; };
 		D1C05531A9C6AC2992F02AD1 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 697146552A7ABDF2F7002D2F /* SnapshotTesting */; };
 		D75585D988EBF9575F091BE8 /* Placeholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A477BB9F4F3C4290E5196ED /* Placeholder.swift */; };
 		DB3BC1673D33C876EDD8ADD3 /* NotchyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC3E0563BD6694DA94F039A /* NotchyApp.swift */; };
@@ -45,8 +47,10 @@
 		8947D82465DDF1474C3C2E4D /* NotchState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchState.swift; sourceTree = "<group>"; };
 		8C3D7AB1CDC0C20683D95BE7 /* ScreenGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenGeometry.swift; sourceTree = "<group>"; };
 		8F8A432C63FD5F5D5741DD0E /* NotchIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchIntent.swift; sourceTree = "<group>"; };
+		D122AD1F4DC763CB8C4850EF /* NotchStateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchStateMachine.swift; sourceTree = "<group>"; };
 		EB210D67BB9058034F788290 /* ScreenGeometryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenGeometryTests.swift; sourceTree = "<group>"; };
 		EEC3E0563BD6694DA94F039A /* NotchyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchyApp.swift; sourceTree = "<group>"; };
+		F444436267456B4A7969E2BF /* NotchStateMachineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchStateMachineTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +70,7 @@
 			children = (
 				8F8A432C63FD5F5D5741DD0E /* NotchIntent.swift */,
 				8947D82465DDF1474C3C2E4D /* NotchState.swift */,
+				D122AD1F4DC763CB8C4850EF /* NotchStateMachine.swift */,
 			);
 			path = State;
 			sourceTree = "<group>";
@@ -73,6 +78,7 @@
 		321CEC731CBA72C72536F09F /* NotchyTests */ = {
 			isa = PBXGroup;
 			children = (
+				F444436267456B4A7969E2BF /* NotchStateMachineTests.swift */,
 				5A477BB9F4F3C4290E5196ED /* Placeholder.swift */,
 				EB210D67BB9058034F788290 /* ScreenGeometryTests.swift */,
 			);
@@ -252,6 +258,7 @@
 			files = (
 				06F29F064FA18C158A92DB97 /* NotchIntent.swift in Sources */,
 				52F7BE5899E9B9BED6E4A3E7 /* NotchState.swift in Sources */,
+				0A19675515A4620A0B528D24 /* NotchStateMachine.swift in Sources */,
 				DB3BC1673D33C876EDD8ADD3 /* NotchyApp.swift in Sources */,
 				622ED93051501AD7FA938E32 /* ScreenGeometry.swift in Sources */,
 			);
@@ -261,6 +268,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B410B694159C4D693BB0B4A5 /* NotchStateMachineTests.swift in Sources */,
 				D75585D988EBF9575F091BE8 /* Placeholder.swift in Sources */,
 				F29841C20EF81367D1331F67 /* ScreenGeometryTests.swift in Sources */,
 			);
