@@ -7,9 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		622ED93051501AD7FA938E32 /* ScreenGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3D7AB1CDC0C20683D95BE7 /* ScreenGeometry.swift */; };
 		D1C05531A9C6AC2992F02AD1 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 697146552A7ABDF2F7002D2F /* SnapshotTesting */; };
 		D75585D988EBF9575F091BE8 /* Placeholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A477BB9F4F3C4290E5196ED /* Placeholder.swift */; };
 		DB3BC1673D33C876EDD8ADD3 /* NotchyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC3E0563BD6694DA94F039A /* NotchyApp.swift */; };
+		F29841C20EF81367D1331F67 /* ScreenGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB210D67BB9058034F788290 /* ScreenGeometryTests.swift */; };
 		FB8A981216B67649B07A7D4A /* Placeholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C48864F05F8FB04487850E /* Placeholder.swift */; };
 /* End PBXBuildFile section */
 
@@ -38,6 +40,8 @@
 		3E25FC2C84830F4ECAEA0991 /* Notchy.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Notchy.entitlements; sourceTree = "<group>"; };
 		567B2D36795AD1D1E87789A1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		5A477BB9F4F3C4290E5196ED /* Placeholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Placeholder.swift; sourceTree = "<group>"; };
+		8C3D7AB1CDC0C20683D95BE7 /* ScreenGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenGeometry.swift; sourceTree = "<group>"; };
+		EB210D67BB9058034F788290 /* ScreenGeometryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenGeometryTests.swift; sourceTree = "<group>"; };
 		EEC3E0563BD6694DA94F039A /* NotchyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchyApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -57,6 +61,7 @@
 			isa = PBXGroup;
 			children = (
 				5A477BB9F4F3C4290E5196ED /* Placeholder.swift */,
+				EB210D67BB9058034F788290 /* ScreenGeometryTests.swift */,
 			);
 			path = NotchyTests;
 			sourceTree = "<group>";
@@ -67,6 +72,14 @@
 				27C48864F05F8FB04487850E /* Placeholder.swift */,
 			);
 			path = NotchySnapshotTests;
+			sourceTree = "<group>";
+		};
+		70635849FAB5CD4211B8F25D /* System */ = {
+			isa = PBXGroup;
+			children = (
+				8C3D7AB1CDC0C20683D95BE7 /* ScreenGeometry.swift */,
+			);
+			path = System;
 			sourceTree = "<group>";
 		};
 		96F0B6EFED0588E33C8DCF4A /* Features */ = {
@@ -83,6 +96,7 @@
 				3E25FC2C84830F4ECAEA0991 /* Notchy.entitlements */,
 				EEC3E0563BD6694DA94F039A /* NotchyApp.swift */,
 				96F0B6EFED0588E33C8DCF4A /* Features */,
+				70635849FAB5CD4211B8F25D /* System */,
 			);
 			path = Notchy;
 			sourceTree = "<group>";
@@ -223,6 +237,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DB3BC1673D33C876EDD8ADD3 /* NotchyApp.swift in Sources */,
+				622ED93051501AD7FA938E32 /* ScreenGeometry.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -231,6 +246,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D75585D988EBF9575F091BE8 /* Placeholder.swift in Sources */,
+				F29841C20EF81367D1331F67 /* ScreenGeometryTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
