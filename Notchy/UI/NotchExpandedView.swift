@@ -9,6 +9,8 @@ struct NotchExpandedView: View {
     let onEmail: () -> Void
     let btFeature: BTFeature
 
+    @AppStorage("notchy.hintEnabled") private var hintEnabled = true
+
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: DesignTokens.cornerRadius, style: .continuous)
@@ -24,6 +26,10 @@ struct NotchExpandedView: View {
                         .padding(.bottom, 22)
                         .opacity(state.isExpanded ? 1 : 0)
                 }
+
+            if state == .hint, hintEnabled {
+                NotchHint().transition(.opacity)
+            }
         }
         .frame(width: width, height: height)
         .clipShape(
