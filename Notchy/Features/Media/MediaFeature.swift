@@ -58,14 +58,17 @@ final class MediaFeature {
     }
 
     func playPause() {
+        _mfLog("playPause() CALLED")
         Task { await bridge.send(.togglePlayPause) }
     }
 
     func next() {
+        _mfLog("next() CALLED")
         Task { await bridge.send(.next) }
     }
 
     func prev() {
+        _mfLog("prev() CALLED")
         Task { await bridge.send(.previous) }
     }
 }

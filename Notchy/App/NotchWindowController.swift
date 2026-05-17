@@ -42,7 +42,7 @@ final class NotchWindowController {
             p.ignoresMouseEvents = true
             p.isMovable = false
             p.isReleasedWhenClosed = false
-            p.contentView = NSHostingView(rootView: rootView())
+            p.contentView = FirstMouseHostingView(rootView: rootView())
             panel = p
         } else {
             panel?.setFrame(frame, display: true)
@@ -60,6 +60,10 @@ final class NotchWindowController {
     /// it needs to receive button clicks, scrubber drags, etc.
     func setIgnoresMouseEvents(_ ignore: Bool) {
         panel?.ignoresMouseEvents = ignore
+        if !ignore {
+            // Become key so SwiftUI buttons fire on click.
+            panel?.makeKeyAndOrderFront(nil)
+        }
     }
 
     /// Expanded panel area is wider/taller than the notch — we always allocate the
@@ -79,11 +83,31 @@ final class NotchWindowController {
     }
 }
 
+/// NSHostingView subclass that forwards the very first click to its subviews
+/// without requiring the window to be the key window. Without this, SwiftUI
+/// `Button` taps inside a `nonactivatingPanel` are silently swallowed —
+/// `acceptsFirstMouse` must explicitly opt in.
+private final class FirstMouseHostingView<C: View>: NSHostingView<C> {
+    override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
+}
+
 /// Borderless NSPanel subclass that allows becoming key so SwiftUI buttons
 /// inside our hosted view actually receive their click events.
-/// Default NSPanel.canBecomeKey is false for borderless panels, which silently
-/// drops button taps on our Now Playing / Drop tray / Mirror controls.
 private final class ClickableNotchPanel: NSPanel {
     override var canBecomeKey: Bool { true }
     override var canBecomeMain: Bool { false }
+
+    override func sendEvent(_ event: NSEvent) {
+        if event.type == .leftMouseDown {
+            let path = "/tmp/notchy.log"
+            let line = "\(Date()) [Notchy.Panel] leftMouseDown at locationInWindow=\(event.locationInWindow) ignoresMouseEvents=\(ignoresMouseEvents) isKey=\(isKeyWindow)\n"
+            if let d = line.data(using: .utf8) {
+                if FileManager.default.fileExists(atPath: path),
+                   let h = try? FileHandle(forWritingTo: URL(fileURLWithPath: path)) {
+                    h.seekToEndOfFile(); try? h.write(contentsOf: d); try? h.close()
+                } else { try? d.write(to: URL(fileURLWithPath: path)) }
+            }
+        }
+        super.sendEvent(event)
+    }
 }
