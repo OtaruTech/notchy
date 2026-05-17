@@ -13,7 +13,7 @@
 [![Latest Release](https://img.shields.io/github/v/release/OtaruTech/notchy?label=Download)](https://github.com/OtaruTech/notchy/releases/latest)
 
 A free, open-source macOS notch utility for Apple-Silicon MacBooks.
-NotchNook-style — Now Playing, file drop tray, AirPods burst, calendar, timer, camera mirror, system stats — all from the notch.
+NotchNook-style — Now Playing, **clipboard manager (⌘⇧V)**, file drop tray, AirPods burst, calendar, timer, camera mirror, system stats — all from the notch.
 
 <img src="docs/images/01-live-activity.png" width="500" alt="Live Activity strip in the notch">
 
@@ -34,6 +34,25 @@ Album art + waveform flank the physical notch while music plays. Hover to expand
 - **Click album art** → bring source app to front
 - **Two-finger horizontal swipe** over the notch → next / previous track
 - **Pause keeps controls visible** so you can re-play without re-summoning
+
+### 📋 Clipboard manager (new in v0.3)
+
+Press **⌘⇧V** anywhere — the panel drops down from under the notch with your last 100 copies as a horizontal card row. Paste-app workflow, anchored on the notch instead of floating mid-screen.
+
+- **Six item kinds with kind-aware previews** — text, URL, image, file, colour (hex/rgb), code (auto-detected by line count + punctuation density)
+- **Quick paste** — `1`–`9` slots on each card; press the number or click to paste back into the previously-focused app
+- **Previous clipboard restored** ~80 ms after the paste so your workflow doesn't lose context (toggleable)
+- **Privacy by design** — default-excludes 1Password, Bitwarden, Keychain Access, LastPass; respects the `org.nspasteboard.ConcealedType` UTI hint; all data lives in a local SQLite file (`~/Library/Application Support/tech.otaru.Notchy/clipboard.sqlite`, mode 0600); zero network
+- **SHA-256 dedupe** — copy the same string twice and the row is bumped, not duplicated
+- **Retention** — auto-purge items older than 7 / 30 / 90 days, or never delete
+- **Pause toggle** in the menu bar for one-click hold-off
+- **Search** the entire history live as you type
+- **Source attribution** — every card shows the app it came from (Safari, Figma, Slack…)
+
+Settings → **Clipboard** tab exposes the full config including an exclusion-list editor with `*` wildcards.
+
+📜 Full PRD: [`docs/specs/2026-05-17-clipboard-prd.md`](docs/specs/2026-05-17-clipboard-prd.md)
+📜 Implementation plan: [`docs/plans/2026-05-17-clipboard-plan.md`](docs/plans/2026-05-17-clipboard-plan.md)
 
 ### 🗂 Drop Tray
 
@@ -126,12 +145,18 @@ If a prompt doesn't appear, add Notchy manually in **System Settings → Privacy
 |---|---|
 | Hover over the notch (with music playing) | Now Playing expands |
 | Hover over the notch (no music) | Dashboard expands |
+| **⌘⇧V** anywhere | Open clipboard panel |
+| **⌘⌥N** / **⌘⌥M** | Toggle Dashboard / Mirror |
+| In clipboard panel: `1`–`9` | Paste that item directly |
+| In clipboard panel: `↩` | Paste selected, restore prior clipboard |
+| In clipboard panel: type to search | Filter live across content + source app |
 | Click ▶ / ⏸ / ⏪ / ⏩ | Control playback |
 | Click album art | Switch to the source app (Music / Spotify / Safari…) |
 | **Two-finger horizontal swipe** over the notch | Next / previous track |
 | Drag a file onto the notch | Drop tray expands |
 | Connect AirPods | 3s burst with battery |
 | Click 🌒 menu bar icon → Settings | Open Settings |
+| Click 🌒 → **Pause Clipboard Capture** | Hold off the clipboard recorder |
 | Click 🌒 → **Start Timer** | Begin 5/15/25-minute timer |
 | Click 🌒 → **Mirror** | Open webcam preview |
 | `Esc` or click outside | Collapse |
@@ -208,6 +233,8 @@ Notchy/
 │                          ScreenGeometry)
 ├── Features/
 │   ├── Media/            — Now Playing
+│   ├── Clipboard/        — Clipboard manager (store, capture, panel, paste)
+│   ├── Lyrics/           — Synced lyrics (optional, lrclib.net)
 │   ├── Drop/             — File tray
 │   ├── AirPods/          — Bluetooth burst
 │   ├── Calendar/         — Today's events
@@ -234,11 +261,20 @@ tail -f /tmp/notchy.log
 
 ## 🛣 Roadmap
 
-- [ ] Configurable hover delay
-- [ ] Configurable trigger gesture (hover vs click vs swipe)
+### Shipped recently
+- [x] **Clipboard manager** (v0.3) — Paste.app-style ⌘⇧V panel anchored on the notch
+- [x] **Global hotkeys** (v0.2.3) — ⌘⌥N dashboard, ⌘⌥M mirror, ⌘⇧V clipboard
+- [x] **Audio output badge** (v0.2.4) — AirPods / speakers / device name on Now Playing
+- [x] **Live progress bar** + **global timer pill** (v0.2.4)
+- [x] **First-launch welcome screen** (v0.2.3)
+
+### Next
+- [ ] **Clipboard v2** — pinboards, stack mode, edit-before-paste, plain-text paste hotkey, smart actions per kind
+- [ ] **HUD replacement** — volume / brightness sliders intercepted into the notch
+- [ ] **Charging indicator + wattage** in the live-activity strip
+- [ ] **Privacy indicators** — mic/camera-in-use dot in the notch
+- [ ] **Caffeine toggle** (keep-awake) in the dashboard
 - [ ] Custom widgets / extension SDK
-- [ ] Live volume / brightness HUD replacement
-- [ ] System notification hijacking
 - [ ] Sparkle auto-updater
 - [ ] Mac App Store distribution path (constrained by private-API usage)
 - [ ] Localization
