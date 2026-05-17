@@ -33,12 +33,11 @@ final class HotZoneMonitor {
     var onHorizontalSwipe: (Int) -> Void = { _ in }
 
     private var scrollAccumulator: CGFloat = 0
-    private let scrollThreshold: CGFloat = 25  // require a deliberate horizontal flick
-    private var scrollResetWork: DispatchWorkItem?
-    /// Cooldown so a single trackpad swipe (which fires many scrollWheel events)
-    /// only triggers ONE next/prev, not 3-5 in a row.
-    private var lastSwipeFire: Date = .distantPast
-    private let swipeCooldown: TimeInterval = 0.6
+    private let scrollThreshold: CGFloat = 25
+    /// True once we've already fired in this gesture; reset on `.began` / `.ended`.
+    /// Prevents one physical 2-finger flick (which emits dozens of scrollWheel
+    /// events + momentum phase) from triggering next-track multiple times.
+    private var swipeFiredThisGesture: Bool = false
 
     func start() {
         globalMonitor = NSEvent.addGlobalMonitorForEvents(
@@ -105,30 +104,31 @@ final class HotZoneMonitor {
 
         if event.type == .scrollWheel {
             guard nowInside else { return }
-            // Use scrollingDeltaX (precise trackpad) if available, else deltaX.
+            // Reset accumulator + fire-flag on the START of a new gesture.
+            if event.phase.contains(.began) {
+                scrollAccumulator = 0
+                swipeFiredThisGesture = false
+            }
+            // Fully reset when fingers lift OR momentum ends.
+            if event.phase.contains(.ended) || event.phase.contains(.cancelled)
+                || event.momentumPhase.contains(.ended) {
+                scrollAccumulator = 0
+                // keep swipeFiredThisGesture true through momentum, reset only
+                // when truly done — handled by .began on the next gesture.
+            }
+
             let dx = event.hasPreciseScrollingDeltas ? event.scrollingDeltaX : event.deltaX
             let dy = event.hasPreciseScrollingDeltas ? event.scrollingDeltaY : event.deltaY
-            // Only count primarily-horizontal gestures (ignore vertical scroll).
-            guard abs(dx) > abs(dy) else { return }
+            guard abs(dx) > abs(dy) else { return }  // horizontal-only
             scrollAccumulator += dx
-            scrollResetWork?.cancel()
-            // Only fire if past threshold AND past cooldown — prevents one
-            // physical swipe from skipping multiple tracks.
-            let now = Date()
-            if now.timeIntervalSince(lastSwipeFire) > swipeCooldown {
-                if scrollAccumulator >= scrollThreshold {
-                    onHorizontalSwipe(1)
-                    lastSwipeFire = now
-                    scrollAccumulator = 0
-                } else if scrollAccumulator <= -scrollThreshold {
-                    onHorizontalSwipe(-1)
-                    lastSwipeFire = now
-                    scrollAccumulator = 0
-                }
+            if swipeFiredThisGesture { return }  // already fired for this gesture
+            if scrollAccumulator >= scrollThreshold {
+                onHorizontalSwipe(1)
+                swipeFiredThisGesture = true
+            } else if scrollAccumulator <= -scrollThreshold {
+                onHorizontalSwipe(-1)
+                swipeFiredThisGesture = true
             }
-            let reset = DispatchWorkItem { [weak self] in self?.scrollAccumulator = 0 }
-            scrollResetWork = reset
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(400), execute: reset)
             return
         }
 

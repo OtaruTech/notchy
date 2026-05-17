@@ -37,7 +37,9 @@ struct NotchShell: View {
     }
 
     private var availableTabs: [NotchState] {
-        var tabs: [NotchState] = []
+        // Dashboard is always available so user can navigate back to it from any
+        // expanded feature (e.g. away from Now Playing while music keeps playing).
+        var tabs: [NotchState] = [.dashboard]
         if mediaFeature.current != nil { tabs.append(.media) }
         if !dropFeature.items.isEmpty { tabs.append(.drop) }
         if btFeature.connected != nil { tabs.append(.airpods) }
