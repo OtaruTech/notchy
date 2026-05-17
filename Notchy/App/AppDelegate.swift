@@ -139,6 +139,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // through to the desktop; expanded states need to receive clicks.
         windowController?.setIgnoresMouseEvents(!stateMachine.state.isExpanded)
 
+        // Grow / shrink hover keep-alive zone so cursor can move INTO the expanded
+        // panel content (buttons, scrubber, etc.) without triggering collapse.
+        hotZone?.isExpanded = stateMachine.state.isExpanded
+
         if stateMachine.state == .airpods {
             airpodsDismissTimer?.cancel()
             airpodsDismissTimer = Task { [weak self] in

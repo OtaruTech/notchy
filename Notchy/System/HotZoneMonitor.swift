@@ -9,6 +9,16 @@ final class HotZoneMonitor {
     private var leaveWorkItem: DispatchWorkItem?
     private var isInside = false
 
+    /// Controlled externally by AppDelegate when the state machine expands/collapses.
+    /// When expanded, the keep-alive zone grows to the full panel (540×220) so the
+    /// cursor can move down into the expanded content without triggering hoverExited.
+    /// When collapsed, the zone is the small notch hot rect only.
+    var isExpanded: Bool = false
+
+    /// Expanded keep-alive zone width/height (matches NotchWindowController.expandedFrame).
+    private let expandedWidth: CGFloat = 540
+    private let expandedHeight: CGFloat = 220
+
     var onEnter: () -> Void = {}
     var onExit: () -> Void = {}
     var onEscape: () -> Void = {}
@@ -31,6 +41,28 @@ final class HotZoneMonitor {
         localMonitor = nil
     }
 
+    /// Computes the current keep-alive rect in screen (bottom-left-origin) coords.
+    private func activeZone(on screen: NSScreen) -> CGRect? {
+        if isExpanded {
+            // Full panel area covering 540 × 220 below the notch.
+            let x = screen.frame.midX - expandedWidth / 2
+            // panel sits at top of screen; bottom-edge in NSScreen coords = maxY - height
+            let y = screen.frame.maxY - expandedHeight
+            return CGRect(x: x, y: y, width: expandedWidth, height: expandedHeight)
+        }
+        // Collapsed: just the notch hot zone + 4pt buffer.
+        guard let hot = ScreenGeometry.hotZone(
+            safeAreaTop: screen.safeAreaInsets.top,
+            screenFrame: screen.frame
+        ) else { return nil }
+        return CGRect(
+            x: screen.frame.minX + hot.minX,
+            y: screen.frame.maxY - hot.maxY,
+            width: hot.width,
+            height: hot.height
+        )
+    }
+
     private func handle(event: NSEvent) {
         if event.type == .keyDown, event.keyCode == 53 /* Esc */ {
             onEscape()
@@ -39,21 +71,10 @@ final class HotZoneMonitor {
 
         let mouseLocation = NSEvent.mouseLocation
         guard let screen = ScreenGeometry.notchedScreen(),
-              let hot = ScreenGeometry.hotZone(
-                safeAreaTop: screen.safeAreaInsets.top,
-                screenFrame: screen.frame
-              )
+              let zone = activeZone(on: screen)
         else { return }
 
-        // Convert hot zone (top-left origin) to screen coords (bottom-left origin).
-        let hotInScreenCoords = CGRect(
-            x: screen.frame.minX + hot.minX,
-            y: screen.frame.maxY - hot.maxY,
-            width: hot.width,
-            height: hot.height
-        )
-
-        let nowInside = hotInScreenCoords.contains(mouseLocation)
+        let nowInside = zone.contains(mouseLocation)
 
         if event.type == .leftMouseDown {
             if !nowInside { onClickOutside() }
