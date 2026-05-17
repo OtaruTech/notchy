@@ -89,6 +89,18 @@ final class NotchWindowController {
 /// `acceptsFirstMouse` must explicitly opt in.
 private final class FirstMouseHostingView<C: View>: NSHostingView<C> {
     override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
+
+    override func mouseDown(with event: NSEvent) {
+        let line = "\(Date()) [Notchy.Host] mouseDown at \(event.locationInWindow) hitTest=\(String(describing: hitTest(event.locationInWindow)))\n"
+        if let d = line.data(using: .utf8) {
+            let path = "/tmp/notchy.log"
+            if FileManager.default.fileExists(atPath: path),
+               let h = try? FileHandle(forWritingTo: URL(fileURLWithPath: path)) {
+                h.seekToEndOfFile(); try? h.write(contentsOf: d); try? h.close()
+            } else { try? d.write(to: URL(fileURLWithPath: path)) }
+        }
+        super.mouseDown(with: event)
+    }
 }
 
 /// Borderless NSPanel subclass that allows becoming key so SwiftUI buttons

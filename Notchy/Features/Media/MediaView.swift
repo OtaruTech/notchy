@@ -43,23 +43,24 @@ struct MediaView: View {
             }
 
             HStack(spacing: 14) {
-                Image(systemName: "backward.fill")
-                    .frame(width: 30, height: 30)
-                    .contentShape(Rectangle())
-                    .onTapGesture { onPrev() }
+                ZStack {
+                    Image(systemName: "backward.fill")
+                    TapCatcher { onPrev() }
+                }
+                .frame(width: 32, height: 32)
                 ZStack {
                     Circle().fill(.white)
                     Image(systemName: vm.isPlaying ? "pause.fill" : "play.fill")
                         .font(.system(size: 16))
                         .foregroundStyle(.black)
+                    TapCatcher { onPlayPause() }
                 }
                 .frame(width: 42, height: 42)
-                .contentShape(Circle())
-                .onTapGesture { onPlayPause() }
-                Image(systemName: "forward.fill")
-                    .frame(width: 30, height: 30)
-                    .contentShape(Rectangle())
-                    .onTapGesture { onNext() }
+                ZStack {
+                    Image(systemName: "forward.fill")
+                    TapCatcher { onNext() }
+                }
+                .frame(width: 32, height: 32)
             }
             .foregroundStyle(.white)
             .font(.system(size: 13))

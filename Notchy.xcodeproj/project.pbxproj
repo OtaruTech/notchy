@@ -29,6 +29,7 @@
 		51F5DC8A60F9A31A0F60D9FD /* TimerFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681D16180B1B4DF163605087 /* TimerFeatureTests.swift */; };
 		52F7BE5899E9B9BED6E4A3E7 /* NotchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8947D82465DDF1474C3C2E4D /* NotchState.swift */; };
 		551E7B961D39A3EFC0EBC7BD /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F293D4B6E0C68019AAA9E33 /* CalendarView.swift */; };
+		5735921B02AF0F53A22A2E7A /* TapCatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE2ADC19DBC393F59AF69C4A /* TapCatcher.swift */; };
 		5A48F3EBB9F12FAB4DF284AB /* DropViewSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8D50074A898F05304A0532 /* DropViewSnapshots.swift */; };
 		5C9D8706401C06F41C3B42CD /* DropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F074AAE64DB16A07192221 /* DropView.swift */; };
 		5D6B9A13CA6B3BC91D023208 /* MediaFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45A277B816298254CE708D9 /* MediaFeatureTests.swift */; };
@@ -151,6 +152,7 @@
 		F20F2178CBDA32615E6263FE /* CalendarViewSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewSnapshots.swift; sourceTree = "<group>"; };
 		F444436267456B4A7969E2BF /* NotchStateMachineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchStateMachineTests.swift; sourceTree = "<group>"; };
 		FB94675DE7AE9014D56A645B /* NotchTabBarSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchTabBarSnapshots.swift; sourceTree = "<group>"; };
+		FE2ADC19DBC393F59AF69C4A /* TapCatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapCatcher.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -336,6 +338,7 @@
 				ED727D1E09C7EBB1277E4711 /* NotchHint.swift */,
 				6633BDBED265ECF9E7B5D9E0 /* NotchShell.swift */,
 				A1100CE891853DA1D6ECC5C9 /* NotchTabBar.swift */,
+				FE2ADC19DBC393F59AF69C4A /* TapCatcher.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -559,6 +562,7 @@
 				D8D69AB95F6081DCC87FF4F3 /* SettingsView.swift in Sources */,
 				849A51251EE8815DCF7187BB /* SystemMonitorBridge.swift in Sources */,
 				2172A68118565954CEE3E589 /* SystemMonitorFeature.swift in Sources */,
+				5735921B02AF0F53A22A2E7A /* TapCatcher.swift in Sources */,
 				811A8EC798FAF3DF30D4C712 /* TimerFeature.swift in Sources */,
 				CD0691F820505A12B0D49DDE /* TimerView.swift in Sources */,
 			);

@@ -46,6 +46,12 @@ private final class DragInterceptView: NSView {
     }
     required init?(coder: NSCoder) { nil }
 
+    /// Critical: return nil so mouse clicks pass THROUGH to the SwiftUI hosting
+    /// view below. Drag operations don't use hitTest — they're routed via the
+    /// NSDraggingDestination protocol independently — so this only kills mouse
+    /// interception, not drag detection.
+    override func hitTest(_ point: NSPoint) -> NSView? { nil }
+
     override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
         session?.draggingEntered(sender) ?? []
     }
