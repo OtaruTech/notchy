@@ -2,6 +2,23 @@
 
 All notable changes to Notchy. Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [0.3.0] — 2026-05-17
+
+### Added
+- **Clipboard manager** — Paste.app-style clipboard history, anchored on the notch.
+  - Captures text / URL / image / file / colour / code on every system copy.
+  - **⌘⇧V** drops the panel out from under the notch — search field + horizontal card row + 1-9 quick-paste slots.
+  - Click or Enter pastes back into the previously-focused app and restores the prior clipboard 80 ms later (configurable).
+  - Default-excludes 1Password / Bitwarden / Keychain Access / LastPass; respects the `org.nspasteboard.ConcealedType` UTI.
+  - SHA-256 hash dedupe — copying the same string twice bumps `updated_at` instead of inserting a duplicate.
+  - Retention purge (7 / 30 / 90 / never) runs on launch and once per hour.
+  - Storage: local SQLite (no SwiftPM deps; raw `libsqlite3`) at `~/Library/Application Support/tech.otaru.Notchy/clipboard.sqlite`, file mode 0600. Images stored as separate PNGs alongside the DB.
+  - Menu bar: "Pause Clipboard Capture" toggle.
+- Settings → Clipboard tab: master on/off, retention picker, restore toggle, capture-images toggle, exclusion editor with "Reset to defaults", "Clear all" with confirm, "Reveal data folder" button.
+
+### Changed
+- Status-bar menu reorganised: Settings / Welcome / **Pause Clipboard** / Start Timer / Mirror / Quit.
+
 ## [0.2.4] — 2026-05-17
 
 ### Added

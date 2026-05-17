@@ -9,7 +9,14 @@ struct SettingsView: View {
     @AppStorage("notchy.debugLogging") private var debugLogging = false
     @AppStorage("notchy.hotkeysEnabled") private var hotkeysEnabled = true
     @AppStorage("notchy.lyricsEnabled") private var lyricsEnabled = false
+    @AppStorage("notchy.clipboardEnabled") private var clipboardEnabled = true
+    @AppStorage("notchy.clipboardRestore") private var clipboardRestore = true
+    @AppStorage("notchy.clipboardCaptureImages") private var clipboardCaptureImages = true
+    @AppStorage("notchy.clipboardRetentionDays") private var clipboardRetentionDays = 30
+    @AppStorage("notchy.clipboardExcludedBundleIDs") private var clipboardExclusions =
+        ClipboardCapturer.defaultExclusions
     @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
+    @State private var clearConfirmShown = false
 
     var body: some View {
         TabView {
@@ -68,6 +75,61 @@ struct SettingsView: View {
             .tabItem { Label("General", systemImage: "gearshape") }
 
             Form {
+                Section("Clipboard") {
+                    Toggle("Enable clipboard history", isOn: $clipboardEnabled)
+                    Toggle("Restore previous clipboard after paste", isOn: $clipboardRestore)
+                    Toggle("Capture images", isOn: $clipboardCaptureImages)
+                    Picker("Retention", selection: $clipboardRetentionDays) {
+                        Text("7 days").tag(7)
+                        Text("30 days").tag(30)
+                        Text("90 days").tag(90)
+                        Text("Never delete").tag(0)
+                    }
+                    Label("⌘⇧V  open clipboard panel", systemImage: "doc.on.clipboard")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Section("Excluded apps") {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Bundle IDs (comma-separated). Wildcards with `*` are allowed.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        TextEditor(text: $clipboardExclusions)
+                            .frame(minHeight: 60)
+                            .font(.system(size: 11, design: .monospaced))
+                            .padding(6)
+                            .background(
+                                RoundedRectangle(cornerRadius: 6)
+                                    .fill(.gray.opacity(0.08))
+                            )
+                        Button("Reset to defaults") {
+                            clipboardExclusions = ClipboardCapturer.defaultExclusions
+                        }
+                        .font(.caption)
+                    }
+                }
+                Section {
+                    Button("Clear all clipboard history…") { clearConfirmShown = true }
+                        .foregroundStyle(.red)
+                    Button("Reveal data folder in Finder") {
+                        let dir = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+                            .appendingPathComponent("tech.otaru.Notchy", isDirectory: true)
+                        NSWorkspace.shared.activateFileViewerSelecting([dir])
+                    }
+                }
+            }
+            .formStyle(.grouped)
+            .tabItem { Label("Clipboard", systemImage: "doc.on.clipboard") }
+            .alert("Erase all clipboard history?", isPresented: $clearConfirmShown) {
+                Button("Erase", role: .destructive) {
+                    Task { await (NSApp.delegate as? AppDelegate)?.clipboardFeature.clearAll() }
+                }
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text("This permanently removes all captured items and saved images. This cannot be undone.")
+            }
+
+            Form {
                 Section("Debug") {
                     Toggle("Verbose file logging", isOn: $debugLogging)
                     Text("Writes to `/tmp/notchy.log`. Off by default. Enable when reporting a bug.")
@@ -97,7 +159,7 @@ struct SettingsView: View {
             .tabItem { Label("Advanced", systemImage: "wrench.adjustable") }
         }
         .padding()
-        .frame(width: 480, height: 440)
+        .frame(width: 520, height: 560)
     }
 
     private var appVersion: String {
@@ -107,7 +169,10 @@ struct SettingsView: View {
     private func resetAll() {
         let keys = ["notchy.hintEnabled", "notchy.gaugeEnabled", "notchy.hoverDelayMs",
                     "notchy.swipeEnabled", "notchy.debugLogging", "notchy.hotkeysEnabled",
-                    "notchy.lyricsEnabled",
+                    "notchy.lyricsEnabled", "notchy.clipboardEnabled",
+                    "notchy.clipboardRestore", "notchy.clipboardCaptureImages",
+                    "notchy.clipboardRetentionDays", "notchy.clipboardExcludedBundleIDs",
+                    "notchy.clipboardPaused",
                     "notchy.hasPromptedAccessibilityV1", "notchy.welcomeShown"]
         for k in keys { UserDefaults.standard.removeObject(forKey: k) }
     }

@@ -29,6 +29,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private(set) var clipboardFeature: ClipboardFeature!
     private var clipboardCapturer: ClipboardCapturer?
     fileprivate var clipboardTargetApp: NSRunningApplication?
+    private var clipboardPauseMenuItem: NSMenuItem?
     private var statusItem: NSStatusItem?
     private var settingsWindow: NSWindow?
     private var welcomeWindow: NSWindow?
@@ -108,6 +109,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let menu = NSMenu()
         menu.addItem(NSMenuItem(title: "Settings…", action: #selector(openSettings), keyEquivalent: ","))
         menu.addItem(NSMenuItem(title: "Welcome…", action: #selector(openWelcome), keyEquivalent: ""))
+        menu.addItem(.separator())
+        let pauseItem = NSMenuItem(
+            title: UserDefaults.standard.bool(forKey: "notchy.clipboardPaused")
+                ? "Resume Clipboard Capture"
+                : "Pause Clipboard Capture",
+            action: #selector(toggleClipboardPaused),
+            keyEquivalent: ""
+        )
+        menu.addItem(pauseItem)
+        clipboardPauseMenuItem = pauseItem
+        menu.addItem(.separator())
         let timerMenu = NSMenu()
         timerMenu.addItem(NSMenuItem(title: "25 minutes", action: #selector(startTimer25), keyEquivalent: ""))
         timerMenu.addItem(NSMenuItem(title: "15 minutes", action: #selector(startTimer15), keyEquivalent: ""))
@@ -326,6 +338,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             welcomeWindow = win
         }
         welcomeWindow?.makeKeyAndOrderFront(nil)
+    }
+
+    @objc func toggleClipboardPaused() {
+        let current = UserDefaults.standard.bool(forKey: "notchy.clipboardPaused")
+        UserDefaults.standard.set(!current, forKey: "notchy.clipboardPaused")
+        clipboardPauseMenuItem?.title = !current
+            ? "Resume Clipboard Capture"
+            : "Pause Clipboard Capture"
     }
 
     @objc func openSettings() {
