@@ -22,3 +22,5 @@ Package.resolved
 # Local secrets
 *.p12
 *.mobileprovision
+release-build/
+Notchy-v*.app.zip
