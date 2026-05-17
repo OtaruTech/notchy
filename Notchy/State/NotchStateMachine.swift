@@ -7,6 +7,10 @@ final class NotchStateMachine {
 
     private(set) var state: NotchState = .idle
     private(set) var mediaAvailable: Bool = false
+    /// Last tab the user explicitly switched to via the tab bar. Restored on the
+    /// next hover-expand so the panel doesn't always snap back to Now Playing.
+    /// Reset to nil when media becomes unavailable.
+    private(set) var stickyTab: NotchState? = nil
 
     func send(_ intent: NotchIntent) {
         let new = reduce(state: state, intent: intent)
@@ -29,15 +33,17 @@ final class NotchStateMachine {
             }
 
         case .hoverEntered:
-            // Hover always expands. Prefer .media if active, else .dashboard.
+            // Hover always expands. Restore last user-pinned tab if any, else
+            // prefer .media when playing, else .dashboard.
             if state == .idle || state == .hint {
+                if let sticky = stickyTab, sticky.isExpanded { return sticky }
                 return mediaAvailable ? .media : .dashboard
             }
             return state
 
         case .hoverExited:
-            // Collapse from any hover-driven expansion (media or dashboard).
-            if state == .media || state == .dashboard {
+            // Collapse from any hover-driven expansion.
+            if state.isExpanded {
                 return mediaAvailable ? .hint : .idle
             }
             return state
@@ -76,7 +82,12 @@ final class NotchStateMachine {
             return mediaAvailable ? .hint : .idle
 
         case .tabSwitchedTo(let target):
-            return state.isExpanded ? target : state
+            // Only meaningful while expanded — remember and apply.
+            if state.isExpanded {
+                stickyTab = target
+                return target
+            }
+            return state
 
         case .mirrorRequested:
             return .mirror

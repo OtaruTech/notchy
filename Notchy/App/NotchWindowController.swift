@@ -83,24 +83,11 @@ final class NotchWindowController {
     }
 }
 
-/// NSHostingView subclass that forwards the very first click to its subviews
-/// without requiring the window to be the key window. Without this, SwiftUI
-/// `Button` taps inside a `nonactivatingPanel` are silently swallowed —
-/// `acceptsFirstMouse` must explicitly opt in.
+/// NSHostingView subclass that accepts first-mouse so SwiftUI buttons inside
+/// our `nonactivatingPanel` receive their click events without requiring the
+/// host window to be the key window.
 private final class FirstMouseHostingView<C: View>: NSHostingView<C> {
     override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
-
-    override func mouseDown(with event: NSEvent) {
-        let line = "\(Date()) [Notchy.Host] mouseDown at \(event.locationInWindow) hitTest=\(String(describing: hitTest(event.locationInWindow)))\n"
-        if let d = line.data(using: .utf8) {
-            let path = "/tmp/notchy.log"
-            if FileManager.default.fileExists(atPath: path),
-               let h = try? FileHandle(forWritingTo: URL(fileURLWithPath: path)) {
-                h.seekToEndOfFile(); try? h.write(contentsOf: d); try? h.close()
-            } else { try? d.write(to: URL(fileURLWithPath: path)) }
-        }
-        super.mouseDown(with: event)
-    }
 }
 
 /// Borderless NSPanel subclass that allows becoming key so SwiftUI buttons
@@ -108,18 +95,4 @@ private final class FirstMouseHostingView<C: View>: NSHostingView<C> {
 private final class ClickableNotchPanel: NSPanel {
     override var canBecomeKey: Bool { true }
     override var canBecomeMain: Bool { false }
-
-    override func sendEvent(_ event: NSEvent) {
-        if event.type == .leftMouseDown {
-            let path = "/tmp/notchy.log"
-            let line = "\(Date()) [Notchy.Panel] leftMouseDown at locationInWindow=\(event.locationInWindow) ignoresMouseEvents=\(ignoresMouseEvents) isKey=\(isKeyWindow)\n"
-            if let d = line.data(using: .utf8) {
-                if FileManager.default.fileExists(atPath: path),
-                   let h = try? FileHandle(forWritingTo: URL(fileURLWithPath: path)) {
-                    h.seekToEndOfFile(); try? h.write(contentsOf: d); try? h.close()
-                } else { try? d.write(to: URL(fileURLWithPath: path)) }
-            }
-        }
-        super.sendEvent(event)
-    }
 }

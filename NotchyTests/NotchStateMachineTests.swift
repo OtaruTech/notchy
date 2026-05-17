@@ -106,4 +106,17 @@ struct NotchStateMachineTests {
         sm.send(.tabSwitchedTo(.calendar))
         #expect(sm.state == .calendar)
     }
+
+    @Test func stickyTabRestoredOnNextHover() {
+        let sm = NotchStateMachine()
+        sm.send(.mediaAvailabilityChanged(true))
+        sm.send(.hoverEntered)
+        #expect(sm.state == .media)
+        sm.send(.tabSwitchedTo(.dashboard))
+        #expect(sm.state == .dashboard)
+        sm.send(.hoverExited)
+        #expect(sm.state == .hint)
+        sm.send(.hoverEntered)
+        #expect(sm.state == .dashboard)  // sticky restored, not jumping back to media
+    }
 }

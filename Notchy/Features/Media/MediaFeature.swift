@@ -2,6 +2,7 @@ import Foundation
 import Observation
 
 fileprivate func _mfLog(_ msg: String) {
+    guard UserDefaults.standard.bool(forKey: "notchy.debugLogging") else { return }
     let line = "\(Date()) [Notchy.MediaFeature] \(msg)\n"
     let path = "/tmp/notchy.log"
     if let data = line.data(using: .utf8) {
@@ -59,17 +60,14 @@ final class MediaFeature {
     }
 
     func playPause() {
-        _mfLog("playPause() CALLED")
         Task { await bridge.send(.togglePlayPause) }
     }
 
     func next() {
-        _mfLog("next() CALLED")
         Task { await bridge.send(.next) }
     }
 
     func prev() {
-        _mfLog("prev() CALLED")
         Task { await bridge.send(.previous) }
     }
 }

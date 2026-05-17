@@ -1,8 +1,9 @@
 import Foundation
 
-/// Append a line to /tmp/notchy.log for debugging (NSLog/print don't reliably
-/// reach `log show` from sandbox-free Swift apps on recent macOS).
+/// Append a line to /tmp/notchy.log when `notchy.debugLogging` UserDefault is true.
+/// Set via: `defaults write tech.otaru.Notchy notchy.debugLogging -bool true`
 fileprivate func _debugLog(_ msg: String) {
+    guard UserDefaults.standard.bool(forKey: "notchy.debugLogging") else { return }
     let line = "\(Date()) \(msg)\n"
     let path = "/tmp/notchy.log"
     if let data = line.data(using: .utf8) {
