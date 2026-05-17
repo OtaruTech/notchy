@@ -77,8 +77,10 @@ final class NotchWindowController {
     /// Expanded panel area is wider/taller than the notch — we always allocate the
     /// max expansion box so SwiftUI can animate within it.
     private func expandedFrame(hot: CGRect) -> CGRect {
-        let expandedWidth: CGFloat = 540
-        let expandedHeight: CGFloat = 220
+        // Wide enough to host the clipboard panel's horizontal card strip.
+        // Other states render centered within and clip to their own width.
+        let expandedWidth: CGFloat = 920
+        let expandedHeight: CGFloat = 320
         let x = hot.midX - expandedWidth / 2
         return CGRect(x: x, y: 0, width: expandedWidth, height: expandedHeight)
     }

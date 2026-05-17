@@ -1,6 +1,22 @@
 import AppKit
 import Carbon.HIToolbox
 
+fileprivate func _pasteLog(_ msg: String) {
+    guard UserDefaults.standard.bool(forKey: "notchy.debugLogging") else { return }
+    let line = "\(Date()) [Notchy.Paste] \(msg)\n"
+    let path = "/tmp/notchy.log"
+    if let data = line.data(using: .utf8) {
+        if FileManager.default.fileExists(atPath: path),
+           let h = try? FileHandle(forWritingTo: URL(fileURLWithPath: path)) {
+            h.seekToEndOfFile()
+            try? h.write(contentsOf: data)
+            try? h.close()
+        } else {
+            try? data.write(to: URL(fileURLWithPath: path))
+        }
+    }
+}
+
 /// Writes a `ClipboardItem` to the system pasteboard, refocuses the previous
 /// app, synthesises a ⌘V keystroke, and optionally restores the user's prior
 /// clipboard content shortly after.
@@ -29,11 +45,7 @@ enum PasteEngine {
         // 40ms wasn't enough on slower machines or when the target was
         // background-launched. 150ms is reliable and still feels instant.
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-            if UserDefaults.standard.bool(forKey: "notchy.debugLogging") {
-                NSLog("[Notchy.Paste] synth CmdV (frontmost=%@ trusted=%d)",
-                      NSWorkspace.shared.frontmostApplication?.localizedName ?? "?",
-                      AXIsProcessTrusted() ? 1 : 0)
-            }
+            _pasteLog("synth CmdV frontmost=\(NSWorkspace.shared.frontmostApplication?.localizedName ?? "?") trusted=\(AXIsProcessTrusted() ? 1 : 0)")
             synthesizeCmdV()
             if restorePrevious {
                 // Wait long enough that the destination app has actually read

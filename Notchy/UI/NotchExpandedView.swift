@@ -89,6 +89,7 @@ struct NotchExpandedView: View {
     }
 
     private var width: CGFloat {
+        if state == .clipboard { return DesignTokens.clipboardWidth }
         if state.isExpanded { return DesignTokens.expandedWidth }
         let actualNotchW = ScreenGeometry.liveNotchWidth()
         let hasMedia = mediaVM != nil
@@ -116,7 +117,7 @@ struct NotchExpandedView: View {
             if lyricsEnabled, mediaVM != nil, lyricsFeature.hasAny { return base + 34 }
             return base
         case .drop: return DesignTokens.expandedHeightDrop
-        case .clipboard: return DesignTokens.expandedHeightDrop  // 220 — fit search + cards + hints
+        case .clipboard: return DesignTokens.clipboardHeight
         default: return DesignTokens.expandedHeightDefault
         }
     }

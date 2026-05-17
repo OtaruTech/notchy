@@ -47,6 +47,7 @@
 		6607034E836A622EC384CA81 /* LyricsFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF411B38876B3174927368AA /* LyricsFeature.swift */; };
 		77D1EDBBCA6AE49016C7EA3D /* AirPodsViewSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B72C57C5C358F93B591E5A1 /* AirPodsViewSnapshots.swift */; };
 		781ED9252B58782D95E47750 /* DropItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D601C50E08A7A66E52CBFCF4 /* DropItem.swift */; };
+		7AA7B6325EFA3AEF46D9C0FC /* ClipboardKindChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = C771911B2250D5B134445E2C /* ClipboardKindChip.swift */; };
 		811A8EC798FAF3DF30D4C712 /* TimerFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B2176394FA4A39E56579A2 /* TimerFeature.swift */; };
 		81D7868D4FA2A62F2E7619EC /* LyricsBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEFBDBBA2E81D30514B4B484 /* LyricsBridge.swift */; };
 		82CC0F4AE909CD17F25D7DD9 /* NotchHint.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED727D1E09C7EBB1277E4711 /* NotchHint.swift */; };
@@ -168,6 +169,7 @@
 		C392C6E5409579A1E5477CC7 /* CalendarFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarFeature.swift; sourceTree = "<group>"; };
 		C49CFCBE4B35D330FB05BD5E /* LyricsTicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricsTicker.swift; sourceTree = "<group>"; };
 		C5BF2C7B3BA24BABF10B7FEE /* MediaFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaFeature.swift; sourceTree = "<group>"; };
+		C771911B2250D5B134445E2C /* ClipboardKindChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardKindChip.swift; sourceTree = "<group>"; };
 		C7DB84D3D526593E9918B079 /* GaugePillSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaugePillSnapshots.swift; sourceTree = "<group>"; };
 		D122AD1F4DC763CB8C4850EF /* NotchStateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchStateMachine.swift; sourceTree = "<group>"; };
 		D153BA554912F668AC5887CA /* BTFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BTFeature.swift; sourceTree = "<group>"; };
@@ -209,6 +211,7 @@
 				8BDCFC40324F50CA77E2C4E9 /* ClipboardCapturer.swift */,
 				4FEA9F562C67C167FFE5C8D6 /* ClipboardFeature.swift */,
 				F8C132AC85ACAD2523542DE3 /* ClipboardItem.swift */,
+				C771911B2250D5B134445E2C /* ClipboardKindChip.swift */,
 				485C2B895268772A9BF67952 /* ClipboardPanel.swift */,
 				4A2132BBDC5D21838A8334F4 /* ClipboardStore.swift */,
 				FD3A3278F5F109DD0119B52A /* ItemCard.swift */,
@@ -606,6 +609,7 @@
 				E7278F76CBAC9EC0C6D76809 /* ClipboardCapturer.swift in Sources */,
 				1D9A6E7602F202E31AB6F90F /* ClipboardFeature.swift in Sources */,
 				27165D68CF520A434326CEE5 /* ClipboardItem.swift in Sources */,
+				7AA7B6325EFA3AEF46D9C0FC /* ClipboardKindChip.swift in Sources */,
 				195C4713F5791E9228EB7CB4 /* ClipboardPanel.swift in Sources */,
 				E2AD4084D1E9A524DC173903 /* ClipboardStore.swift in Sources */,
 				F5144B2A34BE3536C844C2C9 /* DashboardView.swift in Sources */,

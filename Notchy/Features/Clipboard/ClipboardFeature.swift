@@ -22,6 +22,11 @@ final class ClipboardFeature {
         }
     }
 
+    /// Currently active filter chip, nil = "All".
+    var kindFilter: ClipboardItem.Kind? = nil {
+        didSet { selectedIndex = 0 }
+    }
+
     private let store: ClipboardStore
     private let recentLimit = 100
 
@@ -85,8 +90,18 @@ final class ClipboardFeature {
         count = 0
     }
 
-    /// Items the UI should render — search results when querying, else recent.
+    /// Items the UI should render — search results when querying, else recent,
+    /// then filtered by `kindFilter`.
     var displayed: [ClipboardItem] {
-        query.isEmpty ? recent : searchResults
+        let base = query.isEmpty ? recent : searchResults
+        guard let kind = kindFilter else { return base }
+        return base.filter { $0.kind == kind }
+    }
+
+    /// Count of items currently available for each kind (uses `recent`, ignores
+    /// search query so the chip counts stay stable while typing).
+    func count(kind: ClipboardItem.Kind?) -> Int {
+        guard let kind else { return recent.count }
+        return recent.lazy.filter { $0.kind == kind }.count
     }
 }
