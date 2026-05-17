@@ -1,6 +1,8 @@
 <div align="center">
 
-# 🌒 Notchy
+<img src="docs/images/00-app-icon.png" width="128" height="128" alt="Notchy app icon">
+
+# Notchy
 
 **Turn your MacBook's notch into a delightful interactive surface.**
 
