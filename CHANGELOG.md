@@ -2,6 +2,19 @@
 
 All notable changes to Notchy. Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [0.2.4] — 2026-05-17
+
+### Added
+- **Audio output badge** in Now Playing — small pill above the track title showing the current output device (`🎧 AirPods`, `🔊 MacBook Speakers`, etc.) via CoreAudio HAL with AirPods/Beats name detection
+- **Live-ticking progress bar** — scrubber + elapsed-time label tick smoothly between sparse `media-control` events; `NowPlayingVM` interpolates from a captured `snapshotDate`
+- **Global timer pill** — when a countdown is running, the live-activity strip's right wing shows a red/orange ring + `mm:ss` countdown; remains visible while music continues
+- **Synced lyrics** (opt-in, default OFF) — `LyricsBridge` fetches from lrclib.net (exact `get` → loose `search` → plain-text fallback → Apple Music AppleScript). When enabled, a thin black capsule with the current LRC line appears below the notch
+- Settings → Now Playing → "Show synced lyrics below notch" toggle
+
+### Changed
+- Live-activity strip renders when EITHER media is loaded OR a timer is running (was: media only)
+- Plain-text lyrics rendered when synced LRC isn't available (tagged "Plain lyrics (no timing)")
+
 ## [0.2.3] — 2026-05-17
 
 ### Added
