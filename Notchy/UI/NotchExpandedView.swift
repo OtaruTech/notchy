@@ -12,6 +12,7 @@ struct NotchExpandedView: View {
     let calendarFeature: CalendarFeature
     let timerFeature: TimerFeature
     let systemMonitor: SystemMonitorFeature
+    let mirrorFeature: MirrorFeature
     let availableTabs: [NotchState]
     let onTabSwitch: (NotchState) -> Void
 
@@ -92,6 +93,7 @@ struct NotchExpandedView: View {
         case .calendar: return Color(red: 0.98, green: 0.65, blue: 0.20)
         case .timer: return Color(red: 0.97, green: 0.38, blue: 0.38)
         case .dashboard: return Color(red: 0.55, green: 0.62, blue: 0.85)
+        case .mirror: return Color(red: 0.50, green: 0.85, blue: 1.00)
         case .hint, .idle: return .clear
         }
     }
@@ -148,6 +150,8 @@ struct NotchExpandedView: View {
                 onResume: { timerFeature.resume() },
                 onReset: { timerFeature.reset() }
             )
+        case .mirror:
+            MirrorView(feature: mirrorFeature)
         default: EmptyView()
         }
     }

@@ -10,11 +10,12 @@ enum NotchState: Equatable, Sendable {
     case airpods
     case calendar
     case timer
+    case mirror
 
     var isExpanded: Bool {
         switch self {
         case .idle, .hint: return false
-        case .dashboard, .media, .drop, .airpods, .calendar, .timer: return true
+        case .dashboard, .media, .drop, .airpods, .calendar, .timer, .mirror: return true
         }
     }
 }

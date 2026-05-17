@@ -20,6 +20,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private(set) var calendarFeature: CalendarFeature!
     private(set) var timerFeature: TimerFeature!
     private(set) var systemMonitor: SystemMonitorFeature!
+    let mirrorFeature = MirrorFeature()
     private var statusItem: NSStatusItem?
     private var settingsWindow: NSWindow?
 
@@ -55,6 +56,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let timerItem = NSMenuItem(title: "Start Timer", action: nil, keyEquivalent: "")
         timerItem.submenu = timerMenu
         menu.addItem(timerItem)
+        menu.addItem(NSMenuItem(title: "Mirror", action: #selector(openMirror), keyEquivalent: "m"))
         menu.addItem(.separator())
         menu.addItem(NSMenuItem(title: "Quit Notchy", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         item.menu = menu
@@ -67,6 +69,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let cf = calendarFeature!
         let tf = timerFeature!
         let smon = systemMonitor!
+        let mir = mirrorFeature
         windowController = NotchWindowController { [weak self] in
             NotchShell(
                 stateMachine: sm,
@@ -77,7 +80,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 btFeature: bf,
                 calendarFeature: cf,
                 timerFeature: tf,
-                systemMonitor: smon
+                systemMonitor: smon,
+                mirrorFeature: mir
             )
         }
         windowController?.show()
@@ -212,6 +216,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func startTimer25() { timerFeature.start(seconds: 1500) }
     @objc func startTimer15() { timerFeature.start(seconds: 900) }
     @objc func startTimer5() { timerFeature.start(seconds: 300) }
+
+    @objc func openMirror() {
+        stateMachine.send(.mirrorRequested)
+        Task { await mirrorFeature.start() }
+    }
 
     /// Trigger the system Accessibility prompt so Notchy appears in
     /// System Settings → Privacy & Security → Accessibility. Without this,

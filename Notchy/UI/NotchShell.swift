@@ -10,6 +10,7 @@ struct NotchShell: View {
     let calendarFeature: CalendarFeature
     let timerFeature: TimerFeature
     let systemMonitor: SystemMonitorFeature
+    let mirrorFeature: MirrorFeature
     @AppStorage("notchy.gaugeEnabled") private var gaugeEnabled = true
 
     var body: some View {
@@ -25,6 +26,7 @@ struct NotchShell: View {
                 calendarFeature: calendarFeature,
                 timerFeature: timerFeature,
                 systemMonitor: systemMonitor,
+                mirrorFeature: mirrorFeature,
                 availableTabs: availableTabs,
                 onTabSwitch: { stateMachine.send(.tabSwitchedTo($0)) }
             )
@@ -41,6 +43,7 @@ struct NotchShell: View {
         if btFeature.connected != nil { tabs.append(.airpods) }
         if !calendarFeature.events.isEmpty { tabs.append(.calendar) }
         if timerFeature.state != .idle { tabs.append(.timer) }
+        if mirrorFeature.status == .running { tabs.append(.mirror) }
         return tabs
     }
 }

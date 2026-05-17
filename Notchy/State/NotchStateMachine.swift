@@ -77,6 +77,9 @@ final class NotchStateMachine {
 
         case .tabSwitchedTo(let target):
             return state.isExpanded ? target : state
+
+        case .mirrorRequested:
+            return .mirror
         }
     }
 }

@@ -39,6 +39,7 @@ targets:
         LSUIElement: true
         NSBluetoothAlwaysUsageDescription: "Notchy reads connected AirPods battery levels to display them in the notch."
         NSCalendarsUsageDescription: "Notchy shows your upcoming events in the notch panel."
+        NSCameraUsageDescription: "Notchy's Mirror widget previews your camera so you can check yourself before a video call."
         NSHumanReadableCopyright: "© 2026"
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: tech.otaru.Notchy

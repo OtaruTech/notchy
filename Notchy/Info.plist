@@ -24,6 +24,8 @@
 	<string>Notchy reads connected AirPods battery levels to display them in the notch.</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>Notchy shows your upcoming events in the notch panel.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Notchy's Mirror widget previews your camera so you can check yourself before a video call.</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>© 2026</string>
 </dict>

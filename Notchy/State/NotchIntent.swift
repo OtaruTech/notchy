@@ -17,4 +17,5 @@ enum NotchIntent: Equatable, Sendable {
     case timerTicked
     case timerCompleted
     case tabSwitchedTo(NotchState)
+    case mirrorRequested
 }
