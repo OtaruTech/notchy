@@ -8,7 +8,7 @@ enum DesignTokens {
     static let expandedHeightDefault: CGFloat = 180
     static let expandedHeightDrop: CGFloat = 220
     static let clipboardWidth: CGFloat = 880
-    static let clipboardHeight: CGFloat = 300
+    static let clipboardHeight: CGFloat = 320
     static let cornerRadius: CGFloat = 28
 
     // Animation

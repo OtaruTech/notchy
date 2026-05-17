@@ -67,7 +67,9 @@ struct NotchExpandedView: View {
             }
         }
         .overlay(alignment: .bottom) {
-            if state.isExpanded, availableTabs.count >= 2 {
+            // Tab bar is suppressed for clipboard so cards have the full panel
+            // height (clipboard has its own footer hint row).
+            if state.isExpanded, state != .clipboard, availableTabs.count >= 2 {
                 NotchTabBar(
                     availableTabs: availableTabs,
                     active: state,

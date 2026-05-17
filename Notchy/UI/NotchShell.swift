@@ -56,7 +56,9 @@ struct NotchShell: View {
         if !calendarFeature.events.isEmpty { tabs.append(.calendar) }
         if timerFeature.state != .idle { tabs.append(.timer) }
         if mirrorFeature.status == .running { tabs.append(.mirror) }
-        if stateMachine.state == .clipboard { tabs.append(.clipboard) }
+        // Clipboard is a hotkey-launched panel — not a tab. Its own footer
+        // hints replace the tab bar so the panel has the full vertical
+        // budget for cards.
         return tabs
     }
 }
