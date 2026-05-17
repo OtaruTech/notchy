@@ -21,8 +21,8 @@ enum MRCommand: String {
     case play
     case pause
     case togglePlayPause = "toggle-play-pause"
-    case next
-    case previous
+    case next = "next-track"
+    case previous = "previous-track"
 }
 
 struct NowPlayingInfo: Equatable, Sendable {
