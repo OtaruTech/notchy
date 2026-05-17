@@ -21,6 +21,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private(set) var timerFeature: TimerFeature!
     private(set) var systemMonitor: SystemMonitorFeature!
     private var statusItem: NSStatusItem?
+    private var settingsWindow: NSWindow?
 
     nonisolated(unsafe) private static var weakSelf: AppDelegate?
 
@@ -167,10 +168,23 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc func openSettings() {
+        // LSUIElement (accessory) apps can't reliably show SwiftUI's Settings scene.
+        // Promote to regular activation, host SettingsView in an NSWindow, revert on close.
+        NSApp.setActivationPolicy(.regular)
         NSApp.activate(ignoringOtherApps: true)
-        if #available(macOS 14, *) {
-            NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+
+        if settingsWindow == nil {
+            let hosting = NSHostingController(rootView: SettingsView())
+            let window = NSWindow(contentViewController: hosting)
+            window.title = "Notchy Settings"
+            window.styleMask = [.titled, .closable, .miniaturizable]
+            window.setContentSize(NSSize(width: 420, height: 320))
+            window.isReleasedWhenClosed = false
+            window.center()
+            window.delegate = self
+            settingsWindow = window
         }
+        settingsWindow?.makeKeyAndOrderFront(nil)
     }
 
     @objc func startTimer25() { timerFeature.start(seconds: 1500) }
@@ -187,5 +201,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         signal(SIGTERM, handler)
         signal(SIGABRT, handler)
         signal(SIGSEGV, handler)
+    }
+}
+
+extension AppDelegate: NSWindowDelegate {
+    nonisolated func windowWillClose(_ notification: Notification) {
+        Task { @MainActor in
+            // Settle one runloop tick before reverting activation policy,
+            // so AppKit finishes the close transition cleanly.
+            try? await Task.sleep(for: .milliseconds(100))
+            NSApp.setActivationPolicy(.accessory)
+        }
     }
 }
