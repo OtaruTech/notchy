@@ -39,6 +39,8 @@ struct NotchTabBar: View {
         case .airpods: return "airpods"
         case .calendar: return "calendar"
         case .timer: return "timer"
+        case .mirror: return "video.fill"
+        case .dashboard: return "square.grid.2x2.fill"
         default: return "questionmark"
         }
     }
@@ -50,6 +52,8 @@ struct NotchTabBar: View {
         case .airpods: return "AirPods"
         case .calendar: return "Calendar"
         case .timer: return "Timer"
+        case .mirror: return "Mirror"
+        case .dashboard: return "Dashboard"
         default: return ""
         }
     }
@@ -61,6 +65,8 @@ struct NotchTabBar: View {
         case .airpods: return DesignTokens.glowAirPods
         case .calendar: return Color(red: 0.98, green: 0.65, blue: 0.20)
         case .timer: return Color(red: 0.97, green: 0.38, blue: 0.38)
+        case .mirror: return Color(red: 0.50, green: 0.85, blue: 1.00)
+        case .dashboard: return Color(red: 0.55, green: 0.62, blue: 0.85)
         default: return .white
         }
     }
