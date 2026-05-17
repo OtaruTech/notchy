@@ -30,6 +30,7 @@ targets:
         CFBundleShortVersionString: $(MARKETING_VERSION)
         LSUIElement: true
         NSBluetoothAlwaysUsageDescription: "Notchy reads connected AirPods battery levels to display them in the notch."
+        NSCalendarsUsageDescription: "Notchy shows your upcoming events in the notch panel."
         NSHumanReadableCopyright: "© 2026"
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: tech.otaru.Notchy
