@@ -15,9 +15,14 @@ final class HotZoneMonitor {
     /// When collapsed, the zone is the small notch hot rect only.
     var isExpanded: Bool = false
 
+    /// True while media is playing — extends the collapsed hover zone with wings
+    /// to cover the live-activity strip (album art + waveform on either side).
+    var isLiveActivityVisible: Bool = false
+
     /// Expanded keep-alive zone width/height (matches NotchWindowController.expandedFrame).
     private let expandedWidth: CGFloat = 540
     private let expandedHeight: CGFloat = 220
+    private let liveActivityWingWidth: CGFloat = 70
 
     var onEnter: () -> Void = {}
     var onExit: () -> Void = {}
@@ -50,15 +55,17 @@ final class HotZoneMonitor {
             let y = screen.frame.maxY - expandedHeight
             return CGRect(x: x, y: y, width: expandedWidth, height: expandedHeight)
         }
-        // Collapsed: just the notch hot zone + 4pt buffer.
+        // Collapsed: notch hot zone + 4pt buffer, optionally widened by wings when
+        // the live-activity strip is showing (album art + waveform around the notch).
         guard let hot = ScreenGeometry.hotZone(
             safeAreaTop: screen.safeAreaInsets.top,
             screenFrame: screen.frame
         ) else { return nil }
+        let extraWidth = isLiveActivityVisible ? 2 * liveActivityWingWidth : 0
         return CGRect(
-            x: screen.frame.minX + hot.minX,
+            x: screen.frame.minX + hot.minX - extraWidth / 2,
             y: screen.frame.maxY - hot.maxY,
-            width: hot.width,
+            width: hot.width + extraWidth,
             height: hot.height
         )
     }

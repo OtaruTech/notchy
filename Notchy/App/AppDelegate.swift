@@ -126,6 +126,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func observeStateChanges() {
         withObservationTracking {
             _ = stateMachine.state
+            _ = mediaFeature?.current  // also re-fire when media starts/stops
         } onChange: {
             Task { @MainActor [weak self] in
                 self?.handleStateChange()
@@ -142,6 +143,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // Grow / shrink hover keep-alive zone so cursor can move INTO the expanded
         // panel content (buttons, scrubber, etc.) without triggering collapse.
         hotZone?.isExpanded = stateMachine.state.isExpanded
+
+        // Live-activity wings widen the collapsed hover zone so cursor can hover
+        // the album art / waveform area and still trigger expand-to-media.
+        let mediaPlaying = mediaFeature?.current?.isPlaying == true
+        hotZone?.isLiveActivityVisible = mediaPlaying && !stateMachine.state.isExpanded
 
         if stateMachine.state == .airpods {
             airpodsDismissTimer?.cancel()
