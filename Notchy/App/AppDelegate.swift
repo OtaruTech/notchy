@@ -23,6 +23,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     let mirrorFeature = MirrorFeature()
     private var statusItem: NSStatusItem?
     private var settingsWindow: NSWindow?
+    private var welcomeWindow: NSWindow?
 
     nonisolated(unsafe) private static var weakSelf: AppDelegate?
 
@@ -30,6 +31,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         AppDelegate.weakSelf = self
         installSignalHandlers()
         promptAccessibilityIfNeeded()
+        showWelcomeIfFirstLaunch()
 
         mediaFeature = MediaFeature(bridge: mediaBridge, stateMachine: stateMachine)
         mediaFeature.start()
@@ -70,6 +72,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         let menu = NSMenu()
         menu.addItem(NSMenuItem(title: "Settings…", action: #selector(openSettings), keyEquivalent: ","))
+        menu.addItem(NSMenuItem(title: "Welcome…", action: #selector(openWelcome), keyEquivalent: ""))
         let timerMenu = NSMenu()
         timerMenu.addItem(NSMenuItem(title: "25 minutes", action: #selector(startTimer25), keyEquivalent: ""))
         timerMenu.addItem(NSMenuItem(title: "15 minutes", action: #selector(startTimer15), keyEquivalent: ""))
@@ -113,8 +116,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         monitor.onEscape = { [weak self] in self?.stateMachine.send(.escapeKeyPressed) }
         monitor.onClickOutside = { [weak self] in self?.stateMachine.send(.outsideClicked) }
         monitor.onHorizontalSwipe = { [weak self] direction in
-            // Act if a track is loaded (playing OR paused — so swipe still
-            // changes track while paused).
+            // Gated by Settings → Now Playing → swipe toggle.
+            let enabled = UserDefaults.standard.object(forKey: "notchy.swipeEnabled") as? Bool ?? true
+            guard enabled else { return }
             guard self?.mediaFeature.current != nil else { return }
             if direction > 0 { self?.mediaFeature.next() }
             else { self?.mediaFeature.prev() }
@@ -212,6 +216,34 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         guard !urls.isEmpty else { return }
         let service = NSSharingService(named: .composeEmail)
         service?.perform(withItems: urls)
+    }
+
+    private func showWelcomeIfFirstLaunch() {
+        let key = "notchy.welcomeShown"
+        guard !UserDefaults.standard.bool(forKey: key) else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { [weak self] in
+            self?.openWelcome()
+            UserDefaults.standard.set(true, forKey: key)
+        }
+    }
+
+    @objc func openWelcome() {
+        NSApp.setActivationPolicy(.regular)
+        NSApp.activate(ignoringOtherApps: true)
+        if welcomeWindow == nil {
+            let hosting = NSHostingController(rootView: WelcomeView { [weak self] in
+                self?.welcomeWindow?.close()
+            })
+            let win = NSWindow(contentViewController: hosting)
+            win.title = "Welcome to Notchy"
+            win.styleMask = [.titled, .closable]
+            win.setContentSize(NSSize(width: 460, height: 540))
+            win.isReleasedWhenClosed = false
+            win.center()
+            win.delegate = self
+            welcomeWindow = win
+        }
+        welcomeWindow?.makeKeyAndOrderFront(nil)
     }
 
     @objc func openSettings() {

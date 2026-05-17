@@ -140,7 +140,9 @@ final class HotZoneMonitor {
                 self.onEnter()
             }
             hoverWorkItem = work
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(120), execute: work)
+            // Read user-configurable hover delay (default 120ms).
+            let delayMs = UserDefaults.standard.object(forKey: "notchy.hoverDelayMs") as? Double ?? 120
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(Int(delayMs)), execute: work)
         } else if !nowInside, isInside {
             isInside = false
             hoverWorkItem?.cancel()
