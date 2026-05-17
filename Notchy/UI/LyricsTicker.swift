@@ -1,12 +1,7 @@
 import SwiftUI
 
-/// Global single-line lyrics ticker that lives BELOW the physical notch while
-/// music plays and the panel is collapsed. Renders a rounded pill with the
-/// current LRC line (synced when available, plain otherwise) and crossfades
-/// when the active line changes.
-///
-/// Designed to be pure display — the hover zone does NOT extend over this
-/// pill, so passing the cursor through it won't expand the notch.
+/// Single-line lyrics pill rendered just below the physical notch when the
+/// panel is collapsed. Off by default — user enables via Settings → Now Playing.
 struct LyricsTicker: View {
     let synced: [LrcLine]
     let plain: [LrcLine]
@@ -26,9 +21,8 @@ struct LyricsTicker: View {
             }
             return idx
         } else {
-            let secondsPerLine: Double = duration > 0 ? max(2, duration / Double(lines.count)) : 4
-            let idx = Int(elapsed / secondsPerLine)
-            return max(0, min(lines.count - 1, idx))
+            let perLine: Double = duration > 0 ? max(2, duration / Double(lines.count)) : 4
+            return max(0, min(lines.count - 1, Int(elapsed / perLine)))
         }
     }
 
@@ -49,17 +43,14 @@ struct LyricsTicker: View {
                 .lineLimit(1)
                 .truncationMode(.tail)
                 .id(activeIndex ?? -1)
-                .transition(.asymmetric(insertion: .opacity, removal: .opacity))
+                .transition(.opacity)
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 6)
         .background(
             Capsule(style: .continuous)
                 .fill(.black.opacity(0.88))
-                .overlay(
-                    Capsule(style: .continuous)
-                        .stroke(.white.opacity(0.08), lineWidth: 0.5)
-                )
+                .overlay(Capsule(style: .continuous).stroke(.white.opacity(0.08), lineWidth: 0.5))
                 .shadow(color: .black.opacity(0.45), radius: 18, y: 6)
         )
         .frame(maxWidth: 380)

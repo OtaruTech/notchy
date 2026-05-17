@@ -8,6 +8,7 @@ struct SettingsView: View {
     @AppStorage("notchy.swipeEnabled") private var swipeEnabled = true
     @AppStorage("notchy.debugLogging") private var debugLogging = false
     @AppStorage("notchy.hotkeysEnabled") private var hotkeysEnabled = true
+    @AppStorage("notchy.lyricsEnabled") private var lyricsEnabled = false
     @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
 
     var body: some View {
@@ -42,6 +43,10 @@ struct SettingsView: View {
                 Section("Now Playing") {
                     Toggle("Show hint pill while media plays", isOn: $hintEnabled)
                     Toggle("Two-finger horizontal swipe to switch track", isOn: $swipeEnabled)
+                    Toggle("Show synced lyrics below notch", isOn: $lyricsEnabled)
+                    Text("Off by default. When on, fetches synced LRC from lrclib.net and shows the current line below the notch.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
                 Section("System pill") {
                     Toggle("Show CPU + battery readout in dashboard", isOn: $gaugeEnabled)
@@ -102,6 +107,7 @@ struct SettingsView: View {
     private func resetAll() {
         let keys = ["notchy.hintEnabled", "notchy.gaugeEnabled", "notchy.hoverDelayMs",
                     "notchy.swipeEnabled", "notchy.debugLogging", "notchy.hotkeysEnabled",
+                    "notchy.lyricsEnabled",
                     "notchy.hasPromptedAccessibilityV1", "notchy.welcomeShown"]
         for k in keys { UserDefaults.standard.removeObject(forKey: k) }
     }

@@ -42,9 +42,7 @@ struct NotchExpandedView: View {
             if (state == .hint || state == .idle), shouldShowLiveStrip {
                 VStack(spacing: 6) {
                     LiveActivityStrip(vm: mediaVM, timerState: timerFeature.state)
-                    // Global lyrics ticker — below the notch, only when music
-                    // is loaded and lyrics are available.
-                    if let mvm = mediaVM, lyricsFeature.hasAny {
+                    if lyricsEnabled, let mvm = mediaVM, lyricsFeature.hasAny {
                         TimelineView(.periodic(from: .now, by: 0.5)) { ctx in
                             LyricsTicker(
                                 synced: lyricsFeature.lines,
@@ -86,14 +84,15 @@ struct NotchExpandedView: View {
     private var width: CGFloat {
         if state.isExpanded { return DesignTokens.expandedWidth }
         let actualNotchW = ScreenGeometry.liveNotchWidth()
-        // Wings show whenever a track is loaded (playing or paused) or a timer
-        // is running. Track adds left wing; timer/waveform adds right wing.
         let hasMedia = mediaVM != nil
         let hasTimer = timerFeature.state != .idle
-        if hasMedia && hasTimer { return actualNotchW + 2 * 70 }
         if hasMedia { return actualNotchW + 2 * 70 }
         if hasTimer { return actualNotchW + 70 }
         return state == .hint ? actualNotchW + 8 : actualNotchW
+    }
+
+    private var lyricsEnabled: Bool {
+        UserDefaults.standard.bool(forKey: "notchy.lyricsEnabled")
     }
 
     private var shouldShowLiveStrip: Bool {
@@ -107,8 +106,7 @@ struct NotchExpandedView: View {
         switch state {
         case .idle, .hint:
             let base = actualNotchH + (state == .hint ? 3 : 0)
-            // Lyrics ticker pill = ~28pt + 6pt gap when it's showing.
-            if mediaVM != nil, lyricsFeature.hasAny { return base + 34 }
+            if lyricsEnabled, mediaVM != nil, lyricsFeature.hasAny { return base + 34 }
             return base
         case .drop: return DesignTokens.expandedHeightDrop
         default: return DesignTokens.expandedHeightDefault
