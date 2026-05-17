@@ -10,50 +10,52 @@ import AppKit
 /// hardware notch shows through unmodified; only the wings render content.
 struct LiveActivityStrip: View {
     let vm: NowPlayingVM
-    /// Single-character vertical "bar" heights driven by an animation phase.
     @State private var phase: Double = 0
     private let timer = Timer.publish(every: 0.12, on: .main, in: .common).autoconnect()
 
     private let wingWidth: CGFloat = 70
-    private let stripHeight: CGFloat = DesignTokens.notchHeight
+
+    /// Live values queried at render so the strip matches THIS Mac's notch.
+    private var notchW: CGFloat { ScreenGeometry.liveNotchWidth() }
+    private var notchH: CGFloat { ScreenGeometry.liveNotchHeight() }
 
     var body: some View {
         HStack(spacing: 0) {
             // LEFT wing — album art
             ZStack(alignment: .trailing) {
-                Rectangle().fill(.black)  // wing background — same as notch
+                Rectangle().fill(.black)
                 artwork
-                    .frame(width: stripHeight - 6, height: stripHeight - 6)
+                    .frame(width: notchH - 8, height: notchH - 8)
                     .padding(.trailing, 6)
             }
-            .frame(width: wingWidth, height: stripHeight)
+            .frame(width: wingWidth, height: notchH)
             .clipShape(
                 .rect(
-                    topLeadingRadius: 14,
-                    bottomLeadingRadius: 14,
+                    topLeadingRadius: 12,
+                    bottomLeadingRadius: 12,
                     bottomTrailingRadius: 0,
                     topTrailingRadius: 0,
                     style: .continuous
                 )
             )
 
-            // CENTER — invisible passthrough matching the physical notch
-            Color.black.frame(width: DesignTokens.notchWidth, height: stripHeight)
+            // CENTER — invisible passthrough matching the physical notch (LIVE size).
+            Color.black.frame(width: notchW, height: notchH)
 
             // RIGHT wing — animated waveform
             ZStack(alignment: .leading) {
                 Rectangle().fill(.black)
                 Waveform(phase: phase, playing: vm.isPlaying)
-                    .frame(width: wingWidth - 12, height: stripHeight - 12)
+                    .frame(width: wingWidth - 12, height: notchH - 12)
                     .padding(.leading, 6)
             }
-            .frame(width: wingWidth, height: stripHeight)
+            .frame(width: wingWidth, height: notchH)
             .clipShape(
                 .rect(
                     topLeadingRadius: 0,
                     bottomLeadingRadius: 0,
-                    bottomTrailingRadius: 14,
-                    topTrailingRadius: 14,
+                    bottomTrailingRadius: 12,
+                    topTrailingRadius: 12,
                     style: .continuous
                 )
             )

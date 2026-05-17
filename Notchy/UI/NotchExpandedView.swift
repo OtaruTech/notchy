@@ -69,14 +69,16 @@ struct NotchExpandedView: View {
 
     private var width: CGFloat {
         if state.isExpanded { return DesignTokens.expandedWidth }
-        // Live-activity strip widens the collapsed shape with wings around the notch.
-        if let mvm = mediaVM, mvm.isPlaying { return DesignTokens.notchWidth + 2 * 70 }
-        return state == .hint ? DesignTokens.notchWidth + 8 : DesignTokens.notchWidth
+        // Live-activity strip widens the collapsed shape with wings around the LIVE notch.
+        let actualNotchW = ScreenGeometry.liveNotchWidth()
+        if let mvm = mediaVM, mvm.isPlaying { return actualNotchW + 2 * 70 }
+        return state == .hint ? actualNotchW + 8 : actualNotchW
     }
 
     private var height: CGFloat {
+        let actualNotchH = ScreenGeometry.liveNotchHeight()
         switch state {
-        case .idle, .hint: return DesignTokens.notchHeight + (state == .hint ? 3 : 0)
+        case .idle, .hint: return actualNotchH + (state == .hint ? 3 : 0)
         case .drop: return DesignTokens.expandedHeightDrop
         default: return DesignTokens.expandedHeightDefault
         }
