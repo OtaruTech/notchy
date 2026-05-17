@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		042B349F5799C3F7CF15EA99 /* AirPodsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB110EA11D24C6907762BAF /* AirPodsView.swift */; };
+		0476813050891A01F9DFDF6B /* Data+Append.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78ACFB47B00A482E040584F8 /* Data+Append.swift */; };
 		0570CCAF85C30825C4528D25 /* NotchShell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6633BDBED265ECF9E7B5D9E0 /* NotchShell.swift */; };
 		06F29F064FA18C158A92DB97 /* NotchIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8A432C63FD5F5D5741DD0E /* NotchIntent.swift */; };
 		07793ECBED4BA6325FC499EE /* SnapshotHosting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F31F61FC708402DBDC105B1 /* SnapshotHosting.swift */; };
@@ -113,6 +114,7 @@
 		6B72C57C5C358F93B591E5A1 /* AirPodsViewSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirPodsViewSnapshots.swift; sourceTree = "<group>"; };
 		6F15C234362B1F696258D424 /* EventVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventVM.swift; sourceTree = "<group>"; };
 		75197809ED6A9E7CC86445BD /* TimerViewSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewSnapshots.swift; sourceTree = "<group>"; };
+		78ACFB47B00A482E040584F8 /* Data+Append.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Append.swift"; sourceTree = "<group>"; };
 		7A5EB720D8D42405DE7F6F10 /* LiveActivityStrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivityStrip.swift; sourceTree = "<group>"; };
 		854599C0C8ADAC528D1D0203 /* CalendarFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarFeatureTests.swift; sourceTree = "<group>"; };
 		87F074AAE64DB16A07192221 /* DropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropView.swift; sourceTree = "<group>"; };
@@ -253,6 +255,7 @@
 		57C0DE170022192A4163EEA0 /* Mirror */ = {
 			isa = PBXGroup;
 			children = (
+				78ACFB47B00A482E040584F8 /* Data+Append.swift */,
 				4D3E5FEACE7BC707A8AA10C8 /* MirrorFeature.swift */,
 				502A1D39A74B73C64CB48E2A /* MirrorView.swift */,
 			);
@@ -532,6 +535,7 @@
 				60DBF9B26104D42BBB9CCDDE /* CalendarFeature.swift in Sources */,
 				551E7B961D39A3EFC0EBC7BD /* CalendarView.swift in Sources */,
 				F5144B2A34BE3536C844C2C9 /* DashboardView.swift in Sources */,
+				0476813050891A01F9DFDF6B /* Data+Append.swift in Sources */,
 				9E1B8767990F873C8ADF23C5 /* DesignTokens.swift in Sources */,
 				195480A06999E8B25DFEBFA2 /* DragSession.swift in Sources */,
 				181C49AA1DBBCA49D1328FED /* DropFeature.swift in Sources */,

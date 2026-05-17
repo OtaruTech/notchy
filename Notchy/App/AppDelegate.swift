@@ -218,6 +218,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func startTimer5() { timerFeature.start(seconds: 300) }
 
     @objc func openMirror() {
+        let line = "\(Date()) [Notchy.App] openMirror() called\n"
+        if UserDefaults.standard.bool(forKey: "notchy.debugLogging") {
+            try? line.data(using: .utf8)?.writeAppending(to: "/tmp/notchy.log")
+        }
         stateMachine.send(.mirrorRequested)
         Task { await mirrorFeature.start() }
     }

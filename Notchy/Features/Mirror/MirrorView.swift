@@ -60,7 +60,7 @@ struct MirrorView: View {
 private struct MirrorPreview: NSViewRepresentable {
     let session: AVCaptureSession
 
-    func makeNSView(context: Context) -> NSView {
+    func makeNSView(context: Context) -> PreviewView {
         let view = PreviewView()
         view.wantsLayer = true
         let layer = AVCaptureVideoPreviewLayer(session: session)
@@ -70,10 +70,19 @@ private struct MirrorPreview: NSViewRepresentable {
         return view
     }
 
-    func updateNSView(_ nsView: NSView, context: Context) {}
+    func updateNSView(_ nsView: PreviewView, context: Context) {
+        // Layer frame must follow the view bounds — AVCaptureVideoPreviewLayer
+        // shows nothing if frame is zero (which it is at first auto-layout pass).
+        nsView.previewLayer?.frame = nsView.bounds
+    }
 }
 
 private final class PreviewView: NSView {
     var previewLayer: AVCaptureVideoPreviewLayer?
     override var wantsUpdateLayer: Bool { true }
+
+    override func layout() {
+        super.layout()
+        previewLayer?.frame = bounds
+    }
 }

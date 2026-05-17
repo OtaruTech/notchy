@@ -2,6 +2,12 @@
 import Foundation
 import Observation
 
+fileprivate func _mirLog(_ msg: String) {
+    guard UserDefaults.standard.bool(forKey: "notchy.debugLogging") else { return }
+    let line = "\(Date()) [Notchy.Mirror] \(msg)\n"
+    try? line.data(using: .utf8)?.writeAppending(to: "/tmp/notchy.log")
+}
+
 /// Manages the AVCaptureSession lifecycle for the Mirror widget. Started when
 /// the user opens the mirror tab; stopped when they leave it (so the camera LED
 /// turns off promptly and we don't keep the device busy).
@@ -23,8 +29,10 @@ final class MirrorFeature {
     private var configured = false
 
     func start() async {
-        guard status != .running else { return }
+        _mirLog("start() called, current status=\(status), authStatus=\(AVCaptureDevice.authorizationStatus(for: .video).rawValue)")
+        guard status != .running else { _mirLog("already running, returning"); return }
         let granted = await Self.requestAccess()
+        _mirLog("requestAccess returned \(granted)")
         guard granted else {
             status = .denied
             return
