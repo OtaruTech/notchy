@@ -7,6 +7,7 @@ struct SettingsView: View {
     @AppStorage("notchy.hoverDelayMs") private var hoverDelayMs = 120.0
     @AppStorage("notchy.swipeEnabled") private var swipeEnabled = true
     @AppStorage("notchy.debugLogging") private var debugLogging = false
+    @AppStorage("notchy.hotkeysEnabled") private var hotkeysEnabled = true
     @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
 
     var body: some View {
@@ -44,6 +45,18 @@ struct SettingsView: View {
                 }
                 Section("System pill") {
                     Toggle("Show CPU + battery readout in dashboard", isOn: $gaugeEnabled)
+                }
+                Section("Keyboard shortcuts") {
+                    Toggle("Enable global hotkeys", isOn: $hotkeysEnabled)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Label("⌘⌥N  toggle dashboard", systemImage: "square.grid.2x2.fill")
+                        Label("⌘⌥M  toggle Mirror", systemImage: "video.fill")
+                    }
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    Text("Changes take effect on next launch.")
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
                 }
             }
             .formStyle(.grouped)
@@ -88,7 +101,7 @@ struct SettingsView: View {
 
     private func resetAll() {
         let keys = ["notchy.hintEnabled", "notchy.gaugeEnabled", "notchy.hoverDelayMs",
-                    "notchy.swipeEnabled", "notchy.debugLogging",
+                    "notchy.swipeEnabled", "notchy.debugLogging", "notchy.hotkeysEnabled",
                     "notchy.hasPromptedAccessibilityV1", "notchy.welcomeShown"]
         for k in keys { UserDefaults.standard.removeObject(forKey: k) }
     }

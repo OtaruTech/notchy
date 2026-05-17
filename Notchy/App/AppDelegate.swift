@@ -9,6 +9,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private(set) var mediaFeature: MediaFeature!
     private var windowController: NotchWindowController?
     private var hotZone: HotZoneMonitor?
+    private var hotKeys: HotKeyCenter?
     let dropFeature = DropFeature()
     private var dragSession: DragSession?
     private var airpodsDismissTimer: Task<Void, Never>?
@@ -125,6 +126,30 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         monitor.start()
         hotZone = monitor
+
+        let hk = HotKeyCenter()
+        hk.onAction = { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .toggleDashboard:
+                if self.stateMachine.state == .dashboard {
+                    self.stateMachine.send(.hoverExited)
+                } else {
+                    if !self.stateMachine.state.isExpanded {
+                        self.stateMachine.send(.hoverEntered)
+                    }
+                    self.stateMachine.send(.tabSwitchedTo(.dashboard))
+                }
+            case .toggleMirror:
+                if self.stateMachine.state == .mirror {
+                    self.stateMachine.send(.hoverExited)
+                } else {
+                    self.stateMachine.send(.mirrorRequested)
+                }
+            }
+        }
+        hk.start()
+        hotKeys = hk
 
         let drag = DragSession()
         drag.onEnter = { [weak self] in

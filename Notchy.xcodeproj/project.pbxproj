@@ -57,6 +57,7 @@
 		BAE0142C3BCCC72B8D47B4AC /* EventKitBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9699EC56AAF3E5337015D132 /* EventKitBridge.swift */; };
 		BB64406D197C5E4FD7F1143B /* NowPlayingVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072CBDD5C0C479F642FA10B1 /* NowPlayingVM.swift */; };
 		C2C75C7AF305D4241130A962 /* MediaFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5BF2C7B3BA24BABF10B7FEE /* MediaFeature.swift */; };
+		CCC2A8579A49417C9BF8DCAB /* HotKeyCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F3D20E20F15D4FDCC34106 /* HotKeyCenter.swift */; };
 		CD0691F820505A12B0D49DDE /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BAA3AE68D1DC95427E890C /* TimerView.swift */; };
 		D05424E64997786D698811A8 /* IOBluetoothBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FD8A486D42757C51E8A01E /* IOBluetoothBridge.swift */; };
 		D1C05531A9C6AC2992F02AD1 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 697146552A7ABDF2F7002D2F /* SnapshotTesting */; };
@@ -120,6 +121,7 @@
 		75197809ED6A9E7CC86445BD /* TimerViewSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewSnapshots.swift; sourceTree = "<group>"; };
 		78ACFB47B00A482E040584F8 /* Data+Append.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Append.swift"; sourceTree = "<group>"; };
 		7A5EB720D8D42405DE7F6F10 /* LiveActivityStrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivityStrip.swift; sourceTree = "<group>"; };
+		80F3D20E20F15D4FDCC34106 /* HotKeyCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotKeyCenter.swift; sourceTree = "<group>"; };
 		854599C0C8ADAC528D1D0203 /* CalendarFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarFeatureTests.swift; sourceTree = "<group>"; };
 		87F074AAE64DB16A07192221 /* DropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropView.swift; sourceTree = "<group>"; };
 		8947D82465DDF1474C3C2E4D /* NotchState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchState.swift; sourceTree = "<group>"; };
@@ -287,6 +289,7 @@
 			children = (
 				2AD67689C0B9FE1FA469C399 /* DragSession.swift */,
 				9699EC56AAF3E5337015D132 /* EventKitBridge.swift */,
+				80F3D20E20F15D4FDCC34106 /* HotKeyCenter.swift */,
 				1C3034B9AB977A1751561A17 /* HotZoneMonitor.swift */,
 				48FD8A486D42757C51E8A01E /* IOBluetoothBridge.swift */,
 				5D9705394CEBEC362E7C42D2 /* MediaRemoteBridge.swift */,
@@ -551,6 +554,7 @@
 				BAE0142C3BCCC72B8D47B4AC /* EventKitBridge.swift in Sources */,
 				35B9950815B5A629A9506A9C /* EventVM.swift in Sources */,
 				D4CCDBE2BB9605168AF1C05E /* GaugePill.swift in Sources */,
+				CCC2A8579A49417C9BF8DCAB /* HotKeyCenter.swift in Sources */,
 				892BD16133C0CB804E94B701 /* HotZoneMonitor.swift in Sources */,
 				D05424E64997786D698811A8 /* IOBluetoothBridge.swift in Sources */,
 				513E97F3E39579F6C8CC364A /* LiveActivityStrip.swift in Sources */,
