@@ -74,4 +74,28 @@ struct NotchStateMachineTests {
         sm.send(.mediaAvailabilityChanged(false))
         #expect(sm.state == .idle)
     }
+
+    @Test func timerStartedExpandsToTimer() {
+        let sm = NotchStateMachine()
+        sm.send(.timerStarted)
+        #expect(sm.state == .timer)
+    }
+
+    @Test func timerCompletedReturnsToIdle() {
+        let sm = NotchStateMachine()
+        sm.send(.timerStarted)
+        sm.send(.timerCompleted)
+        #expect(sm.state == .idle)
+    }
+
+    @Test func tabSwitchedChangesStateOnlyIfExpanded() {
+        let sm = NotchStateMachine()
+        sm.send(.tabSwitchedTo(.calendar))
+        #expect(sm.state == .idle)
+        sm.send(.mediaAvailabilityChanged(true))
+        sm.send(.hoverEntered)
+        #expect(sm.state == .media)
+        sm.send(.tabSwitchedTo(.calendar))
+        #expect(sm.state == .calendar)
+    }
 }

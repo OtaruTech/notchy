@@ -60,6 +60,21 @@ final class NotchStateMachine {
 
         case .escapeKeyPressed, .outsideClicked:
             return mediaAvailable ? .hint : .idle
+
+        case .calendarAvailabilityChanged:
+            return state
+
+        case .timerStarted:
+            return .timer
+
+        case .timerTicked:
+            return state
+
+        case .timerCompleted:
+            return mediaAvailable ? .hint : .idle
+
+        case .tabSwitchedTo(let target):
+            return state.isExpanded ? target : state
         }
     }
 }

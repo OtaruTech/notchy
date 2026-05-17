@@ -61,7 +61,7 @@ struct NotchExpandedView: View {
         case .media: return DesignTokens.glowMedia
         case .drop: return DesignTokens.glowDrop
         case .airpods: return DesignTokens.glowAirPods
-        case .hint, .idle: return .clear
+        case .hint, .idle, .calendar, .timer: return .clear
         }
     }
 

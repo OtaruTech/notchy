@@ -12,4 +12,9 @@ enum NotchIntent: Equatable, Sendable {
     case mediaAvailabilityChanged(Bool)
     case airPodsConnected
     case dismissTimerFired
+    case calendarAvailabilityChanged(Bool)
+    case timerStarted
+    case timerTicked
+    case timerCompleted
+    case tabSwitchedTo(NotchState)
 }
