@@ -46,7 +46,28 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         systemMonitor.start()
 
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-        item.button?.title = "🌒"
+        // Try a few SF Symbols, falling back to emoji if none exist.
+        let candidates = [
+            "moonphase.waxing.crescent",         // crescent moon = "Notchy" 🌒
+            "moon.fill",
+            "moon.stars.fill",
+            "rectangle.topthird.inset.filled",  // last-resort notch shape
+        ]
+        var iconImage: NSImage?
+        for name in candidates {
+            if let img = NSImage(systemSymbolName: name, accessibilityDescription: "Notchy") {
+                iconImage = img
+                break
+            }
+        }
+        if let icon = iconImage {
+            let config = NSImage.SymbolConfiguration(pointSize: 15, weight: .regular)
+            let configured = icon.withSymbolConfiguration(config) ?? icon
+            configured.isTemplate = true  // adapts to dark/light menu bar
+            item.button?.image = configured
+        } else {
+            item.button?.title = "🌒"
+        }
         let menu = NSMenu()
         menu.addItem(NSMenuItem(title: "Settings…", action: #selector(openSettings), keyEquivalent: ","))
         let timerMenu = NSMenu()

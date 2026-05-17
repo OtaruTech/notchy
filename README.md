@@ -4,10 +4,11 @@
 
 **Turn your MacBook's notch into a delightful interactive surface.**
 
+[![CI](https://github.com/OtaruTech/notchy/actions/workflows/ci.yml/badge.svg)](https://github.com/OtaruTech/notchy/actions/workflows/ci.yml)
 [![macOS 14+](https://img.shields.io/badge/macOS-14.0+-blue.svg)](https://www.apple.com/macos/)
 [![Swift 6.0](https://img.shields.io/badge/Swift-6.0-orange.svg)](https://swift.org)
 [![License MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Open Source](https://img.shields.io/badge/Open%20Source-❤️-red.svg)](https://github.com/OtaruTech/notchy)
+[![Latest Release](https://img.shields.io/github/v/release/OtaruTech/notchy?label=Download)](https://github.com/OtaruTech/notchy/releases/latest)
 
 A free, open-source macOS notch utility for Apple-Silicon MacBooks.
 NotchNook-style — Now Playing, file drop tray, AirPods burst, calendar, timer, camera mirror, system stats — all from the notch.
