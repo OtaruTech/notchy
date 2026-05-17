@@ -44,6 +44,7 @@
 		892BD16133C0CB804E94B701 /* HotZoneMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C3034B9AB977A1751561A17 /* HotZoneMonitor.swift */; };
 		91D59D6E4197DBCDC78A951B /* BatteryReading.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB75579F5D02B1886B70C9CD /* BatteryReading.swift */; };
 		940AC4856FD3CD63E4BFD8B4 /* CalendarViewSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20F2178CBDA32615E6263FE /* CalendarViewSnapshots.swift */; };
+		9C6DEF8F0D1B50794129A23A /* MediaControl in Resources */ = {isa = PBXBuildFile; fileRef = 8E72D4A2A3104EC93AF373FD /* MediaControl */; };
 		9E1B8767990F873C8ADF23C5 /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17D845897E3385277807C80 /* DesignTokens.swift */; };
 		B410B694159C4D693BB0B4A5 /* NotchStateMachineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F444436267456B4A7969E2BF /* NotchStateMachineTests.swift */; };
 		B4E75597701A81337D41387E /* CalendarFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854599C0C8ADAC528D1D0203 /* CalendarFeatureTests.swift */; };
@@ -112,6 +113,7 @@
 		87F074AAE64DB16A07192221 /* DropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropView.swift; sourceTree = "<group>"; };
 		8947D82465DDF1474C3C2E4D /* NotchState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchState.swift; sourceTree = "<group>"; };
 		8C3D7AB1CDC0C20683D95BE7 /* ScreenGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenGeometry.swift; sourceTree = "<group>"; };
+		8E72D4A2A3104EC93AF373FD /* MediaControl */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MediaControl; path = Notchy/Resources/MediaControl; sourceTree = SOURCE_ROOT; };
 		8E8D50074A898F05304A0532 /* DropViewSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropViewSnapshots.swift; sourceTree = "<group>"; };
 		8EB110EA11D24C6907762BAF /* AirPodsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirPodsView.swift; sourceTree = "<group>"; };
 		8F31F61FC708402DBDC105B1 /* SnapshotHosting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotHosting.swift; sourceTree = "<group>"; };
@@ -186,6 +188,14 @@
 				87F074AAE64DB16A07192221 /* DropView.swift */,
 			);
 			path = Drop;
+			sourceTree = "<group>";
+		};
+		2ADA50C611AD3FB3E2051791 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8E72D4A2A3104EC93AF373FD /* MediaControl */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		2C4F5505CACC63DD81CA3EAF /* State */ = {
@@ -294,6 +304,7 @@
 				EEC3E0563BD6694DA94F039A /* NotchyApp.swift */,
 				1E602BF86FB6C687744FA081 /* App */,
 				96F0B6EFED0588E33C8DCF4A /* Features */,
+				2ADA50C611AD3FB3E2051791 /* Resources */,
 				CCEF6C65B9FBA0C60AF15BAB /* Settings */,
 				2C4F5505CACC63DD81CA3EAF /* State */,
 				70635849FAB5CD4211B8F25D /* System */,
@@ -388,6 +399,7 @@
 			buildConfigurationList = C5AB07D6BCD80C799B426D1D /* Build configuration list for PBXNativeTarget "Notchy" */;
 			buildPhases = (
 				CB698B097666DA24EA8DD260 /* Sources */,
+				11FA6346DA1A737CC5AD49EB /* Resources */,
 			);
 			buildRules = (
 			);
@@ -463,6 +475,17 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		11FA6346DA1A737CC5AD49EB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9C6DEF8F0D1B50794129A23A /* MediaControl in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8AB09AA3FDE5BB7F9273726E /* Sources */ = {

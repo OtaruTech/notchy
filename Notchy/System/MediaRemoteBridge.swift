@@ -48,11 +48,19 @@ struct NowPlayingInfo: Equatable, Sendable {
 actor MediaRemoteBridge {
 
     /// Where to look for the `media-control` binary, in order.
-    private static let binaryCandidates = [
-        "/opt/homebrew/bin/media-control",  // Apple Silicon brew
-        "/usr/local/bin/media-control",     // Intel brew
-        "/usr/bin/media-control",           // future bundled path
-    ]
+    /// The bundled copy lives at .app/Contents/Resources/MediaControl/bin/media-control —
+    /// no brew install required for end users.
+    private static var binaryCandidates: [String] {
+        var paths: [String] = []
+        if let bundled = Bundle.main.resourceURL?
+            .appendingPathComponent("MediaControl/bin/media-control", isDirectory: false)
+            .path {
+            paths.append(bundled)
+        }
+        paths.append("/opt/homebrew/bin/media-control")  // Apple Silicon brew
+        paths.append("/usr/local/bin/media-control")     // Intel brew
+        return paths
+    }
 
     static func binaryPath() -> String? {
         binaryCandidates.first { FileManager.default.isExecutableFile(atPath: $0) }

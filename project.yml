@@ -23,7 +23,15 @@ targets:
     type: application
     platform: macOS
     sources:
-      - Notchy
+      - path: Notchy
+        excludes:
+          - "Resources/MediaControl/**"
+      # Bundle the media-control CLI + its perl adapter + framework as a folder
+      # reference so the directory structure is preserved (`bin/`, `lib/`, `Frameworks/`)
+      # which the CLI uses to find its sibling resources via relative paths.
+      # The folder itself becomes Resources/MediaControl/ inside the .app.
+      - path: Notchy/Resources/MediaControl
+        type: folder
     info:
       path: Notchy/Info.plist
       properties:
