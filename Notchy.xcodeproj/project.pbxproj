@@ -18,6 +18,7 @@
 		181C49AA1DBBCA49D1328FED /* DropFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBC17BE3C8BA0AA132DA193 /* DropFeature.swift */; };
 		195480A06999E8B25DFEBFA2 /* DragSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AD67689C0B9FE1FA469C399 /* DragSession.swift */; };
 		2172A68118565954CEE3E589 /* SystemMonitorFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21D078EE082B5722C2D2B29 /* SystemMonitorFeature.swift */; };
+		26631641E79D48109EB14E78 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 69CCE4E74408B91B00D1CE00 /* Assets.xcassets */; };
 		286F215E8831A0344D62077D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEA109DCBD303D912C0C256D /* AppDelegate.swift */; };
 		30FD864030AE3EA6C9478B48 /* NotchExpandedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE756F0AA1ADA997BF8186E4 /* NotchExpandedView.swift */; };
 		349C0F54B8E4E5D139A7EAB6 /* GaugePillSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DB84D3D526593E9918B079 /* GaugePillSnapshots.swift */; };
@@ -111,6 +112,7 @@
 		63EABB2063931DFB30DAC6DB /* DropFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropFeatureTests.swift; sourceTree = "<group>"; };
 		6633BDBED265ECF9E7B5D9E0 /* NotchShell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchShell.swift; sourceTree = "<group>"; };
 		681D16180B1B4DF163605087 /* TimerFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerFeatureTests.swift; sourceTree = "<group>"; };
+		69CCE4E74408B91B00D1CE00 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6B72C57C5C358F93B591E5A1 /* AirPodsViewSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirPodsViewSnapshots.swift; sourceTree = "<group>"; };
 		6F15C234362B1F696258D424 /* EventVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventVM.swift; sourceTree = "<group>"; };
 		75197809ED6A9E7CC86445BD /* TimerViewSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewSnapshots.swift; sourceTree = "<group>"; };
@@ -318,6 +320,7 @@
 		A13FABD741219299261761DC /* Notchy */ = {
 			isa = PBXGroup;
 			children = (
+				69CCE4E74408B91B00D1CE00 /* Assets.xcassets */,
 				567B2D36795AD1D1E87789A1 /* Info.plist */,
 				3E25FC2C84830F4ECAEA0991 /* Notchy.entitlements */,
 				EEC3E0563BD6694DA94F039A /* NotchyApp.swift */,
@@ -501,6 +504,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26631641E79D48109EB14E78 /* Assets.xcassets in Resources */,
 				9C6DEF8F0D1B50794129A23A /* MediaControl in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

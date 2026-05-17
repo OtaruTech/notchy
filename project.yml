@@ -46,6 +46,7 @@ targets:
       MACOSX_DEPLOYMENT_TARGET: "14.0"
       ARCHS: arm64
       CODE_SIGN_ENTITLEMENTS: Notchy/Notchy.entitlements
+      ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
 
   NotchyTests:
     type: bundle.unit-test
