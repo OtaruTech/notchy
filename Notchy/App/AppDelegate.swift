@@ -16,13 +16,28 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     let btBridge = IOBluetoothBridge()
     private(set) var btFeature: BTFeature!
     private var stateObservation: Task<Void, Never>?
+    private var statusItem: NSStatusItem?
+
+    nonisolated(unsafe) private static var weakSelf: AppDelegate?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        AppDelegate.weakSelf = self
+        installSignalHandlers()
+
         mediaFeature = MediaFeature(bridge: mediaBridge, stateMachine: stateMachine)
         mediaFeature.start()
 
         btFeature = BTFeature(bridge: btBridge, stateMachine: stateMachine)
         btFeature.start()
+
+        let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+        item.button?.title = "🌒"
+        let menu = NSMenu()
+        menu.addItem(NSMenuItem(title: "Settings…", action: #selector(openSettings), keyEquivalent: ","))
+        menu.addItem(.separator())
+        menu.addItem(NSMenuItem(title: "Quit Notchy", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+        item.menu = menu
+        statusItem = item
 
         let sm = stateMachine
         let mf = mediaFeature!
@@ -112,5 +127,24 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         guard !urls.isEmpty else { return }
         let service = NSSharingService(named: .composeEmail)
         service?.perform(withItems: urls)
+    }
+
+    @objc func openSettings() {
+        NSApp.activate(ignoringOtherApps: true)
+        if #available(macOS 14, *) {
+            NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+        }
+    }
+
+    private func installSignalHandlers() {
+        let handler: @convention(c) (Int32) -> Void = { _ in
+            Task { @MainActor in
+                AppDelegate.weakSelf?.windowController?.hide()
+                exit(1)
+            }
+        }
+        signal(SIGTERM, handler)
+        signal(SIGABRT, handler)
+        signal(SIGSEGV, handler)
     }
 }
