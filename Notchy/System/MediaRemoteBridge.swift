@@ -1,11 +1,11 @@
 import Foundation
 
-enum MRCommand: Int32 {
-    case play = 0
-    case pause = 1
-    case togglePlayPause = 2
-    case next = 4
-    case previous = 5
+enum MRCommand: String {
+    case play
+    case pause
+    case togglePlayPause = "toggle-play-pause"
+    case next
+    case previous
 }
 
 struct NowPlayingInfo: Equatable, Sendable {
@@ -17,88 +17,144 @@ struct NowPlayingInfo: Equatable, Sendable {
     var isPlaying: Bool
 }
 
+/// Talks to the `media-control` CLI tool (https://github.com/ungive/mediaremote-adapter)
+/// to get Now Playing data. The CLI bypasses macOS 15.4+ TCC restrictions on
+/// `MediaRemote.framework` by running its private-framework loader inside an Apple-signed
+/// `/usr/bin/perl` (whose bundle id `com.apple.perl5` is entitled).
+///
+/// Requires `media-control` on `$PATH`. Install via: `brew install media-control`.
+/// Future: bundle the CLI inside Notchy.app so end users don't need brew.
 actor MediaRemoteBridge {
 
-    private let handle: UnsafeMutableRawPointer?
-    private let getInfoFn: GetInfoFn?
-    private let registerFn: RegisterFn?
-    private let sendCommandFn: SendCommandFn?
+    /// Where to look for the `media-control` binary, in order.
+    private static let binaryCandidates = [
+        "/opt/homebrew/bin/media-control",  // Apple Silicon brew
+        "/usr/local/bin/media-control",     // Intel brew
+        "/usr/bin/media-control",           // future bundled path
+    ]
 
-    private typealias GetInfoFn = @convention(c) (DispatchQueue, @escaping ([String: Any]) -> Void) -> Void
-    private typealias RegisterFn = @convention(c) (DispatchQueue) -> Void
-    private typealias SendCommandFn = @convention(c) (Int32, [String: Any]?) -> Bool
-
-    init() {
-        let path = "/System/Library/PrivateFrameworks/MediaRemote.framework/MediaRemote"
-        let h = dlopen(path, RTLD_NOW)
-        self.handle = h
-        if let h {
-            let g = dlsym(h, "MRMediaRemoteGetNowPlayingInfo")
-            self.getInfoFn = g.map { unsafeBitCast($0, to: GetInfoFn.self) }
-            let r = dlsym(h, "MRMediaRemoteRegisterForNowPlayingNotifications")
-            self.registerFn = r.map { unsafeBitCast($0, to: RegisterFn.self) }
-            let s = dlsym(h, "MRMediaRemoteSendCommand")
-            self.sendCommandFn = s.map { unsafeBitCast($0, to: SendCommandFn.self) }
-        } else {
-            self.getInfoFn = nil
-            self.registerFn = nil
-            self.sendCommandFn = nil
-        }
+    static func binaryPath() -> String? {
+        binaryCandidates.first { FileManager.default.isExecutableFile(atPath: $0) }
     }
 
-    /// One-shot fetch.
+    init() {}
+
+    /// One-shot fetch via `media-control get`.
     func fetch() async -> NowPlayingInfo? {
-        guard let getInfoFn else { return nil }
+        guard let bin = Self.binaryPath() else { return nil }
         return await withCheckedContinuation { cont in
-            getInfoFn(.main) { dict in
-                cont.resume(returning: MediaRemoteBridge.parse(raw: dict))
+            let proc = Process()
+            proc.executableURL = URL(fileURLWithPath: bin)
+            proc.arguments = ["get"]
+            let pipe = Pipe()
+            proc.standardOutput = pipe
+            proc.standardError = Pipe()
+            do {
+                try proc.run()
+                proc.waitUntilExit()
+                let data = pipe.fileHandleForReading.readDataToEndOfFile()
+                cont.resume(returning: MediaRemoteBridge.parse(jsonData: data))
+            } catch {
+                cont.resume(returning: nil)
             }
         }
     }
 
+    /// Send a control command via `media-control <command>`.
     @discardableResult
     func send(_ command: MRCommand) -> Bool {
-        sendCommandFn?(command.rawValue, nil) ?? false
+        guard let bin = Self.binaryPath() else { return false }
+        let proc = Process()
+        proc.executableURL = URL(fileURLWithPath: bin)
+        proc.arguments = [command.rawValue]
+        proc.standardOutput = Pipe()
+        proc.standardError = Pipe()
+        do {
+            try proc.run()
+            proc.waitUntilExit()
+            return proc.terminationStatus == 0
+        } catch {
+            return false
+        }
     }
 
-    /// Pure parser (testable without private API).
-    nonisolated static func parse(raw: [String: Any]) -> NowPlayingInfo? {
-        guard let title = raw["kMRMediaRemoteNowPlayingInfoTitle"] as? String,
-              !title.isEmpty else { return nil }
-        let artist = raw["kMRMediaRemoteNowPlayingInfoArtist"] as? String
-        let album = raw["kMRMediaRemoteNowPlayingInfoAlbum"] as? String
-        let elapsed = raw["kMRMediaRemoteNowPlayingInfoElapsedTime"] as? Double
-        let duration = raw["kMRMediaRemoteNowPlayingInfoDuration"] as? Double
-        let rate = (raw["kMRMediaRemoteNowPlayingInfoPlaybackRate"] as? Double) ?? 0
+    /// Parse media-control JSON output (handles both raw payload and stream `{"type","payload"}` envelope).
+    nonisolated static func parse(jsonData: Data) -> NowPlayingInfo? {
+        guard let any = try? JSONSerialization.jsonObject(with: jsonData),
+              let dict = any as? [String: Any]
+        else { return nil }
+        // Stream envelope: {"type":"data","diff":bool,"payload":{...}}
+        let payload: [String: Any]
+        if let p = dict["payload"] as? [String: Any] {
+            payload = p
+        } else {
+            payload = dict
+        }
+        return parse(payload: payload)
+    }
+
+    nonisolated static func parse(payload: [String: Any]) -> NowPlayingInfo? {
+        guard let title = payload["title"] as? String, !title.isEmpty else { return nil }
+        let artist = payload["artist"] as? String
+        let albumRaw = payload["album"] as? String
+        let album = (albumRaw?.isEmpty == false) ? albumRaw : nil
+        let elapsed = payload["elapsedTime"] as? Double
+        let duration = payload["duration"] as? Double
+        let playing = (payload["playing"] as? Bool) ?? ((payload["playbackRate"] as? Double).map { $0 > 0 } ?? false)
         return NowPlayingInfo(
-            title: title, artist: artist, album: album,
-            elapsed: elapsed, duration: duration,
-            isPlaying: rate > 0
+            title: title,
+            artist: artist,
+            album: album,
+            elapsed: elapsed,
+            duration: duration,
+            isPlaying: playing
         )
     }
 
-    /// Continuously yield current state changes via DistributedNotificationCenter.
+    /// Stream Now Playing changes by reading `media-control stream` line by line.
+    /// Yields nil when no media is playing.
     func changes() -> AsyncStream<NowPlayingInfo?> {
         AsyncStream { continuation in
-            registerFn?(.main)
-            let center = DistributedNotificationCenter.default()
-            nonisolated(unsafe) let token = center.addObserver(
-                forName: Notification.Name("kMRMediaRemoteNowPlayingInfoDidChangeNotification"),
-                object: nil, queue: .main
-            ) { [weak self] _ in
-                guard let self else { return }
-                Task {
-                    let info = await self.fetch()
+            guard let bin = Self.binaryPath() else {
+                continuation.finish()
+                return
+            }
+            let proc = Process()
+            proc.executableURL = URL(fileURLWithPath: bin)
+            proc.arguments = ["stream"]
+            let outPipe = Pipe()
+            proc.standardOutput = outPipe
+            proc.standardError = Pipe()
+
+            let handle = outPipe.fileHandleForReading
+            nonisolated(unsafe) var buffer = Data()
+            handle.readabilityHandler = { fh in
+                let chunk = fh.availableData
+                if chunk.isEmpty {
+                    fh.readabilityHandler = nil
+                    return
+                }
+                buffer.append(chunk)
+                // Split on newlines; keep trailing partial line in buffer.
+                while let nl = buffer.firstIndex(of: 0x0A) {
+                    let line = buffer.subdata(in: 0..<nl)
+                    buffer.removeSubrange(0...nl)
+                    guard !line.isEmpty else { continue }
+                    let info = MediaRemoteBridge.parse(jsonData: line)
                     continuation.yield(info)
                 }
             }
-            // Initial value
-            Task {
-                let info = await self.fetch()
-                continuation.yield(info)
+
+            do {
+                try proc.run()
+            } catch {
+                continuation.finish()
+                return
             }
+
             continuation.onTermination = { _ in
-                center.removeObserver(token)
+                proc.terminate()
+                handle.readabilityHandler = nil
             }
         }
     }
