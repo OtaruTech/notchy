@@ -28,6 +28,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private(set) var clipboardStore: ClipboardStore!
     private(set) var clipboardFeature: ClipboardFeature!
     private var clipboardCapturer: ClipboardCapturer?
+    fileprivate var clipboardTargetApp: NSRunningApplication?
     private var statusItem: NSStatusItem?
     private var settingsWindow: NSWindow?
     private var welcomeWindow: NSWindow?
@@ -130,6 +131,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let mir = mirrorFeature
         let ao = audioOutput
         let lyrics = lyricsFeature!
+        let clip = clipboardFeature!
         windowController = NotchWindowController { [weak self] in
             NotchShell(
                 stateMachine: sm,
@@ -143,7 +145,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 systemMonitor: smon,
                 mirrorFeature: mir,
                 audioOutput: ao,
-                lyricsFeature: lyrics
+                lyricsFeature: lyrics,
+                clipboardFeature: clip,
+                onClipboardPaste: { [weak self] item in
+                    guard let self else { return }
+                    let target = self.clipboardTargetApp
+                    self.clipboardTargetApp = nil
+                    self.stateMachine.send(.hoverExited)
+                    let restore = UserDefaults.standard.object(forKey: "notchy.clipboardRestore") as? Bool ?? true
+                    PasteEngine.paste(item: item, to: target, restorePrevious: restore)
+                }
             )
         }
         windowController?.show()
@@ -182,6 +193,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                     self.stateMachine.send(.hoverExited)
                 } else {
                     self.stateMachine.send(.mirrorRequested)
+                }
+            case .toggleClipboard:
+                if self.stateMachine.state == .clipboard {
+                    self.stateMachine.send(.hoverExited)
+                } else {
+                    // Snapshot the previously-focused app so Paste-engine can
+                    // synthesise ⌘V back into it later.
+                    self.clipboardTargetApp = NSWorkspace.shared.frontmostApplication
+                    self.stateMachine.send(.clipboardRequested)
                 }
             }
         }

@@ -15,6 +15,7 @@ final class HotKeyCenter {
     enum Action: UInt32 {
         case toggleDashboard = 1
         case toggleMirror    = 2
+        case toggleClipboard = 3
     }
 
     /// Fired on the main actor when a registered hotkey fires.
@@ -33,6 +34,7 @@ final class HotKeyCenter {
         installHandler()
         register(keyCode: UInt32(kVK_ANSI_N), modifiers: UInt32(cmdKey | optionKey), id: .toggleDashboard)
         register(keyCode: UInt32(kVK_ANSI_M), modifiers: UInt32(cmdKey | optionKey), id: .toggleMirror)
+        register(keyCode: UInt32(kVK_ANSI_V), modifiers: UInt32(cmdKey | shiftKey), id: .toggleClipboard)
     }
 
     func stop() {

@@ -13,6 +13,8 @@ struct NotchShell: View {
     let mirrorFeature: MirrorFeature
     let audioOutput: AudioOutputBridge
     let lyricsFeature: LyricsFeature
+    let clipboardFeature: ClipboardFeature
+    let onClipboardPaste: (ClipboardItem) -> Void
     @AppStorage("notchy.gaugeEnabled") private var gaugeEnabled = true
 
     var body: some View {
@@ -31,6 +33,8 @@ struct NotchShell: View {
                 systemMonitor: systemMonitor,
                 mirrorFeature: mirrorFeature,
                 lyricsFeature: lyricsFeature,
+                clipboardFeature: clipboardFeature,
+                onClipboardPaste: onClipboardPaste,
                 availableTabs: availableTabs,
                 onTabSwitch: { stateMachine.send(.tabSwitchedTo($0)) }
             )
@@ -50,6 +54,7 @@ struct NotchShell: View {
         if !calendarFeature.events.isEmpty { tabs.append(.calendar) }
         if timerFeature.state != .idle { tabs.append(.timer) }
         if mirrorFeature.status == .running { tabs.append(.mirror) }
+        if stateMachine.state == .clipboard { tabs.append(.clipboard) }
         return tabs
     }
 }

@@ -91,6 +91,9 @@ final class NotchStateMachine {
 
         case .mirrorRequested:
             return .mirror
+
+        case .clipboardRequested:
+            return .clipboard
         }
     }
 }
