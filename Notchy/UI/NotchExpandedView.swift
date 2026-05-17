@@ -5,6 +5,7 @@ struct NotchExpandedView: View {
     let state: NotchState
     let mediaVM: NowPlayingVM?
     let mediaFeature: MediaFeature
+    let audioOutput: AudioOutput?
     let dropFeature: DropFeature
     let onAirDrop: () -> Void
     let onEmail: () -> Void
@@ -107,6 +108,7 @@ struct NotchExpandedView: View {
             if let vm = mediaVM {
                 MediaView(
                     vm: vm,
+                    output: audioOutput,
                     onPlayPause: { mediaFeature.playPause() },
                     onPrev: { mediaFeature.prev() },
                     onNext: { mediaFeature.next() },

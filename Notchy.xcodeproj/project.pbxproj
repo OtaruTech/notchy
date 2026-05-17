@@ -66,6 +66,7 @@
 		D810728D8C29AB9C479A9B94 /* SystemMonitorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3442410EB733AC1751A9511 /* SystemMonitorTests.swift */; };
 		D8D69AB95F6081DCC87FF4F3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9100CBB2EF123484F00E26CF /* SettingsView.swift */; };
 		DB3BC1673D33C876EDD8ADD3 /* NotchyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC3E0563BD6694DA94F039A /* NotchyApp.swift */; };
+		DD1707D9613B4E09C0755D1A /* AudioOutputBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72DA93FE7F9028530835F1EC /* AudioOutputBridge.swift */; };
 		E4A897D208DAB56EE74569EE /* BatteryReadingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D73E5D88FE0299E1D90ABC /* BatteryReadingTests.swift */; };
 		E5DD01A00973F5BE7459D7DB /* NotchWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CF68BED545BCBB3A8822B0 /* NotchWindowController.swift */; };
 		EBB565BFDB9DD4B035BA2677 /* MirrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502A1D39A74B73C64CB48E2A /* MirrorView.swift */; };
@@ -118,6 +119,7 @@
 		69CCE4E74408B91B00D1CE00 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6B72C57C5C358F93B591E5A1 /* AirPodsViewSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirPodsViewSnapshots.swift; sourceTree = "<group>"; };
 		6F15C234362B1F696258D424 /* EventVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventVM.swift; sourceTree = "<group>"; };
+		72DA93FE7F9028530835F1EC /* AudioOutputBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioOutputBridge.swift; sourceTree = "<group>"; };
 		75197809ED6A9E7CC86445BD /* TimerViewSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewSnapshots.swift; sourceTree = "<group>"; };
 		78ACFB47B00A482E040584F8 /* Data+Append.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Append.swift"; sourceTree = "<group>"; };
 		7A5EB720D8D42405DE7F6F10 /* LiveActivityStrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivityStrip.swift; sourceTree = "<group>"; };
@@ -287,6 +289,7 @@
 		70635849FAB5CD4211B8F25D /* System */ = {
 			isa = PBXGroup;
 			children = (
+				72DA93FE7F9028530835F1EC /* AudioOutputBridge.swift */,
 				2AD67689C0B9FE1FA469C399 /* DragSession.swift */,
 				9699EC56AAF3E5337015D132 /* EventKitBridge.swift */,
 				80F3D20E20F15D4FDCC34106 /* HotKeyCenter.swift */,
@@ -540,6 +543,7 @@
 			files = (
 				042B349F5799C3F7CF15EA99 /* AirPodsView.swift in Sources */,
 				286F215E8831A0344D62077D /* AppDelegate.swift in Sources */,
+				DD1707D9613B4E09C0755D1A /* AudioOutputBridge.swift in Sources */,
 				382D85E0AE1EB2D3BD1A7C6E /* BTFeature.swift in Sources */,
 				91D59D6E4197DBCDC78A951B /* BatteryReading.swift in Sources */,
 				60DBF9B26104D42BBB9CCDDE /* CalendarFeature.swift in Sources */,

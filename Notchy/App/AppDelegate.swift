@@ -22,6 +22,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private(set) var timerFeature: TimerFeature!
     private(set) var systemMonitor: SystemMonitorFeature!
     let mirrorFeature = MirrorFeature()
+    let audioOutput = AudioOutputBridge()
     private var statusItem: NSStatusItem?
     private var settingsWindow: NSWindow?
     private var welcomeWindow: NSWindow?
@@ -47,6 +48,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         systemMonitor = SystemMonitorFeature(bridge: monitorBridge)
         systemMonitor.start()
+
+        audioOutput.start()
 
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         // Try a few SF Symbols, falling back to emoji if none exist.
@@ -95,6 +98,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let tf = timerFeature!
         let smon = systemMonitor!
         let mir = mirrorFeature
+        let ao = audioOutput
         windowController = NotchWindowController { [weak self] in
             NotchShell(
                 stateMachine: sm,
@@ -106,7 +110,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 calendarFeature: cf,
                 timerFeature: tf,
                 systemMonitor: smon,
-                mirrorFeature: mir
+                mirrorFeature: mir,
+                audioOutput: ao
             )
         }
         windowController?.show()

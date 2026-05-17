@@ -3,6 +3,7 @@ import AppKit
 
 struct MediaView: View {
     let vm: NowPlayingVM
+    var output: AudioOutput? = nil
     var onPlayPause: () -> Void = {}
     var onPrev: () -> Void = {}
     var onNext: () -> Void = {}
@@ -16,6 +17,10 @@ struct MediaView: View {
                 .help("Show source app")
 
             VStack(alignment: .leading, spacing: 4) {
+                if let output {
+                    OutputBadge(output: output)
+                        .padding(.bottom, 2)
+                }
                 Text(vm.title)
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(.white)
@@ -32,14 +37,24 @@ struct MediaView: View {
                         .foregroundStyle(.white.opacity(0.45))
                         .lineLimit(1)
                 }
-                ScrubberView(progress: vm.progress)
-                    .padding(.top, 6)
-                HStack {
-                    Text(formatTime(vm.elapsed)).foregroundStyle(.white.opacity(0.5))
-                    Spacer()
-                    Text(formatTime(vm.duration)).foregroundStyle(.white.opacity(0.5))
+                // Live-ticking scrubber: re-renders every 0.5s while playing so the
+                // bar fills smoothly between (sparse) media-control events.
+                TimelineView(.periodic(from: .now, by: 0.5)) { ctx in
+                    VStack(spacing: 2) {
+                        ScrubberView(progress: vm.liveProgress(at: ctx.date))
+                        HStack {
+                            Text(formatTime(vm.liveElapsed(at: ctx.date)))
+                                .foregroundStyle(.white.opacity(0.55))
+                                .monospacedDigit()
+                            Spacer()
+                            Text(formatTime(vm.duration))
+                                .foregroundStyle(.white.opacity(0.4))
+                                .monospacedDigit()
+                        }
+                        .font(.system(size: 10))
+                    }
                 }
-                .font(.system(size: 10))
+                .padding(.top, 6)
             }
 
             HStack(spacing: 14) {
@@ -98,6 +113,27 @@ private struct ArtworkView: View {
         }
         .scaleEffect(isPlaying ? 1.0 : 0.92)
         .animation(.spring(response: 0.35, dampingFraction: 0.7), value: isPlaying)
+    }
+}
+
+private struct OutputBadge: View {
+    let output: AudioOutput
+    var body: some View {
+        HStack(spacing: 5) {
+            Image(systemName: output.kind.sfSymbol)
+                .font(.system(size: 9, weight: .semibold))
+            Text(output.name)
+                .font(.system(size: 10, weight: .medium))
+                .lineLimit(1)
+                .truncationMode(.middle)
+        }
+        .foregroundStyle(.white.opacity(0.85))
+        .padding(.horizontal, 8)
+        .padding(.vertical, 3)
+        .background(
+            Capsule().fill(.white.opacity(0.10))
+                .overlay(Capsule().stroke(.white.opacity(0.18), lineWidth: 0.5))
+        )
     }
 }
 

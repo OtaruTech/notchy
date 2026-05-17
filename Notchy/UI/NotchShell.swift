@@ -11,6 +11,7 @@ struct NotchShell: View {
     let timerFeature: TimerFeature
     let systemMonitor: SystemMonitorFeature
     let mirrorFeature: MirrorFeature
+    let audioOutput: AudioOutputBridge
     @AppStorage("notchy.gaugeEnabled") private var gaugeEnabled = true
 
     var body: some View {
@@ -19,6 +20,7 @@ struct NotchShell: View {
                 state: stateMachine.state,
                 mediaVM: mediaFeature.current,
                 mediaFeature: mediaFeature,
+                audioOutput: audioOutput.current,
                 dropFeature: dropFeature,
                 onAirDrop: onAirDrop,
                 onEmail: onEmail,
