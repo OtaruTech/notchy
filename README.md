@@ -90,21 +90,45 @@ When multiple widgets are active, tabs appear at the bottom of the expanded pane
 
 ## 📦 Install
 
-### Quick install (Release build)
+### Option 1 — Download the prebuilt release (recommended)
+
+1. Grab the latest `Notchy-vX.Y.Z.zip` from [Releases](https://github.com/OtaruTech/notchy/releases/latest)
+2. Unzip and drag `Notchy.app` to `/Applications`
+3. **Important — open it the first time.** Notchy is ad-hoc signed (not yet
+   notarized by Apple), so macOS Gatekeeper blocks double-click on first launch.
+   Pick the fastest path that works on your macOS version:
+
+   #### macOS 15 Sequoia or 14 Sonoma (works on all versions)
+
+   ```bash
+   xattr -dr com.apple.quarantine /Applications/Notchy.app
+   open /Applications/Notchy.app
+   ```
+
+   That one-shot removes the quarantine flag and Notchy will double-click open
+   forever after.
+
+   #### Alternative — System Settings (no terminal)
+
+   1. Double-click `Notchy.app` → "Cannot be opened" dialog → click **Done**
+   2. Open **System Settings → Privacy & Security**
+   3. Scroll to the bottom — you'll see *"Notchy was blocked…"* with an
+      **"Open Anyway"** button next to it
+   4. Click **Open Anyway** → confirm with your password
+   5. Now double-click `Notchy.app` again → the prompt will offer "Open"
+
+   > **Why this is needed**: Notchy is open-source and ad-hoc signed. We
+   > don't currently have a paid Apple Developer account ($99/yr), so the
+   > app isn't Developer-ID signed or notarized. Both procedures above are
+   > Apple's standard escape hatch for trusted-but-unsigned apps; they don't
+   > weaken security — you're personally vouching for the app once.
+
+### Option 2 — Build from source
 
 ```bash
 git clone https://github.com/OtaruTech/notchy.git
 cd notchy
-xcodegen generate
-open Notchy.xcodeproj
-# In Xcode: Product → Archive → Distribute App → Copy App
-# Drag the resulting Notchy.app to /Applications
-# First launch: right-click Notchy.app → Open (to bypass Gatekeeper)
-```
-
-### One-shot CLI build (ad-hoc signed)
-
-```bash
+brew install xcodegen
 xcodegen generate
 xcodebuild -project Notchy.xcodeproj -scheme Notchy \
   -configuration Release -derivedDataPath build \
@@ -114,6 +138,9 @@ cp -R build/Build/Products/Release/Notchy.app /Applications/
 xattr -dr com.apple.quarantine /Applications/Notchy.app
 open /Applications/Notchy.app
 ```
+
+Or open `Notchy.xcodeproj` in Xcode and hit `⌘R` — when running directly
+from Xcode, Gatekeeper doesn't apply.
 
 ### Requirements
 
