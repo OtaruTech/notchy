@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    name: Build + test
+    runs-on: macos-15
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install xcodegen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Build
+        run: |
+          xcodebuild -project Notchy.xcodeproj \
+            -scheme Notchy \
+            -configuration Release \
+            -derivedDataPath build \
+            CODE_SIGN_IDENTITY="-" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            build \
+            | xcbeautify || (xcodebuild -project Notchy.xcodeproj -scheme Notchy -configuration Release -derivedDataPath build CODE_SIGN_IDENTITY="-" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO build && false)
+
+      - name: Unit tests
+        run: |
+          xcodebuild -project Notchy.xcodeproj \
+            -scheme NotchyTests \
+            -destination 'platform=macOS' \
+            CODE_SIGNING_ALLOWED=NO \
+            test \
+            | xcbeautify || xcodebuild -project Notchy.xcodeproj -scheme NotchyTests -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO test
+
+      - name: Snapshot tests
+        run: |
+          xcodebuild -project Notchy.xcodeproj \
+            -scheme NotchySnapshotTests \
+            -destination 'platform=macOS' \
+            CODE_SIGNING_ALLOWED=NO \
+            test \
+            | xcbeautify || xcodebuild -project Notchy.xcodeproj -scheme NotchySnapshotTests -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO test
