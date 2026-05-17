@@ -16,6 +16,18 @@ struct ClipboardItem: Identifiable, Equatable, Sendable, Hashable {
     let updatedAt: Date
     let pinned: Bool
 
+    // MARK: cloud-sync metadata (Phase A — populated locally, consumed by CloudKitSyncEngine in Phase B)
+
+    /// CloudKit `CKRecord.ID.recordName` once this item has been pushed to the
+    /// remote container at least once. `nil` ⇒ purely local, never synced.
+    let cloudRecordID: String?
+    /// Timestamp of the most-recent CloudKit upload. Used to compare against
+    /// `updatedAt` to decide whether a re-push is needed.
+    let cloudModifiedAt: Date?
+    /// True ⇒ the local row has unpushed changes (insert, update, or local
+    /// delete). The sync engine clears this after a successful push.
+    let needsSync: Bool
+
     enum Kind: String, Sendable, CaseIterable, Codable {
         case text       // any plain text
         case richtext   // RTF — payloadText holds RTF source

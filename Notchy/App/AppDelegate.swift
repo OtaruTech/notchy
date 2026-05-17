@@ -1,6 +1,22 @@
 import AppKit
 import SwiftUI
 
+fileprivate func _clipLog(_ msg: String) {
+    guard UserDefaults.standard.bool(forKey: "notchy.debugLogging") else { return }
+    let line = "\(Date()) [Notchy.Clip] \(msg)\n"
+    let path = "/tmp/notchy.log"
+    if let data = line.data(using: .utf8) {
+        if FileManager.default.fileExists(atPath: path),
+           let h = try? FileHandle(forWritingTo: URL(fileURLWithPath: path)) {
+            h.seekToEndOfFile()
+            try? h.write(contentsOf: data)
+            try? h.close()
+        } else {
+            try? data.write(to: URL(fileURLWithPath: path))
+        }
+    }
+}
+
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
 
@@ -27,6 +43,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private(set) var lyricsFeature: LyricsFeature!
     private(set) var clipboardStore: ClipboardStore!
     private(set) var clipboardFeature: ClipboardFeature!
+    private(set) var clipboardSyncEngine: SyncEngine!
     private var clipboardCapturer: ClipboardCapturer?
     fileprivate var clipboardTargetApp: NSRunningApplication?
     private var clipboardPauseMenuItem: NSMenuItem?
@@ -69,13 +86,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
             .appendingPathComponent("tech.otaru.Notchy", isDirectory: true)
         clipboardStore = ClipboardStore(directory: appSupport)
-        clipboardFeature = ClipboardFeature(store: clipboardStore)
+        // Phase A: NoopSyncEngine. Phase B (after $99 dev account + iCloud
+        // container provisioning) flips this to:
+        //   clipboardSyncEngine = CloudKitSyncEngine(containerID: "iCloud.tech.otaru.Notchy")
+        clipboardSyncEngine = NoopSyncEngine()
+        clipboardFeature = ClipboardFeature(store: clipboardStore, syncEngine: clipboardSyncEngine)
         Task {
             do { try await clipboardStore.open() } catch { NSLog("[Notchy] clipboard open failed: \(error)") }
             await clipboardFeature.bootstrap()
             // Purge old items on launch (best-effort).
             let retention = UserDefaults.standard.object(forKey: "notchy.clipboardRetentionDays") as? Int ?? 30
             _ = try? await clipboardStore.purgeOlderThan(days: retention)
+            clipboardSyncEngine.start(store: clipboardStore)
         }
         let capturer = ClipboardCapturer(store: clipboardStore)
         capturer.onInsert = { [weak self] item in
@@ -206,6 +228,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                     self.stateMachine.send(.mirrorRequested)
                 }
             case .toggleClipboard:
+                _clipLog("hotkey ⌘⇧V received state=\(self.stateMachine.state)")
                 if self.stateMachine.state == .clipboard {
                     self.dismissClipboardPanel()
                 } else {
@@ -343,6 +366,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     /// be the frontmost app while the panel is open.
     private func openClipboardPanel() {
         clipboardTargetApp = NSWorkspace.shared.frontmostApplication
+        _clipLog("openClipboardPanel target=\(clipboardTargetApp?.localizedName ?? "<nil>") items=\(clipboardFeature.displayed.count)")
         NSApp.setActivationPolicy(.regular)
         NSApp.activate(ignoringOtherApps: true)
         stateMachine.send(.clipboardRequested)
@@ -354,7 +378,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     /// even though SwiftUI's TextField holds focus for the search box.
     private func installClipboardKeyMonitor() {
         if clipboardKeyMonitor != nil { return }
+        _clipLog("keyMonitor installed (frontmost=\(NSWorkspace.shared.frontmostApplication?.localizedName ?? "?"))")
         clipboardKeyMonitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown]) { [weak self] event in
+            _clipLog("keyDown code=\(event.keyCode) chars=\(event.charactersIgnoringModifiers ?? "?") state=\(self?.stateMachine.state ?? .idle)")
             guard let self, self.stateMachine.state == .clipboard else { return event }
             switch event.keyCode {
             case 53: // esc
@@ -417,9 +443,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func performClipboardPaste(_ item: ClipboardItem) {
         let target = clipboardTargetApp
         clipboardTargetApp = nil
-        if UserDefaults.standard.bool(forKey: "notchy.debugLogging") {
-            NSLog("[Notchy.Clip] performPaste kind=%@ target=%@", item.kind.rawValue, target?.localizedName ?? "<nil>")
-        }
+        _clipLog("performPaste kind=\(item.kind.rawValue) target=\(target?.localizedName ?? "<nil>")")
         clipboardFeature.query = ""
         stateMachine.send(.hoverExited)
         windowController?.resignKey()

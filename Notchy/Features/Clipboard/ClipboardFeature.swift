@@ -28,10 +28,12 @@ final class ClipboardFeature {
     }
 
     private let store: ClipboardStore
+    private let syncEngine: SyncEngine
     private let recentLimit = 100
 
-    init(store: ClipboardStore) {
+    init(store: ClipboardStore, syncEngine: SyncEngine) {
         self.store = store
+        self.syncEngine = syncEngine
     }
 
     func bootstrap() async {
@@ -46,6 +48,7 @@ final class ClipboardFeature {
         if recent.count > recentLimit { recent.removeLast(recent.count - recentLimit) }
         count += 1
         if !query.isEmpty { Task { await refreshSearch() } }
+        syncEngine.noteLocalChange()
     }
 
     func moveSelection(by delta: Int) {
@@ -81,6 +84,7 @@ final class ClipboardFeature {
         recent.removeAll { $0.id == item.id }
         searchResults.removeAll { $0.id == item.id }
         count = max(0, count - 1)
+        syncEngine.noteLocalChange()
     }
 
     func clearAll() async {
@@ -88,6 +92,7 @@ final class ClipboardFeature {
         recent = []
         searchResults = []
         count = 0
+        syncEngine.noteLocalChange()
     }
 
     /// Items the UI should render — search results when querying, else recent,

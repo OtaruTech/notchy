@@ -97,6 +97,10 @@ enum ItemKindDetector {
 
     // MARK: makers
 
+    /// Newly captured items are always local + dirty.
+    private static let cloudFresh: (cloudRecordID: String?, cloudModifiedAt: Date?, needsSync: Bool) =
+        (nil, nil, true)
+
     private static func makeTextItem(_ str: String, sourceBundle: String?, sourceName: String?) -> ClipboardItem {
         let now = Date()
         return ClipboardItem(
@@ -111,7 +115,10 @@ enum ItemKindDetector {
             byteSize: str.utf8.count,
             createdAt: now,
             updatedAt: now,
-            pinned: false
+            pinned: false,
+            cloudRecordID: cloudFresh.cloudRecordID,
+            cloudModifiedAt: cloudFresh.cloudModifiedAt,
+            needsSync: cloudFresh.needsSync
         )
     }
 
@@ -130,7 +137,10 @@ enum ItemKindDetector {
             byteSize: rtf.utf8.count,
             createdAt: now,
             updatedAt: now,
-            pinned: false
+            pinned: false,
+            cloudRecordID: cloudFresh.cloudRecordID,
+            cloudModifiedAt: cloudFresh.cloudModifiedAt,
+            needsSync: cloudFresh.needsSync
         )
     }
 
@@ -148,7 +158,10 @@ enum ItemKindDetector {
             byteSize: str.utf8.count,
             createdAt: now,
             updatedAt: now,
-            pinned: false
+            pinned: false,
+            cloudRecordID: cloudFresh.cloudRecordID,
+            cloudModifiedAt: cloudFresh.cloudModifiedAt,
+            needsSync: cloudFresh.needsSync
         )
     }
 
@@ -166,7 +179,10 @@ enum ItemKindDetector {
             byteSize: str.utf8.count,
             createdAt: now,
             updatedAt: now,
-            pinned: false
+            pinned: false,
+            cloudRecordID: cloudFresh.cloudRecordID,
+            cloudModifiedAt: cloudFresh.cloudModifiedAt,
+            needsSync: cloudFresh.needsSync
         )
     }
 
@@ -185,7 +201,10 @@ enum ItemKindDetector {
             byteSize: str.utf8.count,
             createdAt: now,
             updatedAt: now,
-            pinned: false
+            pinned: false,
+            cloudRecordID: cloudFresh.cloudRecordID,
+            cloudModifiedAt: cloudFresh.cloudModifiedAt,
+            needsSync: cloudFresh.needsSync
         )
     }
 
@@ -205,7 +224,10 @@ enum ItemKindDetector {
             byteSize: size,
             createdAt: now,
             updatedAt: now,
-            pinned: false
+            pinned: false,
+            cloudRecordID: cloudFresh.cloudRecordID,
+            cloudModifiedAt: cloudFresh.cloudModifiedAt,
+            needsSync: cloudFresh.needsSync
         )
     }
 
@@ -240,7 +262,10 @@ enum ItemKindDetector {
             byteSize: png.count,
             createdAt: now,
             updatedAt: now,
-            pinned: false
+            pinned: false,
+            cloudRecordID: cloudFresh.cloudRecordID,
+            cloudModifiedAt: cloudFresh.cloudModifiedAt,
+            needsSync: cloudFresh.needsSync
         )
     }
 

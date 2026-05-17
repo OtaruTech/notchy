@@ -31,6 +31,7 @@
 		390E77CC663939E1F72AB759 /* NotchTabBarSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB94675DE7AE9014D56A645B /* NotchTabBarSnapshots.swift */; };
 		40376D104D4D8BFD69BA134D /* MediaRemoteBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9705394CEBEC362E7C42D2 /* MediaRemoteBridge.swift */; };
 		42912963CD05DEB6E9E6A87A /* PasteEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED71AE5031B1A0A16CD8609 /* PasteEngine.swift */; };
+		46082FF97F9B30D1AF34C1B6 /* CloudKitSyncEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964CF9EEC33887AC1E90681D /* CloudKitSyncEngine.swift */; };
 		513E97F3E39579F6C8CC364A /* LiveActivityStrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5EB720D8D42405DE7F6F10 /* LiveActivityStrip.swift */; };
 		51F5DC8A60F9A31A0F60D9FD /* TimerFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681D16180B1B4DF163605087 /* TimerFeatureTests.swift */; };
 		52F7BE5899E9B9BED6E4A3E7 /* NotchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8947D82465DDF1474C3C2E4D /* NotchState.swift */; };
@@ -54,6 +55,7 @@
 		849A51251EE8815DCF7187BB /* SystemMonitorBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE253DEBEF1D9E40C4A71E01 /* SystemMonitorBridge.swift */; };
 		87ECA559C8F8062620C9E9B1 /* NotchTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1100CE891853DA1D6ECC5C9 /* NotchTabBar.swift */; };
 		892BD16133C0CB804E94B701 /* HotZoneMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C3034B9AB977A1751561A17 /* HotZoneMonitor.swift */; };
+		906DF5F28839AE58C637AC9C /* SyncEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB6232EA0DD78B03ECCBE55 /* SyncEngine.swift */; };
 		91D59D6E4197DBCDC78A951B /* BatteryReading.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB75579F5D02B1886B70C9CD /* BatteryReading.swift */; };
 		940AC4856FD3CD63E4BFD8B4 /* CalendarViewSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20F2178CBDA32615E6263FE /* CalendarViewSnapshots.swift */; };
 		9A679225CD48E228159FBAE2 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ACAEC959171F6D5E21EF15 /* WelcomeView.swift */; };
@@ -66,6 +68,7 @@
 		BAE0142C3BCCC72B8D47B4AC /* EventKitBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9699EC56AAF3E5337015D132 /* EventKitBridge.swift */; };
 		BB64406D197C5E4FD7F1143B /* NowPlayingVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072CBDD5C0C479F642FA10B1 /* NowPlayingVM.swift */; };
 		BE239F1D0BB01371BC99A6B3 /* ItemKindDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297FF7D4F6B046616C6364E4 /* ItemKindDetector.swift */; };
+		BFB14CE7E4D058520A76C2B8 /* NoopSyncEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30377D8A669AA2CF8E5675F0 /* NoopSyncEngine.swift */; };
 		C2C75C7AF305D4241130A962 /* MediaFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5BF2C7B3BA24BABF10B7FEE /* MediaFeature.swift */; };
 		CCC2A8579A49417C9BF8DCAB /* HotKeyCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F3D20E20F15D4FDCC34106 /* HotKeyCenter.swift */; };
 		CD0691F820505A12B0D49DDE /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BAA3AE68D1DC95427E890C /* TimerView.swift */; };
@@ -81,6 +84,7 @@
 		E4A897D208DAB56EE74569EE /* BatteryReadingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D73E5D88FE0299E1D90ABC /* BatteryReadingTests.swift */; };
 		E5DD01A00973F5BE7459D7DB /* NotchWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CF68BED545BCBB3A8822B0 /* NotchWindowController.swift */; };
 		E7278F76CBAC9EC0C6D76809 /* ClipboardCapturer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BDCFC40324F50CA77E2C4E9 /* ClipboardCapturer.swift */; };
+		E94776A4C8FE0FD41E282D94 /* CloudKitMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A14A22DB46EB6254A26AA1 /* CloudKitMapping.swift */; };
 		EBB565BFDB9DD4B035BA2677 /* MirrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502A1D39A74B73C64CB48E2A /* MirrorView.swift */; };
 		F29841C20EF81367D1331F67 /* ScreenGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB210D67BB9058034F788290 /* ScreenGeometryTests.swift */; };
 		F30CA51FFDECAEEC718505C0 /* LrcLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF80D35E0458C579AC543D9 /* LrcLine.swift */; };
@@ -109,6 +113,7 @@
 /* Begin PBXFileReference section */
 		03CF68BED545BCBB3A8822B0 /* NotchWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchWindowController.swift; sourceTree = "<group>"; };
 		072CBDD5C0C479F642FA10B1 /* NowPlayingVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingVM.swift; sourceTree = "<group>"; };
+		15A14A22DB46EB6254A26AA1 /* CloudKitMapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitMapping.swift; sourceTree = "<group>"; };
 		1A423F8D9BB22E46CA097007 /* NotchySnapshotTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NotchySnapshotTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C3034B9AB977A1751561A17 /* HotZoneMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotZoneMonitor.swift; sourceTree = "<group>"; };
 		2110AAECFFF10B27041EF2B3 /* NotchyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NotchyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -117,6 +122,7 @@
 		2A27399F0C16B05551598DF9 /* Notchy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notchy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2AD67689C0B9FE1FA469C399 /* DragSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragSession.swift; sourceTree = "<group>"; };
 		2CF80D35E0458C579AC543D9 /* LrcLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LrcLine.swift; sourceTree = "<group>"; };
+		30377D8A669AA2CF8E5675F0 /* NoopSyncEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoopSyncEngine.swift; sourceTree = "<group>"; };
 		3E25FC2C84830F4ECAEA0991 /* Notchy.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Notchy.entitlements; sourceTree = "<group>"; };
 		3F1EF7FA9010FAC624C333ED /* MediaViewSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaViewSnapshots.swift; sourceTree = "<group>"; };
 		3F293D4B6E0C68019AAA9E33 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
@@ -140,6 +146,7 @@
 		69CCE4E74408B91B00D1CE00 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6B72C57C5C358F93B591E5A1 /* AirPodsViewSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirPodsViewSnapshots.swift; sourceTree = "<group>"; };
 		6F15C234362B1F696258D424 /* EventVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventVM.swift; sourceTree = "<group>"; };
+		6FB6232EA0DD78B03ECCBE55 /* SyncEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncEngine.swift; sourceTree = "<group>"; };
 		72DA93FE7F9028530835F1EC /* AudioOutputBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioOutputBridge.swift; sourceTree = "<group>"; };
 		75197809ED6A9E7CC86445BD /* TimerViewSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewSnapshots.swift; sourceTree = "<group>"; };
 		78ACFB47B00A482E040584F8 /* Data+Append.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Append.swift"; sourceTree = "<group>"; };
@@ -156,6 +163,7 @@
 		8F31F61FC708402DBDC105B1 /* SnapshotHosting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotHosting.swift; sourceTree = "<group>"; };
 		8F8A432C63FD5F5D5741DD0E /* NotchIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchIntent.swift; sourceTree = "<group>"; };
 		9100CBB2EF123484F00E26CF /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		964CF9EEC33887AC1E90681D /* CloudKitSyncEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitSyncEngine.swift; sourceTree = "<group>"; };
 		9699EC56AAF3E5337015D132 /* EventKitBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventKitBridge.swift; sourceTree = "<group>"; };
 		987883E6E877E89AC16FBF27 /* MediaRemoteBridgeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaRemoteBridgeTests.swift; sourceTree = "<group>"; };
 		A1100CE891853DA1D6ECC5C9 /* NotchTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchTabBar.swift; sourceTree = "<group>"; };
@@ -217,6 +225,7 @@
 				FD3A3278F5F109DD0119B52A /* ItemCard.swift */,
 				297FF7D4F6B046616C6364E4 /* ItemKindDetector.swift */,
 				5ED71AE5031B1A0A16CD8609 /* PasteEngine.swift */,
+				6590BCA9E5F4D1EA9C0053FE /* Sync */,
 			);
 			path = Clipboard;
 			sourceTree = "<group>";
@@ -323,6 +332,17 @@
 				5A49B1722823E4EB7FCBEF81 /* LyricsView.swift */,
 			);
 			path = Lyrics;
+			sourceTree = "<group>";
+		};
+		6590BCA9E5F4D1EA9C0053FE /* Sync */ = {
+			isa = PBXGroup;
+			children = (
+				15A14A22DB46EB6254A26AA1 /* CloudKitMapping.swift */,
+				964CF9EEC33887AC1E90681D /* CloudKitSyncEngine.swift */,
+				30377D8A669AA2CF8E5675F0 /* NoopSyncEngine.swift */,
+				6FB6232EA0DD78B03ECCBE55 /* SyncEngine.swift */,
+			);
+			path = Sync;
 			sourceTree = "<group>";
 		};
 		69FCE517551DB9C1EA705209 /* NotchySnapshotTests */ = {
@@ -612,6 +632,8 @@
 				7AA7B6325EFA3AEF46D9C0FC /* ClipboardKindChip.swift in Sources */,
 				195C4713F5791E9228EB7CB4 /* ClipboardPanel.swift in Sources */,
 				E2AD4084D1E9A524DC173903 /* ClipboardStore.swift in Sources */,
+				E94776A4C8FE0FD41E282D94 /* CloudKitMapping.swift in Sources */,
+				46082FF97F9B30D1AF34C1B6 /* CloudKitSyncEngine.swift in Sources */,
 				F5144B2A34BE3536C844C2C9 /* DashboardView.swift in Sources */,
 				0476813050891A01F9DFDF6B /* Data+Append.swift in Sources */,
 				9E1B8767990F873C8ADF23C5 /* DesignTokens.swift in Sources */,
@@ -638,6 +660,7 @@
 				08A3041B1A964341B8937D7D /* MediaView.swift in Sources */,
 				6143CACA5A6611792E9FA931 /* MirrorFeature.swift in Sources */,
 				EBB565BFDB9DD4B035BA2677 /* MirrorView.swift in Sources */,
+				BFB14CE7E4D058520A76C2B8 /* NoopSyncEngine.swift in Sources */,
 				30FD864030AE3EA6C9478B48 /* NotchExpandedView.swift in Sources */,
 				82CC0F4AE909CD17F25D7DD9 /* NotchHint.swift in Sources */,
 				06F29F064FA18C158A92DB97 /* NotchIntent.swift in Sources */,
@@ -651,6 +674,7 @@
 				42912963CD05DEB6E9E6A87A /* PasteEngine.swift in Sources */,
 				622ED93051501AD7FA938E32 /* ScreenGeometry.swift in Sources */,
 				D8D69AB95F6081DCC87FF4F3 /* SettingsView.swift in Sources */,
+				906DF5F28839AE58C637AC9C /* SyncEngine.swift in Sources */,
 				849A51251EE8815DCF7187BB /* SystemMonitorBridge.swift in Sources */,
 				2172A68118565954CEE3E589 /* SystemMonitorFeature.swift in Sources */,
 				5735921B02AF0F53A22A2E7A /* TapCatcher.swift in Sources */,
