@@ -4,6 +4,7 @@ import Foundation
 enum NotchState: Equatable, Sendable {
     case idle
     case hint
+    case dashboard   // default hover-expanded state (clock + date + quick peek)
     case media
     case drop
     case airpods
@@ -13,7 +14,7 @@ enum NotchState: Equatable, Sendable {
     var isExpanded: Bool {
         switch self {
         case .idle, .hint: return false
-        case .media, .drop, .airpods, .calendar, .timer: return true
+        case .dashboard, .media, .drop, .airpods, .calendar, .timer: return true
         }
     }
 }

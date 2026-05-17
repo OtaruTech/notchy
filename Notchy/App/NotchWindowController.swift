@@ -37,7 +37,9 @@ final class NotchWindowController {
             p.isOpaque = false
             p.backgroundColor = .clear
             p.hasShadow = false
-            p.ignoresMouseEvents = false
+            // Start opaque-to-events false; AppDelegate toggles based on state.
+            // Initial state is .idle so set true here.
+            p.ignoresMouseEvents = true
             p.isMovable = false
             p.isReleasedWhenClosed = false
             p.contentView = NSHostingView(rootView: rootView())
@@ -51,6 +53,13 @@ final class NotchWindowController {
 
     func hide() {
         panel?.orderOut(nil)
+    }
+
+    /// Toggle whether the panel intercepts mouse events. When idle the panel
+    /// should let clicks pass through to the desktop / menu-bar; when expanded
+    /// it needs to receive button clicks, scrubber drags, etc.
+    func setIgnoresMouseEvents(_ ignore: Bool) {
+        panel?.ignoresMouseEvents = ignore
     }
 
     /// Expanded panel area is wider/taller than the notch — we always allocate the

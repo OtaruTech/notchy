@@ -11,6 +11,7 @@ struct NotchExpandedView: View {
     let btFeature: BTFeature
     let calendarFeature: CalendarFeature
     let timerFeature: TimerFeature
+    let systemMonitor: SystemMonitorFeature
     let availableTabs: [NotchState]
     let onTabSwitch: (NotchState) -> Void
 
@@ -78,6 +79,7 @@ struct NotchExpandedView: View {
         case .airpods: return DesignTokens.glowAirPods
         case .calendar: return Color(red: 0.98, green: 0.65, blue: 0.20)
         case .timer: return Color(red: 0.97, green: 0.38, blue: 0.38)
+        case .dashboard: return Color(red: 0.55, green: 0.62, blue: 0.85)
         case .hint, .idle: return .clear
         }
     }
@@ -85,6 +87,8 @@ struct NotchExpandedView: View {
     @ViewBuilder
     private var content: some View {
         switch state {
+        case .dashboard:
+            DashboardView(nextEvent: calendarFeature.events.first, snapshot: systemMonitor.snapshot)
         case .media:
             if let vm = mediaVM {
                 MediaView(

@@ -61,6 +61,7 @@
 		E4A897D208DAB56EE74569EE /* BatteryReadingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D73E5D88FE0299E1D90ABC /* BatteryReadingTests.swift */; };
 		E5DD01A00973F5BE7459D7DB /* NotchWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CF68BED545BCBB3A8822B0 /* NotchWindowController.swift */; };
 		F29841C20EF81367D1331F67 /* ScreenGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB210D67BB9058034F788290 /* ScreenGeometryTests.swift */; };
+		F5144B2A34BE3536C844C2C9 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D689D273D37007ED622990E1 /* DashboardView.swift */; };
 		FB8A981216B67649B07A7D4A /* Placeholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C48864F05F8FB04487850E /* Placeholder.swift */; };
 /* End PBXBuildFile section */
 
@@ -131,6 +132,7 @@
 		D153BA554912F668AC5887CA /* BTFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BTFeature.swift; sourceTree = "<group>"; };
 		D45A277B816298254CE708D9 /* MediaFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaFeatureTests.swift; sourceTree = "<group>"; };
 		D601C50E08A7A66E52CBFCF4 /* DropItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropItem.swift; sourceTree = "<group>"; };
+		D689D273D37007ED622990E1 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		DEA109DCBD303D912C0C256D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E3442410EB733AC1751A9511 /* SystemMonitorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMonitorTests.swift; sourceTree = "<group>"; };
 		E4B2176394FA4A39E56579A2 /* TimerFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerFeature.swift; sourceTree = "<group>"; };
@@ -260,11 +262,20 @@
 			path = System;
 			sourceTree = "<group>";
 		};
+		8E8491B3A385E984296E8EFF /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				D689D273D37007ED622990E1 /* DashboardView.swift */,
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
 		96F0B6EFED0588E33C8DCF4A /* Features */ = {
 			isa = PBXGroup;
 			children = (
 				ADF40D5E94924170E55495A6 /* AirPods */,
 				36ADBBC3FC84399756C07446 /* Calendar */,
+				8E8491B3A385E984296E8EFF /* Dashboard */,
 				271D7F760B84B33810FEA1EB /* Drop */,
 				2135213ACED6312E4D7643C4 /* Media */,
 				F93B4A6AA7F28C96B503640E /* SystemMonitor */,
@@ -477,6 +488,7 @@
 				91D59D6E4197DBCDC78A951B /* BatteryReading.swift in Sources */,
 				60DBF9B26104D42BBB9CCDDE /* CalendarFeature.swift in Sources */,
 				551E7B961D39A3EFC0EBC7BD /* CalendarView.swift in Sources */,
+				F5144B2A34BE3536C844C2C9 /* DashboardView.swift in Sources */,
 				9E1B8767990F873C8ADF23C5 /* DesignTokens.swift in Sources */,
 				195480A06999E8B25DFEBFA2 /* DragSession.swift in Sources */,
 				181C49AA1DBBCA49D1328FED /* DropFeature.swift in Sources */,

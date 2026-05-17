@@ -28,6 +28,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         AppDelegate.weakSelf = self
         installSignalHandlers()
+        promptAccessibilityIfNeeded()
 
         mediaFeature = MediaFeature(bridge: mediaBridge, stateMachine: stateMachine)
         mediaFeature.start()
@@ -134,6 +135,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func handleStateChange() {
+        // Toggle click-through: idle/hint = transparent area must pass clicks
+        // through to the desktop; expanded states need to receive clicks.
+        windowController?.setIgnoresMouseEvents(!stateMachine.state.isExpanded)
+
         if stateMachine.state == .airpods {
             airpodsDismissTimer?.cancel()
             airpodsDismissTimer = Task { [weak self] in
@@ -190,6 +195,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func startTimer25() { timerFeature.start(seconds: 1500) }
     @objc func startTimer15() { timerFeature.start(seconds: 900) }
     @objc func startTimer5() { timerFeature.start(seconds: 300) }
+
+    /// Trigger the system Accessibility prompt so Notchy appears in
+    /// System Settings → Privacy & Security → Accessibility. Without this,
+    /// NSEvent global monitors silently fail (return nil) and hover never fires.
+    private func promptAccessibilityIfNeeded() {
+        // Swift 6 doesn't let us touch the bridged kAXTrustedCheckOptionPrompt global
+        // (it's an unsafe shared mutable). Use the literal key string instead — the
+        // value is stable in macOS history.
+        let options = ["AXTrustedCheckOptionPrompt": kCFBooleanTrue!] as CFDictionary
+        _ = AXIsProcessTrustedWithOptions(options)
+    }
 
     private func installSignalHandlers() {
         let handler: @convention(c) (Int32) -> Void = { _ in

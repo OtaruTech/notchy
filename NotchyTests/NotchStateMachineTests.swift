@@ -9,10 +9,10 @@ struct NotchStateMachineTests {
         #expect(sm.state == .idle)
     }
 
-    @Test func hoverWithNoMediaStaysIdle() {
+    @Test func hoverWithNoMediaExpandsToDashboard() {
         let sm = NotchStateMachine()
         sm.send(.hoverEntered)
-        #expect(sm.state == .idle)
+        #expect(sm.state == .dashboard)
     }
 
     @Test func hoverWithMediaExpandsToMedia() {
@@ -22,12 +22,20 @@ struct NotchStateMachineTests {
         #expect(sm.state == .media)
     }
 
-    @Test func hoverExitedCollapsesToHintIfMediaActive() {
+    @Test func hoverExitedFromMediaCollapsesToHint() {
         let sm = NotchStateMachine()
         sm.send(.mediaAvailabilityChanged(true))
         sm.send(.hoverEntered)
         sm.send(.hoverExited)
         #expect(sm.state == .hint)
+    }
+
+    @Test func hoverExitedFromDashboardCollapsesToIdle() {
+        let sm = NotchStateMachine()
+        sm.send(.hoverEntered)
+        #expect(sm.state == .dashboard)
+        sm.send(.hoverExited)
+        #expect(sm.state == .idle)
     }
 
     @Test func dragEnteredForcesDropEvenOverMedia() {

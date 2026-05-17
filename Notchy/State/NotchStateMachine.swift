@@ -29,13 +29,15 @@ final class NotchStateMachine {
             }
 
         case .hoverEntered:
-            if mediaAvailable, state == .idle || state == .hint {
-                return .media
+            // Hover always expands. Prefer .media if active, else .dashboard.
+            if state == .idle || state == .hint {
+                return mediaAvailable ? .media : .dashboard
             }
             return state
 
         case .hoverExited:
-            if state == .media {
+            // Collapse from any hover-driven expansion (media or dashboard).
+            if state == .media || state == .dashboard {
                 return mediaAvailable ? .hint : .idle
             }
             return state

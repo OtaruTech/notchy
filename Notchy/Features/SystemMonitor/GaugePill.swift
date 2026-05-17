@@ -6,10 +6,10 @@ struct GaugePill: View {
     var body: some View {
         HStack(spacing: 8) {
             HStack(spacing: 3) {
-                Image(systemName: "cpu")
+                Image(systemName: "gauge.with.dots.needle.50percent")
                     .font(.system(size: 9))
-                    .foregroundStyle(.white.opacity(0.55))
-                Text("\(snapshot.cpuPercent)%")
+                    .foregroundStyle(snapshot.cpuPercent > 70 ? .orange : .white.opacity(0.55))
+                Text("CPU \(snapshot.cpuPercent)%")
                     .font(.system(size: 10, weight: .medium))
                     .foregroundStyle(.white.opacity(0.8))
             }

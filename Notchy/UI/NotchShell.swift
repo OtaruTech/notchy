@@ -24,17 +24,11 @@ struct NotchShell: View {
                 btFeature: btFeature,
                 calendarFeature: calendarFeature,
                 timerFeature: timerFeature,
+                systemMonitor: systemMonitor,
                 availableTabs: availableTabs,
                 onTabSwitch: { stateMachine.send(.tabSwitchedTo($0)) }
             )
             Spacer(minLength: 0)
-        }
-        .overlay(alignment: .topTrailing) {
-            if gaugeEnabled, stateMachine.state == .idle || stateMachine.state == .hint {
-                GaugePill(snapshot: systemMonitor.snapshot)
-                    .padding(.top, DesignTokens.notchHeight + 4)
-                    .padding(.trailing, 4)
-            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .animation(DesignTokens.springExpand, value: stateMachine.state)
