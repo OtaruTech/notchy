@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Notchy — Turn your MacBook's notch into a delightful interactive surface</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Free, open-source macOS notch utility. Clipboard manager, Now Playing, Drop tray, Pomodoro, Mirror, Calendar — all from the notch.">
+<meta name="theme-color" content="#0a0a0c">
+<meta property="og:title" content="Notchy">
+<meta property="og:description" content="Turn your MacBook's notch into a delightful interactive surface.">
+<meta property="og:image" content="https://otarutech.github.io/notchy/images/00-app-icon.png">
+<meta property="og:url" content="https://otarutech.github.io/notchy/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="images/00-app-icon.png">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="nav">
+  <a class="nav__brand" href="#top">
+    <img src="images/00-app-icon.png" alt="" width="28" height="28">
+    <span>Notchy</span>
+  </a>
+  <nav class="nav__links">
+    <a href="#features">Features</a>
+    <a href="#clipboard">Clipboard</a>
+    <a href="#download">Download</a>
+    <a href="https://github.com/OtaruTech/notchy" target="_blank" rel="noopener">GitHub ↗</a>
+  </nav>
+</header>
+
+<main>
+
+<section class="hero" id="top">
+  <div class="hero__inner">
+    <div class="hero__notch" aria-hidden="true">
+      <div class="hero__notch-bar"></div>
+    </div>
+    <p class="hero__eyebrow">Free · Open source · macOS 14+</p>
+    <h1 class="hero__title">
+      Your MacBook's notch,<br>
+      <span class="hero__title-accent">but useful.</span>
+    </h1>
+    <p class="hero__sub">
+      Notchy turns the hardware notch into a tactile control surface — clipboard history,
+      Now Playing, a Pomodoro timer, file drop tray, mirror, calendar, AirPods battery,
+      and more. All anchored on the notch. None of it in your way.
+    </p>
+    <div class="hero__cta">
+      <a class="btn btn--primary" href="#download">Download for macOS</a>
+      <a class="btn btn--ghost" href="https://github.com/OtaruTech/notchy" target="_blank" rel="noopener">View on GitHub</a>
+    </div>
+    <p class="hero__meta">Latest release: <a href="https://github.com/OtaruTech/notchy/releases/latest" target="_blank" rel="noopener">v0.3.0</a> · Apple Silicon · MIT licensed</p>
+  </div>
+  <div class="hero__shot">
+    <img src="images/01-live-activity.png" alt="Notchy's live-activity strip showing album art and waveform flanking the notch" loading="eager" fetchpriority="high">
+  </div>
+</section>
+
+<section class="features" id="features">
+  <h2 class="section-title">Everything you wish your notch did.</h2>
+  <p class="section-sub">One small surface. Eight things you actually do every day.</p>
+  <ul class="feature-grid">
+    <li class="feature">
+      <div class="feature__icon">📋</div>
+      <h3>Clipboard manager</h3>
+      <p>⌘⇧V opens a Paste-style horizontal card strip with your last 100 copies. Text, URLs, images, files, colours, code. Privacy by design.</p>
+    </li>
+    <li class="feature">
+      <div class="feature__icon">🎵</div>
+      <h3>Now Playing</h3>
+      <p>Album art and waveform flank the notch while music plays. Hover to expand into a full player with live progress, scrubber, and audio output badge.</p>
+    </li>
+    <li class="feature">
+      <div class="feature__icon">🗂</div>
+      <h3>Drop tray</h3>
+      <p>Drag a file onto the notch. Panel expands into a temporary tray with AirDrop, Email, and Clear. Drag chips back out to any app.</p>
+    </li>
+    <li class="feature">
+      <div class="feature__icon">⏱</div>
+      <h3>Pomodoro timer</h3>
+      <p>5 / 15 / 25 minute presets from the menu bar. Ring progress in the notch. Notification fires on completion. Stays visible while music plays.</p>
+    </li>
+    <li class="feature">
+      <div class="feature__icon">📷</div>
+      <h3>Mirror</h3>
+      <p>Front-camera preview in the notch. One-second sanity check before a video call. ⌘⌥M toggles it.</p>
+    </li>
+    <li class="feature">
+      <div class="feature__icon">📅</div>
+      <h3>Calendar</h3>
+      <p>Today's upcoming events at a glance. Live event badge on the dashboard when something's about to happen.</p>
+    </li>
+    <li class="feature">
+      <div class="feature__icon">🎧</div>
+      <h3>AirPods burst</h3>
+      <p>Connect AirPods, the notch briefly expands showing device name and L / R / Case battery. Dismisses itself in 3 seconds.</p>
+    </li>
+    <li class="feature">
+      <div class="feature__icon">📊</div>
+      <h3>Dashboard</h3>
+      <p>Default hover view: big clock, today's date, next calendar event, live CPU and battery readouts. ⌘⌥N opens it instantly.</p>
+    </li>
+  </ul>
+</section>
+
+<section class="spotlight" id="clipboard">
+  <div class="spotlight__inner spotlight__inner--reverse">
+    <div class="spotlight__copy">
+      <p class="spotlight__eyebrow">New in v0.3</p>
+      <h2 class="spotlight__title">A clipboard manager that lives in your notch.</h2>
+      <p class="spotlight__text">
+        Press <kbd>⌘</kbd>+<kbd>⇧</kbd>+<kbd>V</kbd>. The panel drops out from under
+        the notch with your last 100 copies as a horizontal card strip. Filter by
+        kind, hit a number key to paste, hit Enter to paste what you're hovering on.
+      </p>
+      <ul class="bullets">
+        <li><strong>Six item kinds</strong> — text, URL, image, file, colour, code — each with a tailored preview.</li>
+        <li><strong>Smart paste</strong> — pastes back into the previously-focused app, then restores your prior clipboard 80 ms later.</li>
+        <li><strong>Privacy first</strong> — local SQLite, zero network. Default-excludes 1Password, Bitwarden, Keychain, LastPass.</li>
+        <li><strong>SHA-256 dedupe</strong> — copying the same string twice bumps the row; doesn't duplicate.</li>
+        <li><strong>Retention purge</strong> — 7 / 30 / 90 days or never. Pause toggle in the menu bar.</li>
+      </ul>
+    </div>
+    <div class="spotlight__art">
+      <img src="images/02-now-playing.png" alt="Notchy Now Playing widget expanded">
+    </div>
+  </div>
+</section>
+
+<section class="spotlight spotlight--alt">
+  <div class="spotlight__inner">
+    <div class="spotlight__art">
+      <img src="images/05-mirror.png" alt="Notchy Mirror widget showing live front camera preview">
+    </div>
+    <div class="spotlight__copy">
+      <p class="spotlight__eyebrow">Live activities, anchored</p>
+      <h2 class="spotlight__title">It grows from the notch. It doesn't take it over.</h2>
+      <p class="spotlight__text">
+        Music plays, album art and waveform extend the notch sideways like wings.
+        A timer's running, you see the countdown ring on the right. AirPods connect,
+        a 3-second burst tells you their battery. Drag a file, the tray slides down.
+        Hover to expand into a full panel. Walk away and it disappears.
+      </p>
+      <p class="spotlight__text">
+        Every widget is built around the principle that the notch is a tool, not
+        a stage. Nothing pulses for attention. Nothing covers your work.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="spotlight spotlight--alt">
+  <div class="spotlight__inner spotlight__inner--reverse">
+    <div class="spotlight__copy">
+      <p class="spotlight__eyebrow">Dashboard</p>
+      <h2 class="spotlight__title">A glanceable home for everything.</h2>
+      <p class="spotlight__text">
+        Hover the notch with nothing else going on and the dashboard expands: big clock,
+        today's date, the next event from your calendar, live CPU and battery. Tab between
+        the dashboard and any active widget without breaking focus.
+      </p>
+      <ul class="bullets">
+        <li><kbd>⌘</kbd>+<kbd>⌥</kbd>+<kbd>N</kbd> — toggle dashboard from anywhere</li>
+        <li><kbd>⌘</kbd>+<kbd>⌥</kbd>+<kbd>M</kbd> — toggle Mirror</li>
+        <li><kbd>⌘</kbd>+<kbd>⇧</kbd>+<kbd>V</kbd> — open clipboard panel</li>
+        <li>Two-finger horizontal swipe over the notch → next / previous track</li>
+      </ul>
+    </div>
+    <div class="spotlight__art">
+      <img src="images/03-dashboard.png" alt="Notchy dashboard view with clock, calendar event and system stats">
+    </div>
+  </div>
+</section>
+
+<section class="trust" id="trust">
+  <div class="trust__grid">
+    <div class="trust__item">
+      <h3>Open source</h3>
+      <p>MIT licensed. Every line of code is on GitHub. No telemetry. No analytics. No phone-home.</p>
+    </div>
+    <div class="trust__item">
+      <h3>Free, forever</h3>
+      <p>Not a freemium. Not a trial. Not paywalled. We don't even take donations because we don't need to.</p>
+    </div>
+    <div class="trust__item">
+      <h3>Local-first</h3>
+      <p>Your clipboard history, your timer, your widgets — all live in your own user folder. Zero servers.</p>
+    </div>
+    <div class="trust__item">
+      <h3>Native</h3>
+      <p>SwiftUI + AppKit. No Electron, no Web. Tiny memory footprint, runs cool on battery, looks like a Mac app should.</p>
+    </div>
+  </div>
+</section>
+
+<section class="download" id="download">
+  <h2 class="section-title">Get Notchy.</h2>
+  <p class="section-sub">macOS 14 Sonoma or later · Apple Silicon · 800 KB download</p>
+  <div class="download__buttons">
+    <a class="btn btn--primary btn--big" href="https://github.com/OtaruTech/notchy/releases/latest" target="_blank" rel="noopener">
+      ↓ Download latest
+    </a>
+    <a class="btn btn--ghost btn--big" href="https://github.com/OtaruTech/notchy#-install" target="_blank" rel="noopener">
+      Install instructions
+    </a>
+  </div>
+  <div class="download__note">
+    <strong>First-launch tip.</strong> Notchy is ad-hoc signed (we don't yet have a paid
+    Apple Developer account). On first launch macOS Gatekeeper will block it. Two
+    workarounds in 5 seconds:
+    <pre><code>xattr -dr com.apple.quarantine /Applications/Notchy.app</code></pre>
+    or <em>System Settings → Privacy &amp; Security → Open Anyway</em>.
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="footer__inner">
+    <div>
+      <img src="images/00-app-icon.png" alt="" width="40" height="40">
+      <p><strong>Notchy</strong> · <a href="https://github.com/OtaruTech/notchy" target="_blank" rel="noopener">github.com/OtaruTech/notchy</a></p>
+      <p class="footer__meta">Modeled after <a href="https://lo.cafe/notchnook" target="_blank" rel="noopener">NotchNook</a>. MIT licensed. Built with SwiftUI + AppKit on macOS 14+.</p>
+    </div>
+    <nav class="footer__links">
+      <a href="https://github.com/OtaruTech/notchy/releases" target="_blank" rel="noopener">Releases</a>
+      <a href="https://github.com/OtaruTech/notchy/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog</a>
+      <a href="https://github.com/OtaruTech/notchy/blob/main/LICENSE" target="_blank" rel="noopener">License</a>
+      <a href="https://github.com/OtaruTech/notchy/issues" target="_blank" rel="noopener">Issues</a>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>
