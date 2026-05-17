@@ -15,7 +15,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var dropDismissTimer: Task<Void, Never>?
     let btBridge = IOBluetoothBridge()
     private(set) var btFeature: BTFeature!
-    private var stateObservation: Task<Void, Never>?
     private var statusItem: NSStatusItem?
 
     nonisolated(unsafe) private static var weakSelf: AppDelegate?
@@ -87,20 +86,26 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             Task { @MainActor in self?.windowController?.show() }
         }
 
-        stateObservation = Task { [weak self] in
-            var last: NotchState = .idle
-            while !Task.isCancelled {
-                try? await Task.sleep(for: .milliseconds(100))
-                guard let self else { return }
-                let s = await MainActor.run { self.stateMachine.state }
-                if s == .airpods, last != .airpods {
-                    self.airpodsDismissTimer?.cancel()
-                    self.airpodsDismissTimer = Task { [weak self] in
-                        try? await Task.sleep(for: DesignTokens.airPodsDismissDelay)
-                        await MainActor.run { self?.stateMachine.send(.dismissTimerFired) }
-                    }
-                }
-                last = s
+        observeStateChanges()
+    }
+
+    private func observeStateChanges() {
+        withObservationTracking {
+            _ = stateMachine.state
+        } onChange: {
+            Task { @MainActor [weak self] in
+                self?.handleStateChange()
+                self?.observeStateChanges()  // re-subscribe (one-shot)
+            }
+        }
+    }
+
+    private func handleStateChange() {
+        if stateMachine.state == .airpods {
+            airpodsDismissTimer?.cancel()
+            airpodsDismissTimer = Task { [weak self] in
+                try? await Task.sleep(for: DesignTokens.airPodsDismissDelay)
+                await MainActor.run { self?.stateMachine.send(.dismissTimerFired) }
             }
         }
     }
