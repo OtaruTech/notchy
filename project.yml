@@ -52,7 +52,10 @@ targets:
   NotchySnapshotTests:
     type: bundle.unit-test
     platform: macOS
-    sources: [NotchySnapshotTests]
+    sources:
+      - path: NotchySnapshotTests
+        excludes:
+          - "__Snapshots__/**"
     dependencies:
       - target: Notchy
       - package: SnapshotTesting
