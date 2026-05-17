@@ -10,7 +10,7 @@ final class HotZoneMonitor {
     private var isInside = false
 
     /// Controlled externally by AppDelegate when the state machine expands/collapses.
-    /// When expanded, the keep-alive zone grows to the full panel (540×220) so the
+    /// When expanded, the keep-alive zone grows to the full panel so the
     /// cursor can move down into the expanded content without triggering hoverExited.
     /// When collapsed, the zone is the small notch hot rect only.
     var isExpanded: Bool = false
@@ -19,9 +19,17 @@ final class HotZoneMonitor {
     /// to cover the live-activity strip (album art + waveform on either side).
     var isLiveActivityVisible: Bool = false
 
+    /// True while the clipboard panel is open. The clipboard panel is much wider
+    /// than the standard expanded panel (880 vs 540) AND it must never collapse
+    /// on cursor leave — only Esc / click-outside / explicit paste should
+    /// dismiss it. This flag flips both behaviours.
+    var isClipboardPanel: Bool = false
+
     /// Expanded keep-alive zone width/height (matches NotchWindowController.expandedFrame).
     private let expandedWidth: CGFloat = 540
     private let expandedHeight: CGFloat = 220
+    private let clipboardZoneWidth: CGFloat = 880
+    private let clipboardZoneHeight: CGFloat = 320
     private let liveActivityWingWidth: CGFloat = 70
 
     var onEnter: () -> Void = {}
@@ -62,6 +70,12 @@ final class HotZoneMonitor {
 
     /// Computes the current keep-alive rect in screen (bottom-left-origin) coords.
     private func activeZone(on screen: NSScreen) -> CGRect? {
+        if isClipboardPanel {
+            // The clipboard panel is wider than the standard expanded panel.
+            let x = screen.frame.midX - clipboardZoneWidth / 2
+            let y = screen.frame.maxY - clipboardZoneHeight
+            return CGRect(x: x, y: y, width: clipboardZoneWidth, height: clipboardZoneHeight)
+        }
         if isExpanded {
             // Full panel area covering 540 × 220 below the notch.
             let x = screen.frame.midX - expandedWidth / 2
@@ -146,6 +160,11 @@ final class HotZoneMonitor {
         } else if !nowInside, isInside {
             isInside = false
             hoverWorkItem?.cancel()
+            // Clipboard panel ignores hover-leave entirely — it stays open
+            // until the user explicitly clicks outside or presses Esc / paste.
+            // Without this, moving the cursor to the search field or to a
+            // far-right card collapses the panel.
+            if isClipboardPanel { return }
             let work = DispatchWorkItem { [weak self] in
                 guard let self, !self.isInside else { return }
                 self.onExit()

@@ -292,6 +292,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // Grow / shrink hover keep-alive zone so cursor can move INTO the expanded
         // panel content (buttons, scrubber, etc.) without triggering collapse.
         hotZone?.isExpanded = stateMachine.state.isExpanded
+        // Clipboard panel gets a larger hover zone AND ignores hover-leave —
+        // it should only dismiss on Esc / click-outside / paste, never on
+        // cursor movement.
+        hotZone?.isClipboardPanel = stateMachine.state == .clipboard
 
         // Live-activity wings widen the collapsed hover zone whenever a track is
         // loaded (playing or paused), so cursor can hover the album art / waveform.
