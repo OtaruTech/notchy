@@ -52,6 +52,10 @@ Start 5 / 15 / 25-minute timers from the status bar menu. Ring progress shows in
 
 Webcam preview in the notch. Useful for last-minute check before video calls.
 
+<img src="docs/images/05-mirror.png" width="700" alt="Mirror widget — live front-camera preview">
+
+Open via the menu bar `🌒 → Mirror`. The camera turns off automatically when you navigate away from the Mirror tab.
+
 ### 📊 Dashboard
 
 Default hover view when nothing else is happening: big clock, today's date, next calendar event, and live CPU / battery readouts.
