@@ -12,6 +12,7 @@ struct NotchShell: View {
     let systemMonitor: SystemMonitorFeature
     let mirrorFeature: MirrorFeature
     let audioOutput: AudioOutputBridge
+    let lyricsFeature: LyricsFeature
     @AppStorage("notchy.gaugeEnabled") private var gaugeEnabled = true
 
     var body: some View {
@@ -29,6 +30,7 @@ struct NotchShell: View {
                 timerFeature: timerFeature,
                 systemMonitor: systemMonitor,
                 mirrorFeature: mirrorFeature,
+                lyricsFeature: lyricsFeature,
                 availableTabs: availableTabs,
                 onTabSwitch: { stateMachine.send(.tabSwitchedTo($0)) }
             )

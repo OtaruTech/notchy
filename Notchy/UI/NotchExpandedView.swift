@@ -14,6 +14,7 @@ struct NotchExpandedView: View {
     let timerFeature: TimerFeature
     let systemMonitor: SystemMonitorFeature
     let mirrorFeature: MirrorFeature
+    let lyricsFeature: LyricsFeature
     let availableTabs: [NotchState]
     let onTabSwitch: (NotchState) -> Void
 
@@ -35,11 +36,12 @@ struct NotchExpandedView: View {
                         .opacity(state.isExpanded ? 1 : 0)
                 }
 
-            // Live-activity flanking strip whenever a track is loaded (playing OR paused).
-            // Showing it on pause means user can hover → click ▶ to resume.
-            if (state == .hint || state == .idle), let mvm = mediaVM {
+            // Live-activity flanking strip whenever a track is loaded (playing OR
+            // paused) OR a timer is running — so the timer remains globally visible
+            // even when the notch is collapsed.
+            if (state == .hint || state == .idle), shouldShowLiveStrip {
                 VStack(spacing: 0) {
-                    LiveActivityStrip(vm: mvm)
+                    LiveActivityStrip(vm: mediaVM, timerState: timerFeature.state)
                     Spacer(minLength: 0)
                 }
                 .transition(.opacity)
@@ -72,9 +74,20 @@ struct NotchExpandedView: View {
     private var width: CGFloat {
         if state.isExpanded { return DesignTokens.expandedWidth }
         let actualNotchW = ScreenGeometry.liveNotchWidth()
-        // Wings show whenever a track is loaded (playing or paused).
-        if mediaVM != nil { return actualNotchW + 2 * 70 }
+        // Wings show whenever a track is loaded (playing or paused) or a timer
+        // is running. Track adds left wing; timer/waveform adds right wing.
+        let hasMedia = mediaVM != nil
+        let hasTimer = timerFeature.state != .idle
+        if hasMedia && hasTimer { return actualNotchW + 2 * 70 }
+        if hasMedia { return actualNotchW + 2 * 70 }
+        if hasTimer { return actualNotchW + 70 }
         return state == .hint ? actualNotchW + 8 : actualNotchW
+    }
+
+    private var shouldShowLiveStrip: Bool {
+        if mediaVM != nil { return true }
+        if timerFeature.state != .idle { return true }
+        return false
     }
 
     private var height: CGFloat {
@@ -109,6 +122,7 @@ struct NotchExpandedView: View {
                 MediaView(
                     vm: vm,
                     output: audioOutput,
+                    lyrics: lyricsFeature.lines,
                     onPlayPause: { mediaFeature.playPause() },
                     onPrev: { mediaFeature.prev() },
                     onNext: { mediaFeature.next() },

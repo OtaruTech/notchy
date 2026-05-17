@@ -4,6 +4,7 @@ import AppKit
 struct MediaView: View {
     let vm: NowPlayingVM
     var output: AudioOutput? = nil
+    var lyrics: [LrcLine] = []
     var onPlayPause: () -> Void = {}
     var onPrev: () -> Void = {}
     var onNext: () -> Void = {}
@@ -38,12 +39,18 @@ struct MediaView: View {
                         .lineLimit(1)
                 }
                 // Live-ticking scrubber: re-renders every 0.5s while playing so the
-                // bar fills smoothly between (sparse) media-control events.
-                TimelineView(.periodic(from: .now, by: 0.5)) { ctx in
-                    VStack(spacing: 2) {
+                // bar fills smoothly between (sparse) media-control events. Also
+                // drives the synced-lyrics highlight.
+                TimelineView(.periodic(from: .now, by: 0.3)) { ctx in
+                    let elapsed = vm.liveElapsed(at: ctx.date)
+                    VStack(alignment: .leading, spacing: 4) {
+                        if !lyrics.isEmpty {
+                            LyricsView(lines: lyrics, elapsed: elapsed)
+                                .padding(.bottom, 2)
+                        }
                         ScrubberView(progress: vm.liveProgress(at: ctx.date))
                         HStack {
-                            Text(formatTime(vm.liveElapsed(at: ctx.date)))
+                            Text(formatTime(elapsed))
                                 .foregroundStyle(.white.opacity(0.55))
                                 .monospacedDigit()
                             Spacer()
