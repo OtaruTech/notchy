@@ -25,6 +25,7 @@
 		5D6B9A13CA6B3BC91D023208 /* MediaFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45A277B816298254CE708D9 /* MediaFeatureTests.swift */; };
 		5FBDD83F85E67563BC230339 /* DropFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63EABB2063931DFB30DAC6DB /* DropFeatureTests.swift */; };
 		622ED93051501AD7FA938E32 /* ScreenGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3D7AB1CDC0C20683D95BE7 /* ScreenGeometry.swift */; };
+		77D1EDBBCA6AE49016C7EA3D /* AirPodsViewSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B72C57C5C358F93B591E5A1 /* AirPodsViewSnapshots.swift */; };
 		781ED9252B58782D95E47750 /* DropItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D601C50E08A7A66E52CBFCF4 /* DropItem.swift */; };
 		822562095721E7A66CD32343 /* paused.paused.png in Resources */ = {isa = PBXBuildFile; fileRef = 75666856E474485496091BF7 /* paused.paused.png */; };
 		892BD16133C0CB804E94B701 /* HotZoneMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C3034B9AB977A1751561A17 /* HotZoneMonitor.swift */; };
@@ -84,6 +85,7 @@
 		5EBC17BE3C8BA0AA132DA193 /* DropFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropFeature.swift; sourceTree = "<group>"; };
 		63EABB2063931DFB30DAC6DB /* DropFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropFeatureTests.swift; sourceTree = "<group>"; };
 		6633BDBED265ECF9E7B5D9E0 /* NotchShell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchShell.swift; sourceTree = "<group>"; };
+		6B72C57C5C358F93B591E5A1 /* AirPodsViewSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirPodsViewSnapshots.swift; sourceTree = "<group>"; };
 		75666856E474485496091BF7 /* paused.paused.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = paused.paused.png; sourceTree = "<group>"; };
 		87F074AAE64DB16A07192221 /* DropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropView.swift; sourceTree = "<group>"; };
 		8947D82465DDF1474C3C2E4D /* NotchState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchState.swift; sourceTree = "<group>"; };
@@ -188,6 +190,7 @@
 		69FCE517551DB9C1EA705209 /* NotchySnapshotTests */ = {
 			isa = PBXGroup;
 			children = (
+				6B72C57C5C358F93B591E5A1 /* AirPodsViewSnapshots.swift */,
 				8E8D50074A898F05304A0532 /* DropViewSnapshots.swift */,
 				3F1EF7FA9010FAC624C333ED /* MediaViewSnapshots.swift */,
 				27C48864F05F8FB04487850E /* Placeholder.swift */,
@@ -415,6 +418,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				77D1EDBBCA6AE49016C7EA3D /* AirPodsViewSnapshots.swift in Sources */,
 				5A48F3EBB9F12FAB4DF284AB /* DropViewSnapshots.swift in Sources */,
 				B7CDBB6E2E9399B453052CCE /* MediaViewSnapshots.swift in Sources */,
 				FB8A981216B67649B07A7D4A /* Placeholder.swift in Sources */,
