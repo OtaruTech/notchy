@@ -18,6 +18,7 @@
 		30FD864030AE3EA6C9478B48 /* NotchExpandedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE756F0AA1ADA997BF8186E4 /* NotchExpandedView.swift */; };
 		40376D104D4D8BFD69BA134D /* MediaRemoteBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9705394CEBEC362E7C42D2 /* MediaRemoteBridge.swift */; };
 		52F7BE5899E9B9BED6E4A3E7 /* NotchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8947D82465DDF1474C3C2E4D /* NotchState.swift */; };
+		5C9D8706401C06F41C3B42CD /* DropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F074AAE64DB16A07192221 /* DropView.swift */; };
 		5D6B9A13CA6B3BC91D023208 /* MediaFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45A277B816298254CE708D9 /* MediaFeatureTests.swift */; };
 		5FBDD83F85E67563BC230339 /* DropFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63EABB2063931DFB30DAC6DB /* DropFeatureTests.swift */; };
 		622ED93051501AD7FA938E32 /* ScreenGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3D7AB1CDC0C20683D95BE7 /* ScreenGeometry.swift */; };
@@ -74,6 +75,7 @@
 		63EABB2063931DFB30DAC6DB /* DropFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropFeatureTests.swift; sourceTree = "<group>"; };
 		6633BDBED265ECF9E7B5D9E0 /* NotchShell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchShell.swift; sourceTree = "<group>"; };
 		75666856E474485496091BF7 /* paused.paused.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = paused.paused.png; sourceTree = "<group>"; };
+		87F074AAE64DB16A07192221 /* DropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropView.swift; sourceTree = "<group>"; };
 		8947D82465DDF1474C3C2E4D /* NotchState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchState.swift; sourceTree = "<group>"; };
 		8C3D7AB1CDC0C20683D95BE7 /* ScreenGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenGeometry.swift; sourceTree = "<group>"; };
 		8F8A432C63FD5F5D5741DD0E /* NotchIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchIntent.swift; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 			children = (
 				5EBC17BE3C8BA0AA132DA193 /* DropFeature.swift */,
 				D601C50E08A7A66E52CBFCF4 /* DropItem.swift */,
+				87F074AAE64DB16A07192221 /* DropView.swift */,
 			);
 			path = Drop;
 			sourceTree = "<group>";
@@ -384,6 +387,7 @@
 				195480A06999E8B25DFEBFA2 /* DragSession.swift in Sources */,
 				181C49AA1DBBCA49D1328FED /* DropFeature.swift in Sources */,
 				781ED9252B58782D95E47750 /* DropItem.swift in Sources */,
+				5C9D8706401C06F41C3B42CD /* DropView.swift in Sources */,
 				892BD16133C0CB804E94B701 /* HotZoneMonitor.swift in Sources */,
 				C2C75C7AF305D4241130A962 /* MediaFeature.swift in Sources */,
 				40376D104D4D8BFD69BA134D /* MediaRemoteBridge.swift in Sources */,

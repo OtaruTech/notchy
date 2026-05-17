@@ -4,6 +4,9 @@ struct NotchExpandedView: View {
     let state: NotchState
     let mediaVM: NowPlayingVM?
     let mediaFeature: MediaFeature
+    let dropFeature: DropFeature
+    let onAirDrop: () -> Void
+    let onEmail: () -> Void
 
     var body: some View {
         ZStack {
@@ -69,7 +72,13 @@ struct NotchExpandedView: View {
             } else {
                 Text("No media").foregroundStyle(.white.opacity(0.7))
             }
-        case .drop:  Text("Drop (Phase 4)").foregroundStyle(.white)
+        case .drop:
+            DropView(
+                items: dropFeature.items,
+                onClear: { dropFeature.clearAll() },
+                onAirDrop: onAirDrop,
+                onEmail: onEmail
+            )
         case .airpods: Text("AirPods (Phase 5)").foregroundStyle(.white)
         default: EmptyView()
         }

@@ -20,8 +20,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         let sm = stateMachine
         let mf = mediaFeature!
-        windowController = NotchWindowController {
-            NotchShell(stateMachine: sm, mediaFeature: mf)
+        let df = dropFeature
+        windowController = NotchWindowController { [weak self] in
+            NotchShell(
+                stateMachine: sm,
+                mediaFeature: mf,
+                dropFeature: df,
+                onAirDrop: { self?.performAirDrop() },
+                onEmail: { self?.performEmail() }
+            )
         }
         windowController?.show()
 
@@ -64,5 +71,21 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             try? await Task.sleep(for: DesignTokens.dragDismissDelay)
             await MainActor.run { self?.stateMachine.send(.dragExited) }
         }
+    }
+
+    @MainActor
+    func performAirDrop() {
+        let urls = dropFeature.items.map(\.url)
+        guard !urls.isEmpty else { return }
+        let sharing = NSSharingService(named: .sendViaAirDrop)
+        sharing?.perform(withItems: urls)
+    }
+
+    @MainActor
+    func performEmail() {
+        let urls = dropFeature.items.map(\.url)
+        guard !urls.isEmpty else { return }
+        let service = NSSharingService(named: .composeEmail)
+        service?.perform(withItems: urls)
     }
 }
