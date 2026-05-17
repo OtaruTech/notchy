@@ -25,6 +25,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     let audioOutput = AudioOutputBridge()
     let lyricsBridge = LyricsBridge()
     private(set) var lyricsFeature: LyricsFeature!
+    private(set) var clipboardStore: ClipboardStore!
+    private(set) var clipboardFeature: ClipboardFeature!
+    private var clipboardCapturer: ClipboardCapturer?
     private var statusItem: NSStatusItem?
     private var settingsWindow: NSWindow?
     private var welcomeWindow: NSWindow?
@@ -55,6 +58,28 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         lyricsFeature = LyricsFeature(bridge: lyricsBridge, mediaFeature: mediaFeature)
         lyricsFeature.start()
+
+        // Clipboard: default to enabled unless the user explicitly turned it off.
+        if UserDefaults.standard.object(forKey: "notchy.clipboardEnabled") == nil {
+            UserDefaults.standard.set(true, forKey: "notchy.clipboardEnabled")
+        }
+        let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+            .appendingPathComponent("tech.otaru.Notchy", isDirectory: true)
+        clipboardStore = ClipboardStore(directory: appSupport)
+        clipboardFeature = ClipboardFeature(store: clipboardStore)
+        Task {
+            do { try await clipboardStore.open() } catch { NSLog("[Notchy] clipboard open failed: \(error)") }
+            await clipboardFeature.bootstrap()
+            // Purge old items on launch (best-effort).
+            let retention = UserDefaults.standard.object(forKey: "notchy.clipboardRetentionDays") as? Int ?? 30
+            _ = try? await clipboardStore.purgeOlderThan(days: retention)
+        }
+        let capturer = ClipboardCapturer(store: clipboardStore)
+        capturer.onInsert = { [weak self] item in
+            self?.clipboardFeature.noteInserted(item)
+        }
+        capturer.start()
+        clipboardCapturer = capturer
 
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         // Try a few SF Symbols, falling back to emoji if none exist.
