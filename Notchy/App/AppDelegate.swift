@@ -15,6 +15,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var dropDismissTimer: Task<Void, Never>?
     let btBridge = IOBluetoothBridge()
     private(set) var btFeature: BTFeature!
+    let eventBridge = EventKitBridge()
+    let monitorBridge = SystemMonitorBridge()
+    private(set) var calendarFeature: CalendarFeature!
+    private(set) var timerFeature: TimerFeature!
+    private(set) var systemMonitor: SystemMonitorFeature!
     private var statusItem: NSStatusItem?
 
     nonisolated(unsafe) private static var weakSelf: AppDelegate?
@@ -29,10 +34,25 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         btFeature = BTFeature(bridge: btBridge, stateMachine: stateMachine)
         btFeature.start()
 
+        calendarFeature = CalendarFeature(bridge: eventBridge, stateMachine: stateMachine)
+        Task { await calendarFeature.start() }
+
+        timerFeature = TimerFeature(stateMachine: stateMachine)
+
+        systemMonitor = SystemMonitorFeature(bridge: monitorBridge)
+        systemMonitor.start()
+
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         item.button?.title = "🌒"
         let menu = NSMenu()
         menu.addItem(NSMenuItem(title: "Settings…", action: #selector(openSettings), keyEquivalent: ","))
+        let timerMenu = NSMenu()
+        timerMenu.addItem(NSMenuItem(title: "25 minutes", action: #selector(startTimer25), keyEquivalent: ""))
+        timerMenu.addItem(NSMenuItem(title: "15 minutes", action: #selector(startTimer15), keyEquivalent: ""))
+        timerMenu.addItem(NSMenuItem(title: "5 minutes", action: #selector(startTimer5), keyEquivalent: ""))
+        let timerItem = NSMenuItem(title: "Start Timer", action: nil, keyEquivalent: "")
+        timerItem.submenu = timerMenu
+        menu.addItem(timerItem)
         menu.addItem(.separator())
         menu.addItem(NSMenuItem(title: "Quit Notchy", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         item.menu = menu
@@ -42,6 +62,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let mf = mediaFeature!
         let df = dropFeature
         let bf = btFeature!
+        let cf = calendarFeature!
+        let tf = timerFeature!
+        let smon = systemMonitor!
         windowController = NotchWindowController { [weak self] in
             NotchShell(
                 stateMachine: sm,
@@ -49,7 +72,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 dropFeature: df,
                 onAirDrop: { self?.performAirDrop() },
                 onEmail: { self?.performEmail() },
-                btFeature: bf
+                btFeature: bf,
+                calendarFeature: cf,
+                timerFeature: tf,
+                systemMonitor: smon
             )
         }
         windowController?.show()
@@ -140,6 +166,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
         }
     }
+
+    @objc func startTimer25() { timerFeature.start(seconds: 1500) }
+    @objc func startTimer15() { timerFeature.start(seconds: 900) }
+    @objc func startTimer5() { timerFeature.start(seconds: 300) }
 
     private func installSignalHandlers() {
         let handler: @convention(c) (Int32) -> Void = { _ in

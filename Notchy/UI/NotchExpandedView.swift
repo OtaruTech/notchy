@@ -1,3 +1,4 @@
+import AppKit
 import SwiftUI
 
 struct NotchExpandedView: View {
@@ -8,6 +9,10 @@ struct NotchExpandedView: View {
     let onAirDrop: () -> Void
     let onEmail: () -> Void
     let btFeature: BTFeature
+    let calendarFeature: CalendarFeature
+    let timerFeature: TimerFeature
+    let availableTabs: [NotchState]
+    let onTabSwitch: (NotchState) -> Void
 
     @AppStorage("notchy.hintEnabled") private var hintEnabled = true
 
@@ -29,6 +34,16 @@ struct NotchExpandedView: View {
 
             if state == .hint, hintEnabled {
                 NotchHint().transition(.opacity)
+            }
+        }
+        .overlay(alignment: .bottom) {
+            if state.isExpanded, availableTabs.count >= 2 {
+                NotchTabBar(
+                    availableTabs: availableTabs,
+                    active: state,
+                    onSelect: onTabSwitch
+                )
+                .padding(.bottom, 8)
             }
         }
         .frame(width: width, height: height)
@@ -61,7 +76,9 @@ struct NotchExpandedView: View {
         case .media: return DesignTokens.glowMedia
         case .drop: return DesignTokens.glowDrop
         case .airpods: return DesignTokens.glowAirPods
-        case .hint, .idle, .calendar, .timer: return .clear
+        case .calendar: return Color(red: 0.98, green: 0.65, blue: 0.20)
+        case .timer: return Color(red: 0.97, green: 0.38, blue: 0.38)
+        case .hint, .idle: return .clear
         }
     }
 
@@ -92,6 +109,20 @@ struct NotchExpandedView: View {
             } else {
                 Text("AirPods").foregroundStyle(.white.opacity(0.7))
             }
+        case .calendar:
+            CalendarView(events: calendarFeature.events) { ev in
+                let url = URL(string: "ical://ekevent/\(ev.id)?method=show&options=more")
+                if let url { NSWorkspace.shared.open(url) }
+            }
+        case .timer:
+            TimerView(
+                state: timerFeature.state,
+                progress: timerFeature.progress,
+                onStart: { timerFeature.start(seconds: $0) },
+                onPause: { timerFeature.pause() },
+                onResume: { timerFeature.resume() },
+                onReset: { timerFeature.reset() }
+            )
         default: EmptyView()
         }
     }

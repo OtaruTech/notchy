@@ -3,6 +3,7 @@ import ServiceManagement
 
 struct SettingsView: View {
     @AppStorage("notchy.hintEnabled") private var hintEnabled = true
+    @AppStorage("notchy.gaugeEnabled") private var gaugeEnabled = true
     @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
 
     var body: some View {
@@ -20,6 +21,9 @@ struct SettingsView: View {
             }
             Section("Now Playing") {
                 Toggle("Show hint pill while media plays", isOn: $hintEnabled)
+            }
+            Section("System pill") {
+                Toggle("Show CPU + battery pill on notch", isOn: $gaugeEnabled)
             }
             Section("About") {
                 Text("Notchy v0.1.0")
