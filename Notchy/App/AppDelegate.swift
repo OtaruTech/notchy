@@ -362,9 +362,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 return nil
             case 36, 76: // return / enter
                 let items = self.clipboardFeature.displayed
-                if let first = items.first {
-                    self.performClipboardPaste(first)
+                let idx = self.clipboardFeature.selectedIndex
+                if idx < items.count {
+                    self.performClipboardPaste(items[idx])
                 }
+                return nil
+            case 123: // ← left arrow
+                self.clipboardFeature.moveSelection(by: -1)
+                return nil
+            case 124: // → right arrow
+                self.clipboardFeature.moveSelection(by: 1)
                 return nil
             default:
                 break
@@ -410,6 +417,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func performClipboardPaste(_ item: ClipboardItem) {
         let target = clipboardTargetApp
         clipboardTargetApp = nil
+        if UserDefaults.standard.bool(forKey: "notchy.debugLogging") {
+            NSLog("[Notchy.Clip] performPaste kind=%@ target=%@", item.kind.rawValue, target?.localizedName ?? "<nil>")
+        }
         clipboardFeature.query = ""
         stateMachine.send(.hoverExited)
         windowController?.resignKey()

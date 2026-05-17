@@ -34,7 +34,7 @@ struct ItemCard: View {
                     .padding(6)
             }
         }
-        .contentShape(Rectangle())
+        .contentShape(RoundedRectangle(cornerRadius: 12))
     }
 
     @ViewBuilder

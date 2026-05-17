@@ -11,8 +11,15 @@ final class ClipboardFeature {
     private(set) var searchResults: [ClipboardItem] = []
     private(set) var count: Int = 0
 
+    /// Highlighted card in the panel. Mutated by AppDelegate's key monitor
+    /// (←/→ arrows) and the panel itself (hover / direct click).
+    var selectedIndex: Int = 0
+
     var query: String = "" {
-        didSet { Task { await refreshSearch() } }
+        didSet {
+            selectedIndex = 0
+            Task { await refreshSearch() }
+        }
     }
 
     private let store: ClipboardStore
@@ -35,6 +42,14 @@ final class ClipboardFeature {
         count += 1
         if !query.isEmpty { Task { await refreshSearch() } }
     }
+
+    func moveSelection(by delta: Int) {
+        let max = displayed.count - 1
+        guard max >= 0 else { selectedIndex = 0; return }
+        selectedIndex = Swift.max(0, Swift.min(max, selectedIndex + delta))
+    }
+
+    func selectFirst() { selectedIndex = 0 }
 
     func reload() async {
         do {

@@ -6,7 +6,6 @@ struct ClipboardPanel: View {
     @Bindable var feature: ClipboardFeature
     let onPaste: (ClipboardItem) -> Void
     let onDismiss: () -> Void
-    @State private var selectedIndex: Int = 0
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -14,20 +13,39 @@ struct ClipboardPanel: View {
             if feature.displayed.isEmpty {
                 emptyState
             } else {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 10) {
-                        ForEach(Array(feature.displayed.enumerated()), id: \.element.id) { idx, item in
-                            ItemCard(item: item, slot: idx < 9 ? idx + 1 : nil, selected: idx == selectedIndex)
-                                .onTapGesture { onPaste(item) }
+                ScrollViewReader { proxy in
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 10) {
+                            ForEach(Array(feature.displayed.enumerated()), id: \.element.id) { idx, item in
+                                Button {
+                                    if UserDefaults.standard.bool(forKey: "notchy.debugLogging") {
+                                        NSLog("[Notchy.Clip] card click idx=%d", idx)
+                                    }
+                                    onPaste(item)
+                                } label: {
+                                    ItemCard(item: item,
+                                             slot: idx < 9 ? idx + 1 : nil,
+                                             selected: idx == feature.selectedIndex)
+                                }
+                                .buttonStyle(.plain)
+                                .id(idx)
+                                .onHover { hovering in
+                                    if hovering { feature.selectedIndex = idx }
+                                }
+                            }
+                        }
+                        .padding(.horizontal, 2)
+                    }
+                    .onChange(of: feature.selectedIndex) { _, new in
+                        withAnimation(.easeOut(duration: 0.18)) {
+                            proxy.scrollTo(new, anchor: .center)
                         }
                     }
-                    .padding(.horizontal, 2)
                 }
             }
             footerHints
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .onChange(of: feature.query) { _, _ in selectedIndex = 0 }
         // Keyboard handling (1-9, Enter, Esc, arrows) lives in the app-level
         // NSEvent local monitor in AppDelegate so it works even while the
         // search TextField has focus.
