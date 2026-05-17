@@ -109,7 +109,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             forName: NSApplication.didChangeScreenParametersNotification,
             object: nil, queue: .main
         ) { [weak self] _ in
-            Task { @MainActor in self?.windowController?.show() }
+            Task { @MainActor in
+                guard let self else { return }
+                self.windowController?.show()
+                if let cv = self.windowController?.contentView, let drag = self.dragSession {
+                    drag.attach(to: cv)
+                }
+            }
         }
 
         observeStateChanges()

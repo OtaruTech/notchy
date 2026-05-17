@@ -7,11 +7,15 @@ final class DragSession: NSObject, NSDraggingDestination {
     var onExit: () -> Void = {}
     var onDrop: ([URL]) -> Void = { _ in }
 
+    private weak var attachedIntermediary: NSView?
+
     func attach(to view: NSView) {
+        attachedIntermediary?.removeFromSuperview()
         view.registerForDraggedTypes([.fileURL])
         let intermediary = DragInterceptView(frame: view.bounds, session: self)
         intermediary.autoresizingMask = [.width, .height]
         view.addSubview(intermediary)
+        attachedIntermediary = intermediary
     }
 
     func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
