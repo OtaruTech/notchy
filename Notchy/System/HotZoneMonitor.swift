@@ -33,7 +33,7 @@ final class HotZoneMonitor {
     var onHorizontalSwipe: (Int) -> Void = { _ in }
 
     private var scrollAccumulator: CGFloat = 0
-    private let scrollThreshold: CGFloat = 30  // pt of accumulated horizontal scroll = one track skip
+    private let scrollThreshold: CGFloat = 10  // sensitive enough for a quick 2-finger flick
     private var scrollResetWork: DispatchWorkItem?
 
     func start() {
@@ -100,10 +100,13 @@ final class HotZoneMonitor {
         }
 
         if event.type == .scrollWheel {
-            // Only count gestures whose cursor is inside the active zone.
             guard nowInside else { return }
-            // Trackpad horizontal scroll → integer accumulator → emit at threshold.
-            scrollAccumulator += event.scrollingDeltaX
+            // Use scrollingDeltaX (precise trackpad) if available, else deltaX.
+            let dx = event.hasPreciseScrollingDeltas ? event.scrollingDeltaX : event.deltaX
+            let dy = event.hasPreciseScrollingDeltas ? event.scrollingDeltaY : event.deltaY
+            // Only count primarily-horizontal gestures (ignore vertical scroll).
+            guard abs(dx) > abs(dy) else { return }
+            scrollAccumulator += dx
             scrollResetWork?.cancel()
             if scrollAccumulator >= scrollThreshold {
                 onHorizontalSwipe(1)
@@ -112,7 +115,6 @@ final class HotZoneMonitor {
                 onHorizontalSwipe(-1)
                 scrollAccumulator = 0
             }
-            // Reset accumulator if user pauses (debounce so two separate swipes don't merge).
             let reset = DispatchWorkItem { [weak self] in self?.scrollAccumulator = 0 }
             scrollResetWork = reset
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(400), execute: reset)

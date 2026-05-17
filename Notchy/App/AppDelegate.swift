@@ -226,15 +226,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     /// System Settings → Privacy & Security → Accessibility. Without this,
     /// NSEvent global monitors silently fail (return nil) and hover never fires.
     private func promptAccessibilityIfNeeded() {
-        // Already trusted? Don't keep popping the prompt every launch.
-        guard !AXIsProcessTrusted() else { return }
-        // Not trusted yet — prompt user. Note: ad-hoc signed builds get a fresh
-        // cdhash on every rebuild, so macOS treats each reinstall as a new app
-        // and re-prompts even if a stale entry exists in Accessibility list.
-        // User needs to remove the old entry and re-add the new one (or use
-        // a stable Developer ID cert).
+        // Already trusted? Don't pop the prompt.
+        if AXIsProcessTrusted() { return }
+        // ad-hoc-signed dev builds get a fresh cdhash each rebuild → AXIsProcessTrusted
+        // returns false even when the user thinks they granted permission. Don't
+        // keep nagging — prompt once total per UserDefaults flag, then trust the user
+        // to fix it manually if needed.
+        let key = "notchy.hasPromptedAccessibilityV1"
+        if UserDefaults.standard.bool(forKey: key) { return }
         let options = ["AXTrustedCheckOptionPrompt": kCFBooleanTrue!] as CFDictionary
         _ = AXIsProcessTrustedWithOptions(options)
+        UserDefaults.standard.set(true, forKey: key)
     }
 
     private func installSignalHandlers() {

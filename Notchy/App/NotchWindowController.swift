@@ -26,7 +26,7 @@ final class NotchWindowController {
         let frame = convertToScreenCoordinates(localRect: expandedFrame(hot: hot), screen: screen)
 
         if panel == nil {
-            let p = NSPanel(
+            let p = ClickableNotchPanel(
                 contentRect: frame,
                 styleMask: [.borderless, .nonactivatingPanel],
                 backing: .buffered,
@@ -77,4 +77,13 @@ final class NotchWindowController {
         let originY = screen.frame.maxY - localRect.maxY
         return CGRect(x: originX, y: originY, width: localRect.width, height: localRect.height)
     }
+}
+
+/// Borderless NSPanel subclass that allows becoming key so SwiftUI buttons
+/// inside our hosted view actually receive their click events.
+/// Default NSPanel.canBecomeKey is false for borderless panels, which silently
+/// drops button taps on our Now Playing / Drop tray / Mirror controls.
+private final class ClickableNotchPanel: NSPanel {
+    override var canBecomeKey: Bool { true }
+    override var canBecomeMain: Bool { false }
 }
