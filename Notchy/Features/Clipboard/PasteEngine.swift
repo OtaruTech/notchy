@@ -20,14 +20,25 @@ enum PasteEngine {
         let priorSnapshot = snapshotPasteboard()
         writeToPasteboard(item)
 
+        // Hand focus back to the target app BEFORE we synthesise ⌘V.
+        // The Notchy panel was key while open, so without this the keystroke
+        // is consumed by the panel itself.
         target?.activate(options: [.activateAllWindows])
 
-        // Tiny delay so the target app has a frame to regain focus before
-        // the keystroke fires.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.04) {
+        // Wait long enough for LaunchServices to actually swap key window —
+        // 40ms wasn't enough on slower machines or when the target was
+        // background-launched. 150ms is reliable and still feels instant.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+            if UserDefaults.standard.bool(forKey: "notchy.debugLogging") {
+                NSLog("[Notchy.Paste] synth CmdV (frontmost=%@ trusted=%d)",
+                      NSWorkspace.shared.frontmostApplication?.localizedName ?? "?",
+                      AXIsProcessTrusted() ? 1 : 0)
+            }
             synthesizeCmdV()
             if restorePrevious {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.08) {
+                // Wait long enough that the destination app has actually read
+                // the pasteboard before we swap it back.
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.20) {
                     restorePasteboard(priorSnapshot)
                 }
             }

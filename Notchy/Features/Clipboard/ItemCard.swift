@@ -6,19 +6,21 @@ struct ItemCard: View {
     let item: ClipboardItem
     /// 1-9 quick-paste slot, or nil if beyond the first 9.
     let slot: Int?
+    var selected: Bool = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             previewArea
             footer
         }
-        .frame(width: 120, height: 160)
+        .frame(width: 110, height: 120)
         .background(
             RoundedRectangle(cornerRadius: 12, style: .continuous)
                 .fill(.white.opacity(0.08))
                 .overlay(
                     RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .stroke(.white.opacity(0.10), lineWidth: 0.5)
+                        .stroke(selected ? .white.opacity(0.9) : .white.opacity(0.10),
+                                lineWidth: selected ? 1.5 : 0.5)
                 )
         )
         .overlay(alignment: .topTrailing) {

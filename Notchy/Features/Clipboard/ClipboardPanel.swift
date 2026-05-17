@@ -5,6 +5,8 @@ import SwiftUI
 struct ClipboardPanel: View {
     @Bindable var feature: ClipboardFeature
     let onPaste: (ClipboardItem) -> Void
+    let onDismiss: () -> Void
+    @State private var selectedIndex: Int = 0
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -15,7 +17,7 @@ struct ClipboardPanel: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 10) {
                         ForEach(Array(feature.displayed.enumerated()), id: \.element.id) { idx, item in
-                            ItemCard(item: item, slot: idx < 9 ? idx + 1 : nil)
+                            ItemCard(item: item, slot: idx < 9 ? idx + 1 : nil, selected: idx == selectedIndex)
                                 .onTapGesture { onPaste(item) }
                         }
                     }
@@ -25,6 +27,10 @@ struct ClipboardPanel: View {
             footerHints
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .onChange(of: feature.query) { _, _ in selectedIndex = 0 }
+        // Keyboard handling (1-9, Enter, Esc, arrows) lives in the app-level
+        // NSEvent local monitor in AppDelegate so it works even while the
+        // search TextField has focus.
     }
 
     private var header: some View {
@@ -59,6 +65,7 @@ struct ClipboardPanel: View {
         HStack(spacing: 14) {
             hint("↩", "paste")
             hint("1–9", "quick paste")
+            hint("← →", "select")
             hint("esc", "close")
         }
         .font(.system(size: 10))
@@ -78,3 +85,4 @@ struct ClipboardPanel: View {
         }
     }
 }
+

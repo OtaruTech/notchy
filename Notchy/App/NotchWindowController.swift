@@ -66,6 +66,14 @@ final class NotchWindowController {
         }
     }
 
+    /// Explicitly drop key-window status WITHOUT hiding the panel. Used after
+    /// a clipboard paste so the synthesised ⌘V lands in the *previous* app
+    /// rather than getting eaten by Notchy.
+    func resignKey() {
+        panel?.resignKey()
+        panel?.ignoresMouseEvents = true
+    }
+
     /// Expanded panel area is wider/taller than the notch — we always allocate the
     /// max expansion box so SwiftUI can animate within it.
     private func expandedFrame(hot: CGRect) -> CGRect {

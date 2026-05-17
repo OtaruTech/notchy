@@ -30,6 +30,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var clipboardCapturer: ClipboardCapturer?
     fileprivate var clipboardTargetApp: NSRunningApplication?
     private var clipboardPauseMenuItem: NSMenuItem?
+    private var clipboardKeyMonitor: Any?
     private var statusItem: NSStatusItem?
     private var settingsWindow: NSWindow?
     private var welcomeWindow: NSWindow?
@@ -160,12 +161,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 lyricsFeature: lyrics,
                 clipboardFeature: clip,
                 onClipboardPaste: { [weak self] item in
-                    guard let self else { return }
-                    let target = self.clipboardTargetApp
-                    self.clipboardTargetApp = nil
-                    self.stateMachine.send(.hoverExited)
-                    let restore = UserDefaults.standard.object(forKey: "notchy.clipboardRestore") as? Bool ?? true
-                    PasteEngine.paste(item: item, to: target, restorePrevious: restore)
+                    self?.performClipboardPaste(item)
+                },
+                onClipboardDismiss: { [weak self] in
+                    self?.dismissClipboardPanel()
                 }
             )
         }
@@ -208,12 +207,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 }
             case .toggleClipboard:
                 if self.stateMachine.state == .clipboard {
-                    self.stateMachine.send(.hoverExited)
+                    self.dismissClipboardPanel()
                 } else {
-                    // Snapshot the previously-focused app so Paste-engine can
-                    // synthesise ⌘V back into it later.
-                    self.clipboardTargetApp = NSWorkspace.shared.frontmostApplication
-                    self.stateMachine.send(.clipboardRequested)
+                    self.openClipboardPanel()
                 }
             }
         }
@@ -338,6 +334,89 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             welcomeWindow = win
         }
         welcomeWindow?.makeKeyAndOrderFront(nil)
+    }
+
+    /// Open the clipboard panel — snapshot the previously-frontmost app so
+    /// we can paste back into it later, then actively grab focus so SwiftUI
+    /// receives keystrokes (TextField search + our 1-9/Enter/Esc monitor).
+    /// Notchy temporarily switches to `.regular` activation policy so it can
+    /// be the frontmost app while the panel is open.
+    private func openClipboardPanel() {
+        clipboardTargetApp = NSWorkspace.shared.frontmostApplication
+        NSApp.setActivationPolicy(.regular)
+        NSApp.activate(ignoringOtherApps: true)
+        stateMachine.send(.clipboardRequested)
+        installClipboardKeyMonitor()
+    }
+
+    /// Window-level event monitor — intercepts keystrokes while the clipboard
+    /// panel is open, so 1-9 / Enter / Esc / arrows reach our paste logic
+    /// even though SwiftUI's TextField holds focus for the search box.
+    private func installClipboardKeyMonitor() {
+        if clipboardKeyMonitor != nil { return }
+        clipboardKeyMonitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown]) { [weak self] event in
+            guard let self, self.stateMachine.state == .clipboard else { return event }
+            switch event.keyCode {
+            case 53: // esc
+                self.dismissClipboardPanel()
+                return nil
+            case 36, 76: // return / enter
+                let items = self.clipboardFeature.displayed
+                if let first = items.first {
+                    self.performClipboardPaste(first)
+                }
+                return nil
+            default:
+                break
+            }
+            // Numeric quick-paste — match by character (handles both top-row
+            // ANSI 1-9 and the numeric keypad regardless of layout). Only
+            // when no modifiers are held.
+            let mods = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+            if mods.isEmpty || mods == .numericPad,
+               let ch = event.charactersIgnoringModifiers,
+               let digit = Int(ch),
+               digit >= 1, digit <= 9
+            {
+                let items = self.clipboardFeature.displayed
+                if digit - 1 < items.count {
+                    self.performClipboardPaste(items[digit - 1])
+                    return nil
+                }
+            }
+            return event
+        }
+    }
+
+    private func removeClipboardKeyMonitor() {
+        if let m = clipboardKeyMonitor {
+            NSEvent.removeMonitor(m)
+            clipboardKeyMonitor = nil
+        }
+    }
+
+    private func dismissClipboardPanel() {
+        let target = clipboardTargetApp
+        clipboardTargetApp = nil
+        clipboardFeature.query = ""
+        stateMachine.send(.hoverExited)
+        windowController?.resignKey()
+        removeClipboardKeyMonitor()
+        // Drop back to accessory so we don't appear in Cmd-Tab.
+        NSApp.setActivationPolicy(.accessory)
+        target?.activate(options: [.activateAllWindows])
+    }
+
+    private func performClipboardPaste(_ item: ClipboardItem) {
+        let target = clipboardTargetApp
+        clipboardTargetApp = nil
+        clipboardFeature.query = ""
+        stateMachine.send(.hoverExited)
+        windowController?.resignKey()
+        removeClipboardKeyMonitor()
+        NSApp.setActivationPolicy(.accessory)
+        let restore = UserDefaults.standard.object(forKey: "notchy.clipboardRestore") as? Bool ?? true
+        PasteEngine.paste(item: item, to: target, restorePrevious: restore)
     }
 
     @objc func toggleClipboardPaused() {

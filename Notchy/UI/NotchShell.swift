@@ -15,6 +15,7 @@ struct NotchShell: View {
     let lyricsFeature: LyricsFeature
     let clipboardFeature: ClipboardFeature
     let onClipboardPaste: (ClipboardItem) -> Void
+    let onClipboardDismiss: () -> Void
     @AppStorage("notchy.gaugeEnabled") private var gaugeEnabled = true
 
     var body: some View {
@@ -35,6 +36,7 @@ struct NotchShell: View {
                 lyricsFeature: lyricsFeature,
                 clipboardFeature: clipboardFeature,
                 onClipboardPaste: onClipboardPaste,
+                onClipboardDismiss: onClipboardDismiss,
                 availableTabs: availableTabs,
                 onTabSwitch: { stateMachine.send(.tabSwitchedTo($0)) }
             )

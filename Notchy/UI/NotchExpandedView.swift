@@ -17,6 +17,7 @@ struct NotchExpandedView: View {
     let lyricsFeature: LyricsFeature
     let clipboardFeature: ClipboardFeature
     let onClipboardPaste: (ClipboardItem) -> Void
+    let onClipboardDismiss: () -> Void
     let availableTabs: [NotchState]
     let onTabSwitch: (NotchState) -> Void
 
@@ -32,7 +33,11 @@ struct NotchExpandedView: View {
                 )
                 .overlay {
                     content
-                        .padding(.top, DesignTokens.notchHeight + 6)
+                        // Use LIVE notch height (queried from NSScreen.safeAreaInsets)
+                        // — the hardcoded 32pt constant is too short on 14"/16"
+                        // MacBook Pros where the hardware notch is ~38pt, leaving
+                        // the top row of clipboard cards visually clipped.
+                        .padding(.top, ScreenGeometry.liveNotchHeight() + 8)
                         .padding(.horizontal, 22)
                         .padding(.bottom, 22)
                         .opacity(state.isExpanded ? 1 : 0)
@@ -111,6 +116,7 @@ struct NotchExpandedView: View {
             if lyricsEnabled, mediaVM != nil, lyricsFeature.hasAny { return base + 34 }
             return base
         case .drop: return DesignTokens.expandedHeightDrop
+        case .clipboard: return DesignTokens.expandedHeightDrop  // 220 — fit search + cards + hints
         default: return DesignTokens.expandedHeightDefault
         }
     }
@@ -185,7 +191,11 @@ struct NotchExpandedView: View {
         case .mirror:
             MirrorView(feature: mirrorFeature)
         case .clipboard:
-            ClipboardPanel(feature: clipboardFeature, onPaste: onClipboardPaste)
+            ClipboardPanel(
+                feature: clipboardFeature,
+                onPaste: onClipboardPaste,
+                onDismiss: onClipboardDismiss
+            )
         default: EmptyView()
         }
     }
