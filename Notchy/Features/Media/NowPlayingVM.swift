@@ -7,6 +7,8 @@ struct NowPlayingVM: Equatable, Sendable {
     var elapsed: Double
     var duration: Double
     var isPlaying: Bool
+    var artworkData: Data?
+    var sourceBundleId: String?
 
     static func from(_ info: NowPlayingInfo) -> NowPlayingVM {
         NowPlayingVM(
@@ -15,7 +17,9 @@ struct NowPlayingVM: Equatable, Sendable {
             album: info.album ?? "",
             elapsed: info.elapsed ?? 0,
             duration: info.duration ?? 0,
-            isPlaying: info.isPlaying
+            isPlaying: info.isPlaying,
+            artworkData: info.artworkData,
+            sourceBundleId: info.bundleIdentifier
         )
     }
 

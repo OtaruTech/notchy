@@ -1,5 +1,22 @@
 import Foundation
 
+/// Append a line to /tmp/notchy.log for debugging (NSLog/print don't reliably
+/// reach `log show` from sandbox-free Swift apps on recent macOS).
+fileprivate func _debugLog(_ msg: String) {
+    let line = "\(Date()) \(msg)\n"
+    let path = "/tmp/notchy.log"
+    if let data = line.data(using: .utf8) {
+        if FileManager.default.fileExists(atPath: path),
+           let h = try? FileHandle(forWritingTo: URL(fileURLWithPath: path)) {
+            h.seekToEndOfFile()
+            try? h.write(contentsOf: data)
+            try? h.close()
+        } else {
+            try? data.write(to: URL(fileURLWithPath: path))
+        }
+    }
+}
+
 enum MRCommand: String {
     case play
     case pause
@@ -15,6 +32,10 @@ struct NowPlayingInfo: Equatable, Sendable {
     var elapsed: Double?
     var duration: Double?
     var isPlaying: Bool
+    /// Decoded JPEG/PNG bytes (small enough — typically <200KB).
+    var artworkData: Data?
+    /// e.g. com.apple.Music, com.google.Chrome
+    var bundleIdentifier: String?
 }
 
 /// Talks to the `media-control` CLI tool (https://github.com/ungive/mediaremote-adapter)
@@ -101,13 +122,22 @@ actor MediaRemoteBridge {
         let elapsed = payload["elapsedTime"] as? Double
         let duration = payload["duration"] as? Double
         let playing = (payload["playing"] as? Bool) ?? ((payload["playbackRate"] as? Double).map { $0 > 0 } ?? false)
+        // Artwork is base64-encoded JPEG/PNG in the JSON payload.
+        let artworkData: Data?
+        if let b64 = payload["artworkData"] as? String, !b64.isEmpty {
+            artworkData = Data(base64Encoded: b64, options: .ignoreUnknownCharacters)
+        } else {
+            artworkData = nil
+        }
         return NowPlayingInfo(
             title: title,
             artist: artist,
             album: album,
             elapsed: elapsed,
             duration: duration,
-            isPlaying: playing
+            isPlaying: playing,
+            artworkData: artworkData,
+            bundleIdentifier: payload["bundleIdentifier"] as? String
         )
     }
 
@@ -130,24 +160,28 @@ actor MediaRemoteBridge {
             nonisolated(unsafe) var buffer = Data()
             handle.readabilityHandler = { fh in
                 let chunk = fh.availableData
+                _debugLog("[Notchy.MediaBridge] readabilityHandler fired, chunk=\(chunk.count) bytes")
                 if chunk.isEmpty {
                     fh.readabilityHandler = nil
                     return
                 }
                 buffer.append(chunk)
-                // Split on newlines; keep trailing partial line in buffer.
                 while let nl = buffer.firstIndex(of: 0x0A) {
                     let line = buffer.subdata(in: 0..<nl)
                     buffer.removeSubrange(0...nl)
                     guard !line.isEmpty else { continue }
                     let info = MediaRemoteBridge.parse(jsonData: line)
+                    _debugLog("[Notchy.MediaBridge] parsed line len=\(line.count), info.title=\(info?.title ?? "<nil>") playing=\(info?.isPlaying ?? false)")
                     continuation.yield(info)
                 }
             }
+            _debugLog("[Notchy.MediaBridge] launching: \(bin) stream")
 
             do {
                 try proc.run()
+                _debugLog("[Notchy.MediaBridge] spawned pid=\(proc.processIdentifier)")
             } catch {
+                _debugLog("[Notchy.MediaBridge] spawn FAILED: \(error)")
                 continuation.finish()
                 return
             }
