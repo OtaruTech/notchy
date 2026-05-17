@@ -95,7 +95,16 @@ struct NotchExpandedView: View {
                     vm: vm,
                     onPlayPause: { mediaFeature.playPause() },
                     onPrev: { mediaFeature.prev() },
-                    onNext: { mediaFeature.next() }
+                    onNext: { mediaFeature.next() },
+                    onArtworkTap: {
+                        // Bring the source app (Music, Spotify, Safari…) to the front.
+                        guard let bid = vm.sourceBundleId,
+                              let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bid)
+                        else { return }
+                        let cfg = NSWorkspace.OpenConfiguration()
+                        cfg.activates = true
+                        NSWorkspace.shared.openApplication(at: url, configuration: cfg) { _, _ in }
+                    }
                 )
             } else {
                 Text("No media").foregroundStyle(.white.opacity(0.7))

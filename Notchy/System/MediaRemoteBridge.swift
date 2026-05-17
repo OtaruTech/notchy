@@ -143,6 +143,12 @@ actor MediaRemoteBridge {
 
     /// Stream Now Playing changes by reading `media-control stream` line by line.
     /// Yields nil when no media is playing.
+    ///
+    /// `media-control stream` emits two kinds of events:
+    /// - `{"type":"data","diff":false,"payload":{...full...}}` — initial / full snapshot
+    /// - `{"type":"data","diff":true,"payload":{...partial...}}` — only the changed fields
+    /// Bridge maintains a merged state so partial diffs (e.g. just `{"playing":false}`)
+    /// don't drop the rest of the now-playing info.
     func changes() -> AsyncStream<NowPlayingInfo?> {
         AsyncStream { continuation in
             guard let bin = Self.binaryPath() else {
@@ -158,9 +164,9 @@ actor MediaRemoteBridge {
 
             let handle = outPipe.fileHandleForReading
             nonisolated(unsafe) var buffer = Data()
+            nonisolated(unsafe) var merged: [String: Any] = [:]
             handle.readabilityHandler = { fh in
                 let chunk = fh.availableData
-                _debugLog("[Notchy.MediaBridge] readabilityHandler fired, chunk=\(chunk.count) bytes")
                 if chunk.isEmpty {
                     fh.readabilityHandler = nil
                     return
@@ -170,8 +176,18 @@ actor MediaRemoteBridge {
                     let line = buffer.subdata(in: 0..<nl)
                     buffer.removeSubrange(0...nl)
                     guard !line.isEmpty else { continue }
-                    let info = MediaRemoteBridge.parse(jsonData: line)
-                    _debugLog("[Notchy.MediaBridge] parsed line len=\(line.count), info.title=\(info?.title ?? "<nil>") playing=\(info?.isPlaying ?? false)")
+                    guard let env = try? JSONSerialization.jsonObject(with: line) as? [String: Any] else { continue }
+                    let isDiff = (env["diff"] as? Bool) ?? false
+                    let payload = (env["payload"] as? [String: Any]) ?? [:]
+                    if isDiff {
+                        // Merge partial diff on top of existing state.
+                        for (k, v) in payload { merged[k] = v }
+                    } else {
+                        // Full replacement (`diff:false`). Empty payload means "nothing playing".
+                        merged = payload
+                    }
+                    let info = MediaRemoteBridge.parse(payload: merged)
+                    _debugLog("[Notchy.MediaBridge] event diff=\(isDiff) keys=\(Array(payload.keys).prefix(4)) -> title=\(info?.title ?? "<nil>") playing=\(info?.isPlaying ?? false)")
                     continuation.yield(info)
                 }
             }
