@@ -40,8 +40,20 @@ struct NotchExpandedView: View {
             // paused) OR a timer is running — so the timer remains globally visible
             // even when the notch is collapsed.
             if (state == .hint || state == .idle), shouldShowLiveStrip {
-                VStack(spacing: 0) {
+                VStack(spacing: 6) {
                     LiveActivityStrip(vm: mediaVM, timerState: timerFeature.state)
+                    // Global lyrics ticker — below the notch, only when music
+                    // is loaded and lyrics are available.
+                    if let mvm = mediaVM, lyricsFeature.hasAny {
+                        TimelineView(.periodic(from: .now, by: 0.5)) { ctx in
+                            LyricsTicker(
+                                synced: lyricsFeature.lines,
+                                plain: lyricsFeature.plainLines,
+                                elapsed: mvm.liveElapsed(at: ctx.date),
+                                duration: mvm.duration
+                            )
+                        }
+                    }
                     Spacer(minLength: 0)
                 }
                 .transition(.opacity)
@@ -93,7 +105,11 @@ struct NotchExpandedView: View {
     private var height: CGFloat {
         let actualNotchH = ScreenGeometry.liveNotchHeight()
         switch state {
-        case .idle, .hint: return actualNotchH + (state == .hint ? 3 : 0)
+        case .idle, .hint:
+            let base = actualNotchH + (state == .hint ? 3 : 0)
+            // Lyrics ticker pill = ~28pt + 6pt gap when it's showing.
+            if mediaVM != nil, lyricsFeature.hasAny { return base + 34 }
+            return base
         case .drop: return DesignTokens.expandedHeightDrop
         default: return DesignTokens.expandedHeightDefault
         }
@@ -122,8 +138,6 @@ struct NotchExpandedView: View {
                 MediaView(
                     vm: vm,
                     output: audioOutput,
-                    syncedLyrics: lyricsFeature.lines,
-                    plainLyrics: lyricsFeature.plainLines,
                     onPlayPause: { mediaFeature.playPause() },
                     onPrev: { mediaFeature.prev() },
                     onNext: { mediaFeature.next() },
