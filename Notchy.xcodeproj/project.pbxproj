@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		042B349F5799C3F7CF15EA99 /* AirPodsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB110EA11D24C6907762BAF /* AirPodsView.swift */; };
 		0570CCAF85C30825C4528D25 /* NotchShell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6633BDBED265ECF9E7B5D9E0 /* NotchShell.swift */; };
 		06F29F064FA18C158A92DB97 /* NotchIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8A432C63FD5F5D5741DD0E /* NotchIntent.swift */; };
 		08A3041B1A964341B8937D7D /* MediaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A8751CBEB8419A976C9866 /* MediaView.swift */; };
@@ -16,6 +17,7 @@
 		195480A06999E8B25DFEBFA2 /* DragSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AD67689C0B9FE1FA469C399 /* DragSession.swift */; };
 		286F215E8831A0344D62077D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEA109DCBD303D912C0C256D /* AppDelegate.swift */; };
 		30FD864030AE3EA6C9478B48 /* NotchExpandedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE756F0AA1ADA997BF8186E4 /* NotchExpandedView.swift */; };
+		382D85E0AE1EB2D3BD1A7C6E /* BTFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = D153BA554912F668AC5887CA /* BTFeature.swift */; };
 		40376D104D4D8BFD69BA134D /* MediaRemoteBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9705394CEBEC362E7C42D2 /* MediaRemoteBridge.swift */; };
 		52F7BE5899E9B9BED6E4A3E7 /* NotchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8947D82465DDF1474C3C2E4D /* NotchState.swift */; };
 		5A48F3EBB9F12FAB4DF284AB /* DropViewSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8D50074A898F05304A0532 /* DropViewSnapshots.swift */; };
@@ -87,6 +89,7 @@
 		8947D82465DDF1474C3C2E4D /* NotchState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchState.swift; sourceTree = "<group>"; };
 		8C3D7AB1CDC0C20683D95BE7 /* ScreenGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenGeometry.swift; sourceTree = "<group>"; };
 		8E8D50074A898F05304A0532 /* DropViewSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropViewSnapshots.swift; sourceTree = "<group>"; };
+		8EB110EA11D24C6907762BAF /* AirPodsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirPodsView.swift; sourceTree = "<group>"; };
 		8F8A432C63FD5F5D5741DD0E /* NotchIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchIntent.swift; sourceTree = "<group>"; };
 		90ED2D4AE8E85C0446467BA4 /* empty.empty.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = empty.empty.png; sourceTree = "<group>"; };
 		95CEDBF54DAA7B3A939C939C /* longText.long-text.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "longText.long-text.png"; sourceTree = "<group>"; };
@@ -98,6 +101,7 @@
 		C5BF2C7B3BA24BABF10B7FEE /* MediaFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaFeature.swift; sourceTree = "<group>"; };
 		C60EDA900BCAE83C5C97DB37 /* standard.standard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = standard.standard.png; sourceTree = "<group>"; };
 		D122AD1F4DC763CB8C4850EF /* NotchStateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchStateMachine.swift; sourceTree = "<group>"; };
+		D153BA554912F668AC5887CA /* BTFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BTFeature.swift; sourceTree = "<group>"; };
 		D45A277B816298254CE708D9 /* MediaFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaFeatureTests.swift; sourceTree = "<group>"; };
 		D601C50E08A7A66E52CBFCF4 /* DropItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropItem.swift; sourceTree = "<group>"; };
 		DEA109DCBD303D912C0C256D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -242,7 +246,9 @@
 		ADF40D5E94924170E55495A6 /* AirPods */ = {
 			isa = PBXGroup;
 			children = (
+				8EB110EA11D24C6907762BAF /* AirPodsView.swift */,
 				BB75579F5D02B1886B70C9CD /* BatteryReading.swift */,
+				D153BA554912F668AC5887CA /* BTFeature.swift */,
 			);
 			path = AirPods;
 			sourceTree = "<group>";
@@ -419,7 +425,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				042B349F5799C3F7CF15EA99 /* AirPodsView.swift in Sources */,
 				286F215E8831A0344D62077D /* AppDelegate.swift in Sources */,
+				382D85E0AE1EB2D3BD1A7C6E /* BTFeature.swift in Sources */,
 				91D59D6E4197DBCDC78A951B /* BatteryReading.swift in Sources */,
 				9E1B8767990F873C8ADF23C5 /* DesignTokens.swift in Sources */,
 				195480A06999E8B25DFEBFA2 /* DragSession.swift in Sources */,

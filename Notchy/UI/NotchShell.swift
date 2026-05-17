@@ -6,6 +6,7 @@ struct NotchShell: View {
     let dropFeature: DropFeature
     let onAirDrop: () -> Void
     let onEmail: () -> Void
+    let btFeature: BTFeature
 
     var body: some View {
         VStack(spacing: 0) {
@@ -15,7 +16,8 @@ struct NotchShell: View {
                 mediaFeature: mediaFeature,
                 dropFeature: dropFeature,
                 onAirDrop: onAirDrop,
-                onEmail: onEmail
+                onEmail: onEmail,
+                btFeature: btFeature
             )
             Spacer(minLength: 0)
         }

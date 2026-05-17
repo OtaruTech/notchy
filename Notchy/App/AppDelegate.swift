@@ -13,21 +13,29 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var dragSession: DragSession?
     private var airpodsDismissTimer: Task<Void, Never>?
     private var dropDismissTimer: Task<Void, Never>?
+    let btBridge = IOBluetoothBridge()
+    private(set) var btFeature: BTFeature!
+    private var stateObservation: Task<Void, Never>?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         mediaFeature = MediaFeature(bridge: mediaBridge, stateMachine: stateMachine)
         mediaFeature.start()
 
+        btFeature = BTFeature(bridge: btBridge, stateMachine: stateMachine)
+        btFeature.start()
+
         let sm = stateMachine
         let mf = mediaFeature!
         let df = dropFeature
+        let bf = btFeature!
         windowController = NotchWindowController { [weak self] in
             NotchShell(
                 stateMachine: sm,
                 mediaFeature: mf,
                 dropFeature: df,
                 onAirDrop: { self?.performAirDrop() },
-                onEmail: { self?.performEmail() }
+                onEmail: { self?.performEmail() },
+                btFeature: bf
             )
         }
         windowController?.show()
@@ -62,6 +70,23 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             object: nil, queue: .main
         ) { [weak self] _ in
             Task { @MainActor in self?.windowController?.show() }
+        }
+
+        stateObservation = Task { [weak self] in
+            var last: NotchState = .idle
+            while !Task.isCancelled {
+                try? await Task.sleep(for: .milliseconds(100))
+                guard let self else { return }
+                let s = await MainActor.run { self.stateMachine.state }
+                if s == .airpods, last != .airpods {
+                    self.airpodsDismissTimer?.cancel()
+                    self.airpodsDismissTimer = Task { [weak self] in
+                        try? await Task.sleep(for: DesignTokens.airPodsDismissDelay)
+                        await MainActor.run { self?.stateMachine.send(.dismissTimerFired) }
+                    }
+                }
+                last = s
+            }
         }
     }
 

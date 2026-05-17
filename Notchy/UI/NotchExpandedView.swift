@@ -7,6 +7,7 @@ struct NotchExpandedView: View {
     let dropFeature: DropFeature
     let onAirDrop: () -> Void
     let onEmail: () -> Void
+    let btFeature: BTFeature
 
     var body: some View {
         ZStack {
@@ -79,7 +80,12 @@ struct NotchExpandedView: View {
                 onAirDrop: onAirDrop,
                 onEmail: onEmail
             )
-        case .airpods: Text("AirPods (Phase 5)").foregroundStyle(.white)
+        case .airpods:
+            if let vm = btFeature.connected {
+                AirPodsView(vm: vm)
+            } else {
+                Text("AirPods").foregroundStyle(.white.opacity(0.7))
+            }
         default: EmptyView()
         }
     }
