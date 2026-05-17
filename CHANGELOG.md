@@ -2,7 +2,28 @@
 
 All notable changes to Notchy. Format based on [Keep a Changelog](https://keepachangelog.com/).
 
-## [Unreleased]
+## [0.2.3] — 2026-05-17
+
+### Added
+- **Settings UI** redesigned: TabView (General + Advanced) with hover-delay slider (0–500ms), swipe toggle, debug-logging toggle, hotkey master toggle, and reset-preferences button
+- **First-launch Welcome screen** — crescent-moon header, 4 feature rows (hover, swipe, drop, mirror), permissions hint, re-accessible via menu bar "Welcome…"
+- **Global keyboard shortcuts** (Carbon `RegisterEventHotKey`):
+  - `⌘⌥N` toggle dashboard
+  - `⌘⌥M` toggle Mirror
+  - Master toggle in Settings → General → Keyboard shortcuts
+
+### Changed
+- Hover trigger delay now user-configurable via `notchy.hoverDelayMs` (default 120ms) — previously hardcoded
+- Two-finger swipe and debug logging gated by individual UserDefault toggles
+
+## [0.2.2] — 2026-05-17
+
+### Added
+- App icon — black rounded square with white crescent moon, exact-pixel sizes generated via CoreGraphics
+- Menu bar status icon now uses SF Symbol `moonphase.waxing.crescent` (template, adapts to dark/light), replacing 🌒 emoji
+- README CI badge + release download badge
+
+## [0.2.1] — 2026-05-17
 
 ### Added
 - Dashboard tab now persistent — switching to it via tab bar is remembered across hover collapses (`stickyTab`)
@@ -10,9 +31,12 @@ All notable changes to Notchy. Format based on [Keep a Changelog](https://keepac
 - Comprehensive open-source README with screenshots
 - MIT LICENSE
 - CONTRIBUTING.md guide
+- GitHub Actions CI — build + unit + snapshot tests on macos-15 runner
+- Camera / audio / Bluetooth / Calendar entitlements (required even with sandbox off + hardened runtime)
 
 ### Fixed
 - **Critical**: clicks on play/pause/prev/next buttons now actually fire — `DragInterceptView` was silently swallowing all panel clicks via its default hitTest
+- Mirror preview now renders — `PreviewView.layout()` syncs `AVCaptureVideoPreviewLayer.frame` with view bounds
 - Media controls remain visible while music is paused (so user can re-play without re-summoning)
 - Two-finger horizontal swipe now triggers exactly one track-skip per physical gesture (was triggering 3-5 in a row due to no `NSEvent.phase` handling)
 - Media `media-control` command names corrected: `next-track` / `previous-track` (were `next` / `previous`)
