@@ -25,6 +25,7 @@
 		389F33FBC51179C10CBFD8A8 /* TimerViewSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75197809ED6A9E7CC86445BD /* TimerViewSnapshots.swift */; };
 		390E77CC663939E1F72AB759 /* NotchTabBarSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB94675DE7AE9014D56A645B /* NotchTabBarSnapshots.swift */; };
 		40376D104D4D8BFD69BA134D /* MediaRemoteBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9705394CEBEC362E7C42D2 /* MediaRemoteBridge.swift */; };
+		513E97F3E39579F6C8CC364A /* LiveActivityStrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5EB720D8D42405DE7F6F10 /* LiveActivityStrip.swift */; };
 		51F5DC8A60F9A31A0F60D9FD /* TimerFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681D16180B1B4DF163605087 /* TimerFeatureTests.swift */; };
 		52F7BE5899E9B9BED6E4A3E7 /* NotchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8947D82465DDF1474C3C2E4D /* NotchState.swift */; };
 		551E7B961D39A3EFC0EBC7BD /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F293D4B6E0C68019AAA9E33 /* CalendarView.swift */; };
@@ -106,6 +107,7 @@
 		6B72C57C5C358F93B591E5A1 /* AirPodsViewSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirPodsViewSnapshots.swift; sourceTree = "<group>"; };
 		6F15C234362B1F696258D424 /* EventVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventVM.swift; sourceTree = "<group>"; };
 		75197809ED6A9E7CC86445BD /* TimerViewSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewSnapshots.swift; sourceTree = "<group>"; };
+		7A5EB720D8D42405DE7F6F10 /* LiveActivityStrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivityStrip.swift; sourceTree = "<group>"; };
 		854599C0C8ADAC528D1D0203 /* CalendarFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarFeatureTests.swift; sourceTree = "<group>"; };
 		87F074AAE64DB16A07192221 /* DropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropView.swift; sourceTree = "<group>"; };
 		8947D82465DDF1474C3C2E4D /* NotchState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchState.swift; sourceTree = "<group>"; };
@@ -304,6 +306,7 @@
 			isa = PBXGroup;
 			children = (
 				B17D845897E3385277807C80 /* DesignTokens.swift */,
+				7A5EB720D8D42405DE7F6F10 /* LiveActivityStrip.swift */,
 				EE756F0AA1ADA997BF8186E4 /* NotchExpandedView.swift */,
 				ED727D1E09C7EBB1277E4711 /* NotchHint.swift */,
 				6633BDBED265ECF9E7B5D9E0 /* NotchShell.swift */,
@@ -499,6 +502,7 @@
 				D4CCDBE2BB9605168AF1C05E /* GaugePill.swift in Sources */,
 				892BD16133C0CB804E94B701 /* HotZoneMonitor.swift in Sources */,
 				D05424E64997786D698811A8 /* IOBluetoothBridge.swift in Sources */,
+				513E97F3E39579F6C8CC364A /* LiveActivityStrip.swift in Sources */,
 				C2C75C7AF305D4241130A962 /* MediaFeature.swift in Sources */,
 				40376D104D4D8BFD69BA134D /* MediaRemoteBridge.swift in Sources */,
 				08A3041B1A964341B8937D7D /* MediaView.swift in Sources */,

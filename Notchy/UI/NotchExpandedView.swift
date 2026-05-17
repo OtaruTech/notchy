@@ -33,7 +33,15 @@ struct NotchExpandedView: View {
                         .opacity(state.isExpanded ? 1 : 0)
                 }
 
-            if state == .hint, hintEnabled {
+            // Live-activity flanking strip when media is playing (collapsed state only).
+            // Sits at top so wings align with the physical notch.
+            if (state == .hint || state == .idle), let mvm = mediaVM, mvm.isPlaying {
+                VStack(spacing: 0) {
+                    LiveActivityStrip(vm: mvm)
+                    Spacer(minLength: 0)
+                }
+                .transition(.opacity)
+            } else if state == .hint, hintEnabled {
                 NotchHint().transition(.opacity)
             }
         }
@@ -60,8 +68,10 @@ struct NotchExpandedView: View {
     }
 
     private var width: CGFloat {
-        state.isExpanded ? DesignTokens.expandedWidth :
-        (state == .hint ? DesignTokens.notchWidth + 8 : DesignTokens.notchWidth)
+        if state.isExpanded { return DesignTokens.expandedWidth }
+        // Live-activity strip widens the collapsed shape with wings around the notch.
+        if let mvm = mediaVM, mvm.isPlaying { return DesignTokens.notchWidth + 2 * 70 }
+        return state == .hint ? DesignTokens.notchWidth + 8 : DesignTokens.notchWidth
     }
 
     private var height: CGFloat {
