@@ -7,18 +7,11 @@ import SnapshotTesting
 @MainActor
 struct DropViewSnapshots {
 
-    private func host<V: View>(_ view: V, width: CGFloat = 540, height: CGFloat = 220) -> NSView {
-        let hosting = NSHostingView(rootView: view)
-        hosting.frame = CGRect(x: 0, y: 0, width: width, height: height)
-        hosting.layoutSubtreeIfNeeded()
-        return hosting
-    }
-
     @Test func empty() {
         let view = DropView(items: [])
             .frame(width: 540, height: 220)
             .background(Color.black)
-        assertSnapshot(of: host(view), as: .image, named: "empty")
+        assertSnapshot(of: snapshotHost(view, width: 540, height: 220), as: .image, named: "empty")
     }
 
     @Test func threeFiles() {
@@ -30,6 +23,6 @@ struct DropViewSnapshots {
         let view = DropView(items: items)
             .frame(width: 540, height: 220)
             .background(Color.black)
-        assertSnapshot(of: host(view), as: .image, named: "three-files")
+        assertSnapshot(of: snapshotHost(view, width: 540, height: 220), as: .image, named: "three-files")
     }
 }
