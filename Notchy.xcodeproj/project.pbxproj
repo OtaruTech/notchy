@@ -16,8 +16,10 @@
 		0E614FC36B1E07D76EF6AF98 /* MediaRemoteBridgeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 987883E6E877E89AC16FBF27 /* MediaRemoteBridgeTests.swift */; };
 		181C49AA1DBBCA49D1328FED /* DropFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBC17BE3C8BA0AA132DA193 /* DropFeature.swift */; };
 		195480A06999E8B25DFEBFA2 /* DragSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AD67689C0B9FE1FA469C399 /* DragSession.swift */; };
+		2172A68118565954CEE3E589 /* SystemMonitorFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21D078EE082B5722C2D2B29 /* SystemMonitorFeature.swift */; };
 		286F215E8831A0344D62077D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEA109DCBD303D912C0C256D /* AppDelegate.swift */; };
 		30FD864030AE3EA6C9478B48 /* NotchExpandedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE756F0AA1ADA997BF8186E4 /* NotchExpandedView.swift */; };
+		349C0F54B8E4E5D139A7EAB6 /* GaugePillSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DB84D3D526593E9918B079 /* GaugePillSnapshots.swift */; };
 		35B9950815B5A629A9506A9C /* EventVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F15C234362B1F696258D424 /* EventVM.swift */; };
 		382D85E0AE1EB2D3BD1A7C6E /* BTFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = D153BA554912F668AC5887CA /* BTFeature.swift */; };
 		389F33FBC51179C10CBFD8A8 /* TimerViewSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75197809ED6A9E7CC86445BD /* TimerViewSnapshots.swift */; };
@@ -36,6 +38,7 @@
 		781ED9252B58782D95E47750 /* DropItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D601C50E08A7A66E52CBFCF4 /* DropItem.swift */; };
 		811A8EC798FAF3DF30D4C712 /* TimerFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B2176394FA4A39E56579A2 /* TimerFeature.swift */; };
 		82CC0F4AE909CD17F25D7DD9 /* NotchHint.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED727D1E09C7EBB1277E4711 /* NotchHint.swift */; };
+		849A51251EE8815DCF7187BB /* SystemMonitorBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE253DEBEF1D9E40C4A71E01 /* SystemMonitorBridge.swift */; };
 		87ECA559C8F8062620C9E9B1 /* NotchTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1100CE891853DA1D6ECC5C9 /* NotchTabBar.swift */; };
 		892BD16133C0CB804E94B701 /* HotZoneMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C3034B9AB977A1751561A17 /* HotZoneMonitor.swift */; };
 		91D59D6E4197DBCDC78A951B /* BatteryReading.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB75579F5D02B1886B70C9CD /* BatteryReading.swift */; };
@@ -50,7 +53,9 @@
 		CD0691F820505A12B0D49DDE /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BAA3AE68D1DC95427E890C /* TimerView.swift */; };
 		D05424E64997786D698811A8 /* IOBluetoothBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FD8A486D42757C51E8A01E /* IOBluetoothBridge.swift */; };
 		D1C05531A9C6AC2992F02AD1 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 697146552A7ABDF2F7002D2F /* SnapshotTesting */; };
+		D4CCDBE2BB9605168AF1C05E /* GaugePill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E514DAF1C7F9A3CE0B92B17 /* GaugePill.swift */; };
 		D75585D988EBF9575F091BE8 /* Placeholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A477BB9F4F3C4290E5196ED /* Placeholder.swift */; };
+		D810728D8C29AB9C479A9B94 /* SystemMonitorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3442410EB733AC1751A9511 /* SystemMonitorTests.swift */; };
 		D8D69AB95F6081DCC87FF4F3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9100CBB2EF123484F00E26CF /* SettingsView.swift */; };
 		DB3BC1673D33C876EDD8ADD3 /* NotchyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC3E0563BD6694DA94F039A /* NotchyApp.swift */; };
 		E4A897D208DAB56EE74569EE /* BatteryReadingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D73E5D88FE0299E1D90ABC /* BatteryReadingTests.swift */; };
@@ -89,6 +94,7 @@
 		3F1EF7FA9010FAC624C333ED /* MediaViewSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaViewSnapshots.swift; sourceTree = "<group>"; };
 		3F293D4B6E0C68019AAA9E33 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		48FD8A486D42757C51E8A01E /* IOBluetoothBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOBluetoothBridge.swift; sourceTree = "<group>"; };
+		4E514DAF1C7F9A3CE0B92B17 /* GaugePill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaugePill.swift; sourceTree = "<group>"; };
 		567B2D36795AD1D1E87789A1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		5A477BB9F4F3C4290E5196ED /* Placeholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Placeholder.swift; sourceTree = "<group>"; };
 		5D9705394CEBEC362E7C42D2 /* MediaRemoteBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaRemoteBridge.swift; sourceTree = "<group>"; };
@@ -111,18 +117,22 @@
 		9699EC56AAF3E5337015D132 /* EventKitBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventKitBridge.swift; sourceTree = "<group>"; };
 		987883E6E877E89AC16FBF27 /* MediaRemoteBridgeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaRemoteBridgeTests.swift; sourceTree = "<group>"; };
 		A1100CE891853DA1D6ECC5C9 /* NotchTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchTabBar.swift; sourceTree = "<group>"; };
+		A21D078EE082B5722C2D2B29 /* SystemMonitorFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMonitorFeature.swift; sourceTree = "<group>"; };
 		A7BAA3AE68D1DC95427E890C /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
+		AE253DEBEF1D9E40C4A71E01 /* SystemMonitorBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMonitorBridge.swift; sourceTree = "<group>"; };
 		B17D845897E3385277807C80 /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
 		B8D73E5D88FE0299E1D90ABC /* BatteryReadingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryReadingTests.swift; sourceTree = "<group>"; };
 		B9A8751CBEB8419A976C9866 /* MediaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaView.swift; sourceTree = "<group>"; };
 		BB75579F5D02B1886B70C9CD /* BatteryReading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryReading.swift; sourceTree = "<group>"; };
 		C392C6E5409579A1E5477CC7 /* CalendarFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarFeature.swift; sourceTree = "<group>"; };
 		C5BF2C7B3BA24BABF10B7FEE /* MediaFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaFeature.swift; sourceTree = "<group>"; };
+		C7DB84D3D526593E9918B079 /* GaugePillSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaugePillSnapshots.swift; sourceTree = "<group>"; };
 		D122AD1F4DC763CB8C4850EF /* NotchStateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchStateMachine.swift; sourceTree = "<group>"; };
 		D153BA554912F668AC5887CA /* BTFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BTFeature.swift; sourceTree = "<group>"; };
 		D45A277B816298254CE708D9 /* MediaFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaFeatureTests.swift; sourceTree = "<group>"; };
 		D601C50E08A7A66E52CBFCF4 /* DropItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropItem.swift; sourceTree = "<group>"; };
 		DEA109DCBD303D912C0C256D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		E3442410EB733AC1751A9511 /* SystemMonitorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMonitorTests.swift; sourceTree = "<group>"; };
 		E4B2176394FA4A39E56579A2 /* TimerFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerFeature.swift; sourceTree = "<group>"; };
 		EB210D67BB9058034F788290 /* ScreenGeometryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenGeometryTests.swift; sourceTree = "<group>"; };
 		ED727D1E09C7EBB1277E4711 /* NotchHint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchHint.swift; sourceTree = "<group>"; };
@@ -195,6 +205,7 @@
 				F444436267456B4A7969E2BF /* NotchStateMachineTests.swift */,
 				5A477BB9F4F3C4290E5196ED /* Placeholder.swift */,
 				EB210D67BB9058034F788290 /* ScreenGeometryTests.swift */,
+				E3442410EB733AC1751A9511 /* SystemMonitorTests.swift */,
 				681D16180B1B4DF163605087 /* TimerFeatureTests.swift */,
 			);
 			path = NotchyTests;
@@ -225,6 +236,7 @@
 				6B72C57C5C358F93B591E5A1 /* AirPodsViewSnapshots.swift */,
 				F20F2178CBDA32615E6263FE /* CalendarViewSnapshots.swift */,
 				8E8D50074A898F05304A0532 /* DropViewSnapshots.swift */,
+				C7DB84D3D526593E9918B079 /* GaugePillSnapshots.swift */,
 				3F1EF7FA9010FAC624C333ED /* MediaViewSnapshots.swift */,
 				FB94675DE7AE9014D56A645B /* NotchTabBarSnapshots.swift */,
 				27C48864F05F8FB04487850E /* Placeholder.swift */,
@@ -243,6 +255,7 @@
 				48FD8A486D42757C51E8A01E /* IOBluetoothBridge.swift */,
 				5D9705394CEBEC362E7C42D2 /* MediaRemoteBridge.swift */,
 				8C3D7AB1CDC0C20683D95BE7 /* ScreenGeometry.swift */,
+				AE253DEBEF1D9E40C4A71E01 /* SystemMonitorBridge.swift */,
 			);
 			path = System;
 			sourceTree = "<group>";
@@ -254,6 +267,7 @@
 				36ADBBC3FC84399756C07446 /* Calendar */,
 				271D7F760B84B33810FEA1EB /* Drop */,
 				2135213ACED6312E4D7643C4 /* Media */,
+				F93B4A6AA7F28C96B503640E /* SystemMonitor */,
 				514B170601E05FFED71CEE19 /* Timer */,
 			);
 			path = Features;
@@ -323,6 +337,15 @@
 				2110AAECFFF10B27041EF2B3 /* NotchyTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		F93B4A6AA7F28C96B503640E /* SystemMonitor */ = {
+			isa = PBXGroup;
+			children = (
+				4E514DAF1C7F9A3CE0B92B17 /* GaugePill.swift */,
+				A21D078EE082B5722C2D2B29 /* SystemMonitorFeature.swift */,
+			);
+			path = SystemMonitor;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -435,6 +458,7 @@
 				77D1EDBBCA6AE49016C7EA3D /* AirPodsViewSnapshots.swift in Sources */,
 				940AC4856FD3CD63E4BFD8B4 /* CalendarViewSnapshots.swift in Sources */,
 				5A48F3EBB9F12FAB4DF284AB /* DropViewSnapshots.swift in Sources */,
+				349C0F54B8E4E5D139A7EAB6 /* GaugePillSnapshots.swift in Sources */,
 				B7CDBB6E2E9399B453052CCE /* MediaViewSnapshots.swift in Sources */,
 				390E77CC663939E1F72AB759 /* NotchTabBarSnapshots.swift in Sources */,
 				FB8A981216B67649B07A7D4A /* Placeholder.swift in Sources */,
@@ -460,6 +484,7 @@
 				5C9D8706401C06F41C3B42CD /* DropView.swift in Sources */,
 				BAE0142C3BCCC72B8D47B4AC /* EventKitBridge.swift in Sources */,
 				35B9950815B5A629A9506A9C /* EventVM.swift in Sources */,
+				D4CCDBE2BB9605168AF1C05E /* GaugePill.swift in Sources */,
 				892BD16133C0CB804E94B701 /* HotZoneMonitor.swift in Sources */,
 				D05424E64997786D698811A8 /* IOBluetoothBridge.swift in Sources */,
 				C2C75C7AF305D4241130A962 /* MediaFeature.swift in Sources */,
@@ -477,6 +502,8 @@
 				BB64406D197C5E4FD7F1143B /* NowPlayingVM.swift in Sources */,
 				622ED93051501AD7FA938E32 /* ScreenGeometry.swift in Sources */,
 				D8D69AB95F6081DCC87FF4F3 /* SettingsView.swift in Sources */,
+				849A51251EE8815DCF7187BB /* SystemMonitorBridge.swift in Sources */,
+				2172A68118565954CEE3E589 /* SystemMonitorFeature.swift in Sources */,
 				811A8EC798FAF3DF30D4C712 /* TimerFeature.swift in Sources */,
 				CD0691F820505A12B0D49DDE /* TimerView.swift in Sources */,
 			);
@@ -494,6 +521,7 @@
 				B410B694159C4D693BB0B4A5 /* NotchStateMachineTests.swift in Sources */,
 				D75585D988EBF9575F091BE8 /* Placeholder.swift in Sources */,
 				F29841C20EF81367D1331F67 /* ScreenGeometryTests.swift in Sources */,
+				D810728D8C29AB9C479A9B94 /* SystemMonitorTests.swift in Sources */,
 				51F5DC8A60F9A31A0F60D9FD /* TimerFeatureTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
