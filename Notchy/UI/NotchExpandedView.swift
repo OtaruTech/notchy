@@ -34,9 +34,9 @@ struct NotchExpandedView: View {
                         .opacity(state.isExpanded ? 1 : 0)
                 }
 
-            // Live-activity flanking strip when media is playing (collapsed state only).
-            // Sits at top so wings align with the physical notch.
-            if (state == .hint || state == .idle), let mvm = mediaVM, mvm.isPlaying {
+            // Live-activity flanking strip whenever a track is loaded (playing OR paused).
+            // Showing it on pause means user can hover → click ▶ to resume.
+            if (state == .hint || state == .idle), let mvm = mediaVM {
                 VStack(spacing: 0) {
                     LiveActivityStrip(vm: mvm)
                     Spacer(minLength: 0)
@@ -70,9 +70,9 @@ struct NotchExpandedView: View {
 
     private var width: CGFloat {
         if state.isExpanded { return DesignTokens.expandedWidth }
-        // Live-activity strip widens the collapsed shape with wings around the LIVE notch.
         let actualNotchW = ScreenGeometry.liveNotchWidth()
-        if let mvm = mediaVM, mvm.isPlaying { return actualNotchW + 2 * 70 }
+        // Wings show whenever a track is loaded (playing or paused).
+        if mediaVM != nil { return actualNotchW + 2 * 70 }
         return state == .hint ? actualNotchW + 8 : actualNotchW
     }
 

@@ -33,8 +33,12 @@ final class HotZoneMonitor {
     var onHorizontalSwipe: (Int) -> Void = { _ in }
 
     private var scrollAccumulator: CGFloat = 0
-    private let scrollThreshold: CGFloat = 10  // sensitive enough for a quick 2-finger flick
+    private let scrollThreshold: CGFloat = 25  // require a deliberate horizontal flick
     private var scrollResetWork: DispatchWorkItem?
+    /// Cooldown so a single trackpad swipe (which fires many scrollWheel events)
+    /// only triggers ONE next/prev, not 3-5 in a row.
+    private var lastSwipeFire: Date = .distantPast
+    private let swipeCooldown: TimeInterval = 0.6
 
     func start() {
         globalMonitor = NSEvent.addGlobalMonitorForEvents(
@@ -108,12 +112,19 @@ final class HotZoneMonitor {
             guard abs(dx) > abs(dy) else { return }
             scrollAccumulator += dx
             scrollResetWork?.cancel()
-            if scrollAccumulator >= scrollThreshold {
-                onHorizontalSwipe(1)
-                scrollAccumulator = 0
-            } else if scrollAccumulator <= -scrollThreshold {
-                onHorizontalSwipe(-1)
-                scrollAccumulator = 0
+            // Only fire if past threshold AND past cooldown — prevents one
+            // physical swipe from skipping multiple tracks.
+            let now = Date()
+            if now.timeIntervalSince(lastSwipeFire) > swipeCooldown {
+                if scrollAccumulator >= scrollThreshold {
+                    onHorizontalSwipe(1)
+                    lastSwipeFire = now
+                    scrollAccumulator = 0
+                } else if scrollAccumulator <= -scrollThreshold {
+                    onHorizontalSwipe(-1)
+                    lastSwipeFire = now
+                    scrollAccumulator = 0
+                }
             }
             let reset = DispatchWorkItem { [weak self] in self?.scrollAccumulator = 0 }
             scrollResetWork = reset

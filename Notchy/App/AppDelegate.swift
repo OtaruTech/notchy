@@ -92,9 +92,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         monitor.onEscape = { [weak self] in self?.stateMachine.send(.escapeKeyPressed) }
         monitor.onClickOutside = { [weak self] in self?.stateMachine.send(.outsideClicked) }
         monitor.onHorizontalSwipe = { [weak self] direction in
-            // Only act if media is currently playing — otherwise this would feel
-            // disconnected (user swiping over an empty notch and getting nothing).
-            guard self?.mediaFeature.current?.isPlaying == true else { return }
+            // Act if a track is loaded (playing OR paused — so swipe still
+            // changes track while paused).
+            guard self?.mediaFeature.current != nil else { return }
             if direction > 0 { self?.mediaFeature.next() }
             else { self?.mediaFeature.prev() }
         }
@@ -155,10 +155,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // panel content (buttons, scrubber, etc.) without triggering collapse.
         hotZone?.isExpanded = stateMachine.state.isExpanded
 
-        // Live-activity wings widen the collapsed hover zone so cursor can hover
-        // the album art / waveform area and still trigger expand-to-media.
-        let mediaPlaying = mediaFeature?.current?.isPlaying == true
-        hotZone?.isLiveActivityVisible = mediaPlaying && !stateMachine.state.isExpanded
+        // Live-activity wings widen the collapsed hover zone whenever a track is
+        // loaded (playing or paused), so cursor can hover the album art / waveform.
+        let hasTrack = mediaFeature?.current != nil
+        hotZone?.isLiveActivityVisible = hasTrack && !stateMachine.state.isExpanded
 
         if stateMachine.state == .airpods {
             airpodsDismissTimer?.cancel()

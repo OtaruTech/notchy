@@ -40,11 +40,12 @@ final class MediaFeature {
             _mfLog("MediaFeature got AsyncStream, entering for-await loop")
             for await info in stream {
                 let vm = info.map(NowPlayingVM.from(_:))
-                _mfLog("MediaFeature received info: title=\(vm?.title ?? "<nil>") playing=\(vm?.isPlaying ?? false)")
                 await MainActor.run {
                     self.current = vm
-                    let available = vm?.isPlaying == true
-                    _mfLog("MediaFeature sending .mediaAvailabilityChanged(\(available))")
+                    // "Available" = a track exists (playing OR paused), so the
+                    // controls remain visible during pause and during the brief
+                    // playbackRate=0 window when skipping tracks.
+                    let available = vm != nil
                     self.stateMachine?.send(.mediaAvailabilityChanged(available))
                 }
             }
