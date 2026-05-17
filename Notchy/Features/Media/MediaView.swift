@@ -4,7 +4,8 @@ import AppKit
 struct MediaView: View {
     let vm: NowPlayingVM
     var output: AudioOutput? = nil
-    var lyrics: [LrcLine] = []
+    var syncedLyrics: [LrcLine] = []
+    var plainLyrics: [LrcLine] = []
     var onPlayPause: () -> Void = {}
     var onPrev: () -> Void = {}
     var onNext: () -> Void = {}
@@ -44,9 +45,14 @@ struct MediaView: View {
                 TimelineView(.periodic(from: .now, by: 0.3)) { ctx in
                     let elapsed = vm.liveElapsed(at: ctx.date)
                     VStack(alignment: .leading, spacing: 4) {
-                        if !lyrics.isEmpty {
-                            LyricsView(lines: lyrics, elapsed: elapsed)
-                                .padding(.bottom, 2)
+                        if !syncedLyrics.isEmpty || !plainLyrics.isEmpty {
+                            LyricsView(
+                                synced: syncedLyrics,
+                                plain: plainLyrics,
+                                elapsed: elapsed,
+                                duration: vm.duration
+                            )
+                            .padding(.bottom, 2)
                         }
                         ScrubberView(progress: vm.liveProgress(at: ctx.date))
                         HStack {

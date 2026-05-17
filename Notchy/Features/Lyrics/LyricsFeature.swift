@@ -1,15 +1,36 @@
 import Foundation
 import Observation
 
-/// Owns the cached LRC lines for the currently-loaded track. Re-fetches whenever
-/// the (title, artist) pair changes. Holds nil when no lyrics are available so
-/// the UI can hide the panel gracefully.
+fileprivate func _lyLog(_ msg: String) {
+    guard UserDefaults.standard.bool(forKey: "notchy.debugLogging") else { return }
+    let line = "\(Date()) [Notchy.Lyrics] \(msg)\n"
+    let path = "/tmp/notchy.log"
+    if let data = line.data(using: .utf8) {
+        if FileManager.default.fileExists(atPath: path),
+           let h = try? FileHandle(forWritingTo: URL(fileURLWithPath: path)) {
+            h.seekToEndOfFile()
+            try? h.write(contentsOf: data)
+            try? h.close()
+        } else {
+            try? data.write(to: URL(fileURLWithPath: path))
+        }
+    }
+}
+
+/// Owns the cached lyrics for the currently-loaded track. Re-fetches whenever
+/// the (title, artist) pair changes. Holds an empty bundle when no lyrics are
+/// available so the UI can hide the panel gracefully.
 @MainActor
 @Observable
 final class LyricsFeature {
 
-    private(set) var lines: [LrcLine] = []
+    private(set) var bundle: LyricsBundle = .empty
     private(set) var trackKey: String = ""  // "title|artist"
+
+    var lines: [LrcLine] { bundle.synced }
+    var plainLines: [LrcLine] { bundle.plain }
+    var hasSynced: Bool { bundle.hasSynced }
+    var hasAny: Bool { !bundle.isEmpty }
 
     private let bridge: LyricsBridge
     private weak var mediaFeature: MediaFeature?
@@ -22,7 +43,10 @@ final class LyricsFeature {
 
     /// Start polling MediaFeature for track changes (Observation-based).
     func start() {
+        _lyLog("LyricsFeature.start()")
         scheduleObserve()
+        // Kick once in case media already has a track loaded before we attached.
+        handleTrackChange()
     }
 
     private func scheduleObserve() {
@@ -43,7 +67,7 @@ final class LyricsFeature {
         scheduleObserve()
 
         guard let vm = mediaFeature?.current else {
-            lines = []
+            bundle = .empty
             trackKey = ""
             return
         }
@@ -54,13 +78,18 @@ final class LyricsFeature {
         let artist = vm.artist
         let album = vm.album
         let duration = vm.duration
+        _lyLog("track change → \(title) / \(artist) (album=\(album), dur=\(duration))")
         Task { @MainActor [weak self] in
             let fetched = await self?.bridge.fetch(
                 title: title, artist: artist, album: album, duration: duration
-            ) ?? []
+            ) ?? .empty
             // Only apply if the track hasn't changed under us.
-            guard self?.trackKey == key else { return }
-            self?.lines = fetched
+            guard self?.trackKey == key else {
+                _lyLog("dropped result: track changed during fetch")
+                return
+            }
+            _lyLog("fetched: synced=\(fetched.synced.count) plain=\(fetched.plain.count) for \(title)")
+            self?.bundle = fetched
         }
     }
 

@@ -122,7 +122,8 @@ struct NotchExpandedView: View {
                 MediaView(
                     vm: vm,
                     output: audioOutput,
-                    lyrics: lyricsFeature.lines,
+                    syncedLyrics: lyricsFeature.lines,
+                    plainLyrics: lyricsFeature.plainLines,
                     onPlayPause: { mediaFeature.playPause() },
                     onPrev: { mediaFeature.prev() },
                     onNext: { mediaFeature.next() },
