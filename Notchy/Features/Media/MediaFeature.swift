@@ -33,4 +33,16 @@ final class MediaFeature {
         streamTask?.cancel()
         streamTask = nil
     }
+
+    func playPause() {
+        Task { await bridge.send(.togglePlayPause) }
+    }
+
+    func next() {
+        Task { await bridge.send(.next) }
+    }
+
+    func prev() {
+        Task { await bridge.send(.previous) }
+    }
 }

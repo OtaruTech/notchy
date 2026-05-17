@@ -3,6 +3,7 @@ import SwiftUI
 struct NotchExpandedView: View {
     let state: NotchState
     let mediaVM: NowPlayingVM?
+    let mediaFeature: MediaFeature
 
     var body: some View {
         ZStack {
@@ -59,7 +60,12 @@ struct NotchExpandedView: View {
         switch state {
         case .media:
             if let vm = mediaVM {
-                MediaView(vm: vm)
+                MediaView(
+                    vm: vm,
+                    onPlayPause: { mediaFeature.playPause() },
+                    onPrev: { mediaFeature.prev() },
+                    onNext: { mediaFeature.next() }
+                )
             } else {
                 Text("No media").foregroundStyle(.white.opacity(0.7))
             }

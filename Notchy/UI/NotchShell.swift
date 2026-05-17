@@ -6,7 +6,11 @@ struct NotchShell: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            NotchExpandedView(state: stateMachine.state, mediaVM: mediaFeature.current)
+            NotchExpandedView(
+                state: stateMachine.state,
+                mediaVM: mediaFeature.current,
+                mediaFeature: mediaFeature
+            )
             Spacer(minLength: 0)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)

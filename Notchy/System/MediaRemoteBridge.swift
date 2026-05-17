@@ -1,5 +1,13 @@
 import Foundation
 
+enum MRCommand: Int32 {
+    case play = 0
+    case pause = 1
+    case togglePlayPause = 2
+    case next = 4
+    case previous = 5
+}
+
 struct NowPlayingInfo: Equatable, Sendable {
     var title: String
     var artist: String?
@@ -14,9 +22,11 @@ actor MediaRemoteBridge {
     private let handle: UnsafeMutableRawPointer?
     private let getInfoFn: GetInfoFn?
     private let registerFn: RegisterFn?
+    private let sendCommandFn: SendCommandFn?
 
     private typealias GetInfoFn = @convention(c) (DispatchQueue, @escaping ([String: Any]) -> Void) -> Void
     private typealias RegisterFn = @convention(c) (DispatchQueue) -> Void
+    private typealias SendCommandFn = @convention(c) (Int32, [String: Any]?) -> Bool
 
     init() {
         let path = "/System/Library/PrivateFrameworks/MediaRemote.framework/MediaRemote"
@@ -27,9 +37,12 @@ actor MediaRemoteBridge {
             self.getInfoFn = g.map { unsafeBitCast($0, to: GetInfoFn.self) }
             let r = dlsym(h, "MRMediaRemoteRegisterForNowPlayingNotifications")
             self.registerFn = r.map { unsafeBitCast($0, to: RegisterFn.self) }
+            let s = dlsym(h, "MRMediaRemoteSendCommand")
+            self.sendCommandFn = s.map { unsafeBitCast($0, to: SendCommandFn.self) }
         } else {
             self.getInfoFn = nil
             self.registerFn = nil
+            self.sendCommandFn = nil
         }
     }
 
@@ -41,6 +54,11 @@ actor MediaRemoteBridge {
                 cont.resume(returning: MediaRemoteBridge.parse(raw: dict))
             }
         }
+    }
+
+    @discardableResult
+    func send(_ command: MRCommand) -> Bool {
+        sendCommandFn?(command.rawValue, nil) ?? false
     }
 
     /// Pure parser (testable without private API).
