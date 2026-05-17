@@ -22,6 +22,8 @@
 	<true/>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Notchy reads connected AirPods battery levels to display them in the notch.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Notchy shows your upcoming events in the notch panel.</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>© 2026</string>
 </dict>
