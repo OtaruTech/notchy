@@ -1,0 +1,78 @@
+import SwiftUI
+
+struct MediaView: View {
+    let vm: NowPlayingVM
+    var onPlayPause: () -> Void = {}
+    var onPrev: () -> Void = {}
+    var onNext: () -> Void = {}
+
+    var body: some View {
+        HStack(spacing: 16) {
+            RoundedRectangle(cornerRadius: 14)
+                .fill(LinearGradient(colors: [.pink, .purple],
+                                     startPoint: .topLeading, endPoint: .bottomTrailing))
+                .frame(width: 96, height: 96)
+                .shadow(color: .purple.opacity(0.6), radius: 14, y: 6)
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(vm.title)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .lineLimit(1)
+                Text(vm.artist)
+                    .font(.system(size: 12))
+                    .foregroundStyle(.white.opacity(0.65))
+                    .lineLimit(1)
+                Text(vm.album)
+                    .font(.system(size: 11))
+                    .foregroundStyle(.white.opacity(0.45))
+                    .lineLimit(1)
+                ScrubberView(progress: vm.progress)
+                    .padding(.top, 6)
+                HStack {
+                    Text(formatTime(vm.elapsed)).foregroundStyle(.white.opacity(0.5))
+                    Spacer()
+                    Text(formatTime(vm.duration)).foregroundStyle(.white.opacity(0.5))
+                }
+                .font(.system(size: 10))
+            }
+
+            HStack(spacing: 14) {
+                Button(action: onPrev) { Image(systemName: "backward.fill") }
+                Button(action: onPlayPause) {
+                    Image(systemName: vm.isPlaying ? "pause.fill" : "play.fill")
+                        .font(.system(size: 16))
+                        .frame(width: 42, height: 42)
+                        .background(.white, in: Circle())
+                        .foregroundStyle(.black)
+                }
+                Button(action: onNext) { Image(systemName: "forward.fill") }
+            }
+            .buttonStyle(.plain)
+            .foregroundStyle(.white)
+            .font(.system(size: 13))
+        }
+    }
+
+    private func formatTime(_ t: Double) -> String {
+        guard t > 0 else { return "—" }
+        let s = Int(t)
+        return String(format: "%d:%02d", s / 60, s % 60)
+    }
+}
+
+private struct ScrubberView: View {
+    let progress: Double
+    var body: some View {
+        GeometryReader { geo in
+            ZStack(alignment: .leading) {
+                Capsule().fill(.white.opacity(0.1)).frame(height: 3)
+                Capsule()
+                    .fill(LinearGradient(colors: [.pink, .purple],
+                                         startPoint: .leading, endPoint: .trailing))
+                    .frame(width: geo.size.width * progress, height: 3)
+            }
+        }
+        .frame(height: 3)
+    }
+}

@@ -2,6 +2,7 @@ import SwiftUI
 
 struct NotchExpandedView: View {
     let state: NotchState
+    let mediaVM: NowPlayingVM?
 
     var body: some View {
         ZStack {
@@ -56,7 +57,12 @@ struct NotchExpandedView: View {
     @ViewBuilder
     private var content: some View {
         switch state {
-        case .media: Text("Media (Phase 3)").foregroundStyle(.white)
+        case .media:
+            if let vm = mediaVM {
+                MediaView(vm: vm)
+            } else {
+                Text("No media").foregroundStyle(.white.opacity(0.7))
+            }
         case .drop:  Text("Drop (Phase 4)").foregroundStyle(.white)
         case .airpods: Text("AirPods (Phase 5)").foregroundStyle(.white)
         default: EmptyView()

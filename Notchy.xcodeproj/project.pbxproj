@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0570CCAF85C30825C4528D25 /* NotchShell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6633BDBED265ECF9E7B5D9E0 /* NotchShell.swift */; };
 		06F29F064FA18C158A92DB97 /* NotchIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8A432C63FD5F5D5741DD0E /* NotchIntent.swift */; };
+		08A3041B1A964341B8937D7D /* MediaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A8751CBEB8419A976C9866 /* MediaView.swift */; };
 		0A19675515A4620A0B528D24 /* NotchStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D122AD1F4DC763CB8C4850EF /* NotchStateMachine.swift */; };
 		0E614FC36B1E07D76EF6AF98 /* MediaRemoteBridgeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 987883E6E877E89AC16FBF27 /* MediaRemoteBridgeTests.swift */; };
 		286F215E8831A0344D62077D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEA109DCBD303D912C0C256D /* AppDelegate.swift */; };
@@ -65,6 +66,7 @@
 		8F8A432C63FD5F5D5741DD0E /* NotchIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchIntent.swift; sourceTree = "<group>"; };
 		987883E6E877E89AC16FBF27 /* MediaRemoteBridgeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaRemoteBridgeTests.swift; sourceTree = "<group>"; };
 		B17D845897E3385277807C80 /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
+		B9A8751CBEB8419A976C9866 /* MediaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaView.swift; sourceTree = "<group>"; };
 		C5BF2C7B3BA24BABF10B7FEE /* MediaFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaFeature.swift; sourceTree = "<group>"; };
 		D122AD1F4DC763CB8C4850EF /* NotchStateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchStateMachine.swift; sourceTree = "<group>"; };
 		D45A277B816298254CE708D9 /* MediaFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaFeatureTests.swift; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 			isa = PBXGroup;
 			children = (
 				C5BF2C7B3BA24BABF10B7FEE /* MediaFeature.swift */,
+				B9A8751CBEB8419A976C9866 /* MediaView.swift */,
 				072CBDD5C0C479F642FA10B1 /* NowPlayingVM.swift */,
 			);
 			path = Media;
@@ -318,6 +321,7 @@
 				892BD16133C0CB804E94B701 /* HotZoneMonitor.swift in Sources */,
 				C2C75C7AF305D4241130A962 /* MediaFeature.swift in Sources */,
 				40376D104D4D8BFD69BA134D /* MediaRemoteBridge.swift in Sources */,
+				08A3041B1A964341B8937D7D /* MediaView.swift in Sources */,
 				30FD864030AE3EA6C9478B48 /* NotchExpandedView.swift in Sources */,
 				06F29F064FA18C158A92DB97 /* NotchIntent.swift in Sources */,
 				0570CCAF85C30825C4528D25 /* NotchShell.swift in Sources */,

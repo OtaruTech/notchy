@@ -5,13 +5,19 @@ import SwiftUI
 final class AppDelegate: NSObject, NSApplicationDelegate {
 
     let stateMachine = NotchStateMachine()
+    let mediaBridge = MediaRemoteBridge()
+    private(set) var mediaFeature: MediaFeature!
     private var windowController: NotchWindowController?
     private var hotZone: HotZoneMonitor?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        mediaFeature = MediaFeature(bridge: mediaBridge, stateMachine: stateMachine)
+        mediaFeature.start()
+
         let sm = stateMachine
+        let mf = mediaFeature!
         windowController = NotchWindowController {
-            NotchShell(stateMachine: sm)
+            NotchShell(stateMachine: sm, mediaFeature: mf)
         }
         windowController?.show()
 
