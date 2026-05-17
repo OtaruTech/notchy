@@ -129,7 +129,18 @@ actor MediaRemoteBridge {
         let album = (albumRaw?.isEmpty == false) ? albumRaw : nil
         let elapsed = payload["elapsedTime"] as? Double
         let duration = payload["duration"] as? Double
-        let playing = (payload["playing"] as? Bool) ?? ((payload["playbackRate"] as? Double).map { $0 > 0 } ?? false)
+        // `playbackRate` is the authoritative play/pause indicator — it's always
+        // updated in diff events. The boolean `playing` may go stale after merging
+        // because diffs sometimes carry only `playbackRate`, leaving the older
+        // `playing: true` in place after a pause.
+        let playing: Bool
+        if let rate = payload["playbackRate"] as? Double {
+            playing = rate > 0
+        } else if let p = payload["playing"] as? Bool {
+            playing = p
+        } else {
+            playing = false
+        }
         // Artwork is base64-encoded JPEG/PNG in the JSON payload.
         let artworkData: Data?
         if let b64 = payload["artworkData"] as? String, !b64.isEmpty {

@@ -11,61 +11,80 @@ struct DashboardView: View {
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
     var body: some View {
-        HStack(spacing: 20) {
-            // Time + date column
-            VStack(alignment: .leading, spacing: 4) {
+        HStack(spacing: 18) {
+            // ── Time + date column ──────────────────────────────
+            VStack(alignment: .leading, spacing: 2) {
                 Text(timeString)
-                    .font(.system(size: 44, weight: .light, design: .rounded))
+                    .font(.system(size: 48, weight: .light, design: .rounded))
                     .foregroundStyle(.white)
                     .monospacedDigit()
-                Text(dateString)
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(.white.opacity(0.65))
+                    .lineLimit(1)
+                HStack(spacing: 6) {
+                    Image(systemName: "calendar")
+                        .font(.system(size: 10))
+                        .foregroundStyle(.white.opacity(0.55))
+                    Text(dateString)
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundStyle(.white.opacity(0.7))
+                }
             }
+            .fixedSize(horizontal: true, vertical: false)
 
             Divider()
-                .frame(width: 1, height: 64)
+                .frame(width: 1, height: 60)
                 .overlay(.white.opacity(0.12))
 
-            // Next event / hint column
-            VStack(alignment: .leading, spacing: 4) {
-                Text("NEXT UP")
-                    .font(.system(size: 9, weight: .semibold))
-                    .foregroundStyle(.white.opacity(0.45))
-                    .tracking(0.8)
+            // ── Next event / hint column ────────────────────────
+            VStack(alignment: .leading, spacing: 3) {
+                HStack(spacing: 5) {
+                    Text("UP NEXT")
+                        .font(.system(size: 9, weight: .bold))
+                        .foregroundStyle(.white.opacity(0.5))
+                        .tracking(1.0)
+                    if let ev = nextEvent, ev.isInProgress {
+                        liveBadge
+                    }
+                }
                 if let ev = nextEvent {
-                    Text(ev.title)
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(.white)
-                        .lineLimit(1)
-                    Text("\(ev.startTime) – \(ev.endTime)")
-                        .font(.system(size: 11))
-                        .foregroundStyle(.white.opacity(0.6))
+                    HStack(spacing: 6) {
+                        Capsule()
+                            .fill(Color(cgColor: ev.calendarColor))
+                            .frame(width: 3, height: 30)
+                        VStack(alignment: .leading, spacing: 1) {
+                            Text(ev.title)
+                                .font(.system(size: 13, weight: .semibold))
+                                .foregroundStyle(.white)
+                                .lineLimit(1)
+                            Text("\(ev.startTime) – \(ev.endTime)")
+                                .font(.system(size: 10, design: .monospaced))
+                                .foregroundStyle(.white.opacity(0.55))
+                        }
+                    }
                 } else {
                     Text("Nothing scheduled")
                         .font(.system(size: 13))
-                        .foregroundStyle(.white.opacity(0.5))
-                    Text("Drop a file or play music")
-                        .font(.system(size: 10))
+                        .foregroundStyle(.white.opacity(0.55))
+                    Text("Drop files · Play music · Connect AirPods")
+                        .font(.system(size: 9))
                         .foregroundStyle(.white.opacity(0.35))
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
 
-            // System stats column (bigger icons, clear labels) — gated by Settings toggle
+            // ── System stats column (gated by Settings toggle) ──
             if gaugeEnabled {
-                VStack(alignment: .trailing, spacing: 6) {
+                VStack(alignment: .trailing, spacing: 8) {
                     statRow(
                         icon: "cpu.fill",
-                        iconColor: snapshot.cpuPercent > 70 ? .orange : .white.opacity(0.7),
+                        iconColor: cpuColor,
                         label: "CPU",
                         value: "\(snapshot.cpuPercent)%"
                     )
                     if let bat = snapshot.batteryPercent {
                         statRow(
-                            icon: snapshot.isCharging ? "battery.100.bolt" : "battery.\(batteryBucket(bat))",
+                            icon: snapshot.isCharging ? "bolt.fill" : "battery.\(batteryBucket(bat))",
                             iconColor: snapshot.isCharging ? .green : (bat < 20 ? .red : .white.opacity(0.7)),
-                            label: snapshot.isCharging ? "Charging" : "Battery",
+                            label: snapshot.isCharging ? "POWER" : "BATT",
                             value: "\(bat)%"
                         )
                     }
@@ -77,23 +96,43 @@ struct DashboardView: View {
         .onReceive(timer) { now = $0 }
     }
 
+    private var liveBadge: some View {
+        HStack(spacing: 3) {
+            Circle()
+                .fill(.red)
+                .frame(width: 5, height: 5)
+            Text("LIVE")
+                .font(.system(size: 8, weight: .bold))
+                .foregroundStyle(.red)
+                .tracking(0.5)
+        }
+    }
+
     @ViewBuilder
     private func statRow(icon: String, iconColor: Color, label: String, value: String) -> some View {
-        HStack(spacing: 6) {
+        HStack(spacing: 7) {
             Image(systemName: icon)
-                .font(.system(size: 14))
+                .font(.system(size: 13))
                 .foregroundStyle(iconColor)
                 .frame(width: 18)
             VStack(alignment: .trailing, spacing: 0) {
                 Text(value)
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(.system(size: 14, weight: .semibold))
                     .foregroundStyle(.white)
                     .monospacedDigit()
                 Text(label)
-                    .font(.system(size: 9))
-                    .foregroundStyle(.white.opacity(0.5))
-                    .tracking(0.5)
+                    .font(.system(size: 8, weight: .medium))
+                    .foregroundStyle(.white.opacity(0.45))
+                    .tracking(0.8)
             }
+        }
+    }
+
+    private var cpuColor: Color {
+        switch snapshot.cpuPercent {
+        case ..<40: return .white.opacity(0.7)
+        case 40..<75: return .yellow
+        default: return .orange
         }
     }
 
