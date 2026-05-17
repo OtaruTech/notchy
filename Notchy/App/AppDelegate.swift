@@ -200,9 +200,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     /// System Settings → Privacy & Security → Accessibility. Without this,
     /// NSEvent global monitors silently fail (return nil) and hover never fires.
     private func promptAccessibilityIfNeeded() {
-        // Swift 6 doesn't let us touch the bridged kAXTrustedCheckOptionPrompt global
-        // (it's an unsafe shared mutable). Use the literal key string instead — the
-        // value is stable in macOS history.
+        // Already trusted? Don't keep popping the prompt every launch.
+        guard !AXIsProcessTrusted() else { return }
+        // Not trusted yet — prompt user. Note: ad-hoc signed builds get a fresh
+        // cdhash on every rebuild, so macOS treats each reinstall as a new app
+        // and re-prompts even if a stale entry exists in Accessibility list.
+        // User needs to remove the old entry and re-add the new one (or use
+        // a stable Developer ID cert).
         let options = ["AXTrustedCheckOptionPrompt": kCFBooleanTrue!] as CFDictionary
         _ = AXIsProcessTrustedWithOptions(options)
     }

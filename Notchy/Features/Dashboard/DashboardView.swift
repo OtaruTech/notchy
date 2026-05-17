@@ -5,6 +5,7 @@ import SwiftUI
 struct DashboardView: View {
     let nextEvent: EventVM?
     let snapshot: SystemSnapshot
+    @AppStorage("notchy.gaugeEnabled") private var gaugeEnabled = true
     @State private var now = Date()
 
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
@@ -51,24 +52,28 @@ struct DashboardView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
 
-            // System stats column (bigger icons, clear labels)
-            VStack(alignment: .trailing, spacing: 6) {
-                statRow(
-                    icon: "cpu.fill",
-                    iconColor: snapshot.cpuPercent > 70 ? .orange : .white.opacity(0.7),
-                    label: "CPU",
-                    value: "\(snapshot.cpuPercent)%"
-                )
-                if let bat = snapshot.batteryPercent {
+            // System stats column (bigger icons, clear labels) — gated by Settings toggle
+            if gaugeEnabled {
+                VStack(alignment: .trailing, spacing: 6) {
                     statRow(
-                        icon: snapshot.isCharging ? "battery.100.bolt" : "battery.\(batteryBucket(bat))",
-                        iconColor: snapshot.isCharging ? .green : (bat < 20 ? .red : .white.opacity(0.7)),
-                        label: snapshot.isCharging ? "Charging" : "Battery",
-                        value: "\(bat)%"
+                        icon: "cpu.fill",
+                        iconColor: snapshot.cpuPercent > 70 ? .orange : .white.opacity(0.7),
+                        label: "CPU",
+                        value: "\(snapshot.cpuPercent)%"
                     )
+                    if let bat = snapshot.batteryPercent {
+                        statRow(
+                            icon: snapshot.isCharging ? "battery.100.bolt" : "battery.\(batteryBucket(bat))",
+                            iconColor: snapshot.isCharging ? .green : (bat < 20 ? .red : .white.opacity(0.7)),
+                            label: snapshot.isCharging ? "Charging" : "Battery",
+                            value: "\(bat)%"
+                        )
+                    }
                 }
+                .transition(.opacity)
             }
         }
+        .animation(.easeInOut(duration: 0.2), value: gaugeEnabled)
         .onReceive(timer) { now = $0 }
     }
 
