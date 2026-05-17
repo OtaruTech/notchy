@@ -9,6 +9,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private(set) var mediaFeature: MediaFeature!
     private var windowController: NotchWindowController?
     private var hotZone: HotZoneMonitor?
+    let dropFeature = DropFeature()
+    private var dragSession: DragSession?
+    private var airpodsDismissTimer: Task<Void, Never>?
+    private var dropDismissTimer: Task<Void, Never>?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         mediaFeature = MediaFeature(bridge: mediaBridge, stateMachine: stateMachine)
@@ -29,11 +33,36 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         monitor.start()
         hotZone = monitor
 
+        let drag = DragSession()
+        drag.onEnter = { [weak self] in
+            self?.stateMachine.send(.dragEntered)
+            self?.dropDismissTimer?.cancel()
+        }
+        drag.onExit = { [weak self] in
+            self?.scheduleDropDismiss()
+        }
+        drag.onDrop = { [weak self] urls in
+            self?.dropFeature.add(urls: urls)
+            self?.scheduleDropDismiss()
+        }
+        if let cv = windowController?.contentView {
+            drag.attach(to: cv)
+        }
+        dragSession = drag
+
         NotificationCenter.default.addObserver(
             forName: NSApplication.didChangeScreenParametersNotification,
             object: nil, queue: .main
         ) { [weak self] _ in
             Task { @MainActor in self?.windowController?.show() }
+        }
+    }
+
+    private func scheduleDropDismiss() {
+        dropDismissTimer?.cancel()
+        dropDismissTimer = Task { [weak self] in
+            try? await Task.sleep(for: DesignTokens.dragDismissDelay)
+            await MainActor.run { self?.stateMachine.send(.dragExited) }
         }
     }
 }

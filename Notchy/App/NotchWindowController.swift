@@ -7,6 +7,8 @@ final class NotchWindowController {
     private var panel: NSPanel?
     private let rootView: () -> AnyView
 
+    var contentView: NSView? { panel?.contentView }
+
     /// `rootView` is a factory so the panel can reattach to a new screen.
     init(@ViewBuilder rootView: @escaping () -> some View) {
         self.rootView = { AnyView(rootView()) }
