@@ -28,12 +28,23 @@ final class HotZoneMonitor {
     var onExit: () -> Void = {}
     var onEscape: () -> Void = {}
     var onClickOutside: () -> Void = {}
+    /// Fired when a horizontal trackpad/scroll gesture happens INSIDE the active zone.
+    /// `direction > 0` = swipe right (next), `direction < 0` = swipe left (previous).
+    var onHorizontalSwipe: (Int) -> Void = { _ in }
+
+    private var scrollAccumulator: CGFloat = 0
+    private let scrollThreshold: CGFloat = 30  // pt of accumulated horizontal scroll = one track skip
+    private var scrollResetWork: DispatchWorkItem?
 
     func start() {
-        globalMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.mouseMoved, .leftMouseDown]) { [weak self] event in
+        globalMonitor = NSEvent.addGlobalMonitorForEvents(
+            matching: [.mouseMoved, .leftMouseDown, .scrollWheel]
+        ) { [weak self] event in
             Task { @MainActor in self?.handle(event: event) }
         }
-        localMonitor = NSEvent.addLocalMonitorForEvents(matching: [.mouseMoved, .leftMouseDown, .keyDown]) { [weak self] event in
+        localMonitor = NSEvent.addLocalMonitorForEvents(
+            matching: [.mouseMoved, .leftMouseDown, .keyDown, .scrollWheel]
+        ) { [weak self] event in
             Task { @MainActor in self?.handle(event: event) }
             return event
         }
@@ -85,6 +96,26 @@ final class HotZoneMonitor {
 
         if event.type == .leftMouseDown {
             if !nowInside { onClickOutside() }
+            return
+        }
+
+        if event.type == .scrollWheel {
+            // Only count gestures whose cursor is inside the active zone.
+            guard nowInside else { return }
+            // Trackpad horizontal scroll → integer accumulator → emit at threshold.
+            scrollAccumulator += event.scrollingDeltaX
+            scrollResetWork?.cancel()
+            if scrollAccumulator >= scrollThreshold {
+                onHorizontalSwipe(1)
+                scrollAccumulator = 0
+            } else if scrollAccumulator <= -scrollThreshold {
+                onHorizontalSwipe(-1)
+                scrollAccumulator = 0
+            }
+            // Reset accumulator if user pauses (debounce so two separate swipes don't merge).
+            let reset = DispatchWorkItem { [weak self] in self?.scrollAccumulator = 0 }
+            scrollResetWork = reset
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(400), execute: reset)
             return
         }
 

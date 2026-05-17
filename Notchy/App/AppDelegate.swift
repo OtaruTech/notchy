@@ -87,6 +87,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         monitor.onExit = { [weak self] in self?.stateMachine.send(.hoverExited) }
         monitor.onEscape = { [weak self] in self?.stateMachine.send(.escapeKeyPressed) }
         monitor.onClickOutside = { [weak self] in self?.stateMachine.send(.outsideClicked) }
+        monitor.onHorizontalSwipe = { [weak self] direction in
+            // Only act if media is currently playing — otherwise this would feel
+            // disconnected (user swiping over an empty notch and getting nothing).
+            guard self?.mediaFeature.current?.isPlaying == true else { return }
+            if direction > 0 { self?.mediaFeature.next() }
+            else { self?.mediaFeature.prev() }
+        }
         monitor.start()
         hotZone = monitor
 
