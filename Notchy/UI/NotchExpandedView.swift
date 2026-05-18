@@ -15,6 +15,7 @@ struct NotchExpandedView: View {
     let systemMonitor: SystemMonitorFeature
     let mirrorFeature: MirrorFeature
     let lyricsFeature: LyricsFeature
+    let systemStatus: SystemStatusFeature
     let clipboardFeature: ClipboardFeature
     let onClipboardPaste: (ClipboardItem) -> Void
     let onClipboardDismiss: () -> Void
@@ -149,7 +150,11 @@ struct NotchExpandedView: View {
     private var content: some View {
         switch state {
         case .dashboard:
-            DashboardView(nextEvent: calendarFeature.events.first, snapshot: systemMonitor.snapshot)
+            DashboardView(
+                nextEvent: calendarFeature.events.first,
+                snapshot: systemMonitor.snapshot,
+                status: systemStatus
+            )
         case .media:
             if let vm = mediaVM {
                 MediaView(

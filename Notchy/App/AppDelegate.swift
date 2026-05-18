@@ -40,6 +40,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     let mirrorFeature = MirrorFeature()
     let audioOutput = AudioOutputBridge()
     let hudFeature = HUDFeature()
+    let systemStatus = SystemStatusFeature()
+    private var powerMonitor: PowerMonitor?
     private var volumeMonitor: VolumeMonitor?
     private var mediaKeyMonitor: MediaKeyMonitor?
     private var hudWindowController: HUDWindowController?
@@ -87,6 +89,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // via @Bindable; main panel doesn't have to know about HUD events.
         hudWindowController = HUDWindowController(feature: hudFeature)
         hudWindowController?.show()
+
+        // System status monitors — populate SystemStatusFeature in the
+        // background; dashboard reads from it.
+        let pm = PowerMonitor(status: systemStatus)
+        pm.start()
+        powerMonitor = pm
 
         // Volume HUD takeover — listen for default-output volume + mute
         // changes and forward to HUDFeature.
@@ -201,6 +209,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let lyrics = lyricsFeature!
         let clip = clipboardFeature!
         let hud = hudFeature
+        let status = systemStatus
         windowController = NotchWindowController { [weak self] in
             NotchShell(
                 stateMachine: sm,
@@ -215,6 +224,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 mirrorFeature: mir,
                 audioOutput: ao,
                 lyricsFeature: lyrics,
+                systemStatus: status,
                 clipboardFeature: clip,
                 onClipboardPaste: { [weak self] item in
                     self?.performClipboardPaste(item)

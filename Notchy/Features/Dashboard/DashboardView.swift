@@ -5,12 +5,20 @@ import SwiftUI
 struct DashboardView: View {
     let nextEvent: EventVM?
     let snapshot: SystemSnapshot
+    var status: SystemStatusFeature? = nil
     @AppStorage("notchy.gaugeEnabled") private var gaugeEnabled = true
     @State private var now = Date()
 
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
     var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            mainRow
+            extrasSection
+        }
+    }
+
+    private var mainRow: some View {
         HStack(spacing: 18) {
             // ── Time + date column ──────────────────────────────
             VStack(alignment: .leading, spacing: 2) {
@@ -94,6 +102,52 @@ struct DashboardView: View {
         }
         .animation(.easeInOut(duration: 0.2), value: gaugeEnabled)
         .onReceive(timer) { now = $0 }
+    }
+
+    private var bodyDummy: some View {  // (kept private structure simple)
+        EmptyView()
+    }
+
+    /// Extras section — system status rows added in v0.4 Phase 4–8.
+    /// Each row gates on its own UserDefault + on whether the data source
+    /// has anything to show. Hidden entirely when none apply.
+    @ViewBuilder
+    var extrasSection: some View {
+        if let status {
+            VStack(spacing: 4) {
+                chargingRow(status: status)
+                // Future rows land here, one per phase.
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func chargingRow(status: SystemStatusFeature) -> some View {
+        let chargingEnabled = UserDefaults.standard.object(forKey: "notchy.indicatorChargingEnabled") as? Bool ?? true
+        if chargingEnabled, status.isCharging, let watts = status.chargingWatts {
+            HStack(spacing: 6) {
+                Image(systemName: "bolt.fill")
+                    .font(.system(size: 11, weight: .bold))
+                    .foregroundStyle(.green)
+                Text("\(watts)W")
+                    .font(.system(size: 12, weight: .semibold, design: .rounded))
+                    .foregroundStyle(.white)
+                    .monospacedDigit()
+                Text(adapterLabel(watts: watts))
+                    .font(.system(size: 10))
+                    .foregroundStyle(.white.opacity(0.45))
+                Spacer(minLength: 0)
+            }
+        }
+    }
+
+    private func adapterLabel(watts: Int) -> String {
+        switch watts {
+        case ..<35:  return "trickle"
+        case 35..<50: return "MagSafe"
+        case 50..<70: return "PD fast"
+        default:     return "PD max"
+        }
     }
 
     private var liveBadge: some View {

@@ -21,6 +21,7 @@
 		195480A06999E8B25DFEBFA2 /* DragSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AD67689C0B9FE1FA469C399 /* DragSession.swift */; };
 		195C4713F5791E9228EB7CB4 /* ClipboardPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 485C2B895268772A9BF67952 /* ClipboardPanel.swift */; };
 		1D9A6E7602F202E31AB6F90F /* ClipboardFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FEA9F562C67C167FFE5C8D6 /* ClipboardFeature.swift */; };
+		2154F16A76B95C051CA887AD /* SystemStatusFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C715910BA0A50F2EB710FDE4 /* SystemStatusFeature.swift */; };
 		2172A68118565954CEE3E589 /* SystemMonitorFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21D078EE082B5722C2D2B29 /* SystemMonitorFeature.swift */; };
 		26631641E79D48109EB14E78 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 69CCE4E74408B91B00D1CE00 /* Assets.xcassets */; };
 		27165D68CF520A434326CEE5 /* ClipboardItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C132AC85ACAD2523542DE3 /* ClipboardItem.swift */; };
@@ -91,6 +92,7 @@
 		E7278F76CBAC9EC0C6D76809 /* ClipboardCapturer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BDCFC40324F50CA77E2C4E9 /* ClipboardCapturer.swift */; };
 		E94776A4C8FE0FD41E282D94 /* CloudKitMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A14A22DB46EB6254A26AA1 /* CloudKitMapping.swift */; };
 		EBB565BFDB9DD4B035BA2677 /* MirrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502A1D39A74B73C64CB48E2A /* MirrorView.swift */; };
+		EC64E85441B1385E7A5BC17E /* PowerMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90D7B2C43C9C1F00F7B3098 /* PowerMonitor.swift */; };
 		ECFB624F24C62DD97AB018A6 /* HUDEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDEFAFF78FCE7EB0DF56720C /* HUDEvent.swift */; };
 		F29841C20EF81367D1331F67 /* ScreenGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB210D67BB9058034F788290 /* ScreenGeometryTests.swift */; };
 		F30CA51FFDECAEEC718505C0 /* LrcLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF80D35E0458C579AC543D9 /* LrcLine.swift */; };
@@ -185,12 +187,14 @@
 		AE253DEBEF1D9E40C4A71E01 /* SystemMonitorBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMonitorBridge.swift; sourceTree = "<group>"; };
 		B17D845897E3385277807C80 /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
 		B8D73E5D88FE0299E1D90ABC /* BatteryReadingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryReadingTests.swift; sourceTree = "<group>"; };
+		B90D7B2C43C9C1F00F7B3098 /* PowerMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerMonitor.swift; sourceTree = "<group>"; };
 		B9A8751CBEB8419A976C9866 /* MediaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaView.swift; sourceTree = "<group>"; };
 		BB75579F5D02B1886B70C9CD /* BatteryReading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryReading.swift; sourceTree = "<group>"; };
 		BDEFAFF78FCE7EB0DF56720C /* HUDEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDEvent.swift; sourceTree = "<group>"; };
 		C392C6E5409579A1E5477CC7 /* CalendarFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarFeature.swift; sourceTree = "<group>"; };
 		C49CFCBE4B35D330FB05BD5E /* LyricsTicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricsTicker.swift; sourceTree = "<group>"; };
 		C5BF2C7B3BA24BABF10B7FEE /* MediaFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaFeature.swift; sourceTree = "<group>"; };
+		C715910BA0A50F2EB710FDE4 /* SystemStatusFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemStatusFeature.swift; sourceTree = "<group>"; };
 		C771911B2250D5B134445E2C /* ClipboardKindChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardKindChip.swift; sourceTree = "<group>"; };
 		C7DB84D3D526593E9918B079 /* GaugePillSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaugePillSnapshots.swift; sourceTree = "<group>"; };
 		D122AD1F4DC763CB8C4850EF /* NotchStateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchStateMachine.swift; sourceTree = "<group>"; };
@@ -429,9 +433,19 @@
 				2135213ACED6312E4D7643C4 /* Media */,
 				57C0DE170022192A4163EEA0 /* Mirror */,
 				F93B4A6AA7F28C96B503640E /* SystemMonitor */,
+				988E49D70DED76A563E505C6 /* SystemStatus */,
 				514B170601E05FFED71CEE19 /* Timer */,
 			);
 			path = Features;
+			sourceTree = "<group>";
+		};
+		988E49D70DED76A563E505C6 /* SystemStatus */ = {
+			isa = PBXGroup;
+			children = (
+				B90D7B2C43C9C1F00F7B3098 /* PowerMonitor.swift */,
+				C715910BA0A50F2EB710FDE4 /* SystemStatusFeature.swift */,
+			);
+			path = SystemStatus;
 			sourceTree = "<group>";
 		};
 		A13FABD741219299261761DC /* Notchy */ = {
@@ -711,11 +725,13 @@
 				DB3BC1673D33C876EDD8ADD3 /* NotchyApp.swift in Sources */,
 				BB64406D197C5E4FD7F1143B /* NowPlayingVM.swift in Sources */,
 				42912963CD05DEB6E9E6A87A /* PasteEngine.swift in Sources */,
+				EC64E85441B1385E7A5BC17E /* PowerMonitor.swift in Sources */,
 				622ED93051501AD7FA938E32 /* ScreenGeometry.swift in Sources */,
 				D8D69AB95F6081DCC87FF4F3 /* SettingsView.swift in Sources */,
 				906DF5F28839AE58C637AC9C /* SyncEngine.swift in Sources */,
 				849A51251EE8815DCF7187BB /* SystemMonitorBridge.swift in Sources */,
 				2172A68118565954CEE3E589 /* SystemMonitorFeature.swift in Sources */,
+				2154F16A76B95C051CA887AD /* SystemStatusFeature.swift in Sources */,
 				5735921B02AF0F53A22A2E7A /* TapCatcher.swift in Sources */,
 				811A8EC798FAF3DF30D4C712 /* TimerFeature.swift in Sources */,
 				CD0691F820505A12B0D49DDE /* TimerView.swift in Sources */,

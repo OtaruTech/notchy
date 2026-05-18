@@ -13,6 +13,7 @@ struct NotchShell: View {
     let mirrorFeature: MirrorFeature
     let audioOutput: AudioOutputBridge
     let lyricsFeature: LyricsFeature
+    let systemStatus: SystemStatusFeature
     let clipboardFeature: ClipboardFeature
     let onClipboardPaste: (ClipboardItem) -> Void
     let onClipboardDismiss: () -> Void
@@ -44,6 +45,7 @@ struct NotchShell: View {
                 systemMonitor: systemMonitor,
                 mirrorFeature: mirrorFeature,
                 lyricsFeature: lyricsFeature,
+                systemStatus: systemStatus,
                 clipboardFeature: clipboardFeature,
                 onClipboardPaste: onClipboardPaste,
                 onClipboardDismiss: onClipboardDismiss,
