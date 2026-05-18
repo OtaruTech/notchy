@@ -16,11 +16,21 @@ struct NotchShell: View {
     let clipboardFeature: ClipboardFeature
     let onClipboardPaste: (ClipboardItem) -> Void
     let onClipboardDismiss: () -> Void
+    let hudFeature: HUDFeature
     @AppStorage("notchy.gaugeEnabled") private var gaugeEnabled = true
 
     var body: some View {
         VStack(spacing: 0) {
-            NotchExpandedView(
+            expandedView
+            Spacer(minLength: 0)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .animation(DesignTokens.springExpand, value: stateMachine.state)
+    }
+
+    @ViewBuilder
+    private var expandedView: some View {
+        NotchExpandedView(
                 state: stateMachine.state,
                 mediaVM: mediaFeature.current,
                 mediaFeature: mediaFeature,
@@ -37,13 +47,10 @@ struct NotchShell: View {
                 clipboardFeature: clipboardFeature,
                 onClipboardPaste: onClipboardPaste,
                 onClipboardDismiss: onClipboardDismiss,
+                hudFeature: hudFeature,
                 availableTabs: availableTabs,
                 onTabSwitch: { stateMachine.send(.tabSwitchedTo($0)) }
             )
-            Spacer(minLength: 0)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .animation(DesignTokens.springExpand, value: stateMachine.state)
     }
 
     private var availableTabs: [NotchState] {

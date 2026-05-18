@@ -18,6 +18,7 @@ struct NotchExpandedView: View {
     let clipboardFeature: ClipboardFeature
     let onClipboardPaste: (ClipboardItem) -> Void
     let onClipboardDismiss: () -> Void
+    let hudFeature: HUDFeature
     let availableTabs: [NotchState]
     let onTabSwitch: (NotchState) -> Void
 
@@ -43,10 +44,9 @@ struct NotchExpandedView: View {
                         .opacity(state.isExpanded ? 1 : 0)
                 }
 
-            // Live-activity flanking strip whenever a track is loaded (playing OR
-            // paused) OR a timer is running — so the timer remains globally visible
-            // even when the notch is collapsed.
             if (state == .hint || state == .idle), shouldShowLiveStrip {
+                // Live-activity flanking strip whenever a track is loaded
+                // (playing OR paused) OR a timer is running.
                 VStack(spacing: 6) {
                     LiveActivityStrip(vm: mediaVM, timerState: timerFeature.state)
                     if lyricsEnabled, let mvm = mediaVM, lyricsFeature.hasAny {
@@ -91,6 +91,12 @@ struct NotchExpandedView: View {
     }
 
     private var width: CGFloat {
+        // HUD overlay needs canvas no matter what state we're in.
+        if hudFeature.current != nil {
+            if state == .clipboard { return DesignTokens.clipboardWidth }
+            if state.isExpanded { return DesignTokens.expandedWidth }
+            return 360
+        }
         if state == .clipboard { return DesignTokens.clipboardWidth }
         if state.isExpanded { return DesignTokens.expandedWidth }
         let actualNotchW = ScreenGeometry.liveNotchWidth()
@@ -115,6 +121,7 @@ struct NotchExpandedView: View {
         let actualNotchH = ScreenGeometry.liveNotchHeight()
         switch state {
         case .idle, .hint:
+            if hudFeature.current != nil { return actualNotchH + 56 }
             let base = actualNotchH + (state == .hint ? 3 : 0)
             if lyricsEnabled, mediaVM != nil, lyricsFeature.hasAny { return base + 34 }
             return base

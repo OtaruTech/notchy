@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0004721435D460BC904035BA /* HUDWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7201C96F6CD85CEE15F21A53 /* HUDWindowController.swift */; };
 		042B349F5799C3F7CF15EA99 /* AirPodsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB110EA11D24C6907762BAF /* AirPodsView.swift */; };
 		0476813050891A01F9DFDF6B /* Data+Append.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78ACFB47B00A482E040584F8 /* Data+Append.swift */; };
 		0570CCAF85C30825C4528D25 /* NotchShell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6633BDBED265ECF9E7B5D9E0 /* NotchShell.swift */; };
@@ -46,6 +47,7 @@
 		6143CACA5A6611792E9FA931 /* MirrorFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3E5FEACE7BC707A8AA10C8 /* MirrorFeature.swift */; };
 		622ED93051501AD7FA938E32 /* ScreenGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3D7AB1CDC0C20683D95BE7 /* ScreenGeometry.swift */; };
 		6607034E836A622EC384CA81 /* LyricsFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF411B38876B3174927368AA /* LyricsFeature.swift */; };
+		717A666DF540A0818B8A2C3A /* HUDFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4D65D46E45936BFE0ADDF6 /* HUDFeature.swift */; };
 		77D1EDBBCA6AE49016C7EA3D /* AirPodsViewSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B72C57C5C358F93B591E5A1 /* AirPodsViewSnapshots.swift */; };
 		781ED9252B58782D95E47750 /* DropItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D601C50E08A7A66E52CBFCF4 /* DropItem.swift */; };
 		7AA7B6325EFA3AEF46D9C0FC /* ClipboardKindChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = C771911B2250D5B134445E2C /* ClipboardKindChip.swift */; };
@@ -79,6 +81,7 @@
 		D810728D8C29AB9C479A9B94 /* SystemMonitorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3442410EB733AC1751A9511 /* SystemMonitorTests.swift */; };
 		D8D69AB95F6081DCC87FF4F3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9100CBB2EF123484F00E26CF /* SettingsView.swift */; };
 		DB3BC1673D33C876EDD8ADD3 /* NotchyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC3E0563BD6694DA94F039A /* NotchyApp.swift */; };
+		DC6F38B78AB7B8100D05FC8A /* HUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88B41A52C4259635F93B399 /* HUDView.swift */; };
 		DD1707D9613B4E09C0755D1A /* AudioOutputBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72DA93FE7F9028530835F1EC /* AudioOutputBridge.swift */; };
 		E2AD4084D1E9A524DC173903 /* ClipboardStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A2132BBDC5D21838A8334F4 /* ClipboardStore.swift */; };
 		E4A897D208DAB56EE74569EE /* BatteryReadingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D73E5D88FE0299E1D90ABC /* BatteryReadingTests.swift */; };
@@ -86,10 +89,12 @@
 		E7278F76CBAC9EC0C6D76809 /* ClipboardCapturer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BDCFC40324F50CA77E2C4E9 /* ClipboardCapturer.swift */; };
 		E94776A4C8FE0FD41E282D94 /* CloudKitMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A14A22DB46EB6254A26AA1 /* CloudKitMapping.swift */; };
 		EBB565BFDB9DD4B035BA2677 /* MirrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502A1D39A74B73C64CB48E2A /* MirrorView.swift */; };
+		ECFB624F24C62DD97AB018A6 /* HUDEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDEFAFF78FCE7EB0DF56720C /* HUDEvent.swift */; };
 		F29841C20EF81367D1331F67 /* ScreenGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB210D67BB9058034F788290 /* ScreenGeometryTests.swift */; };
 		F30CA51FFDECAEEC718505C0 /* LrcLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF80D35E0458C579AC543D9 /* LrcLine.swift */; };
 		F5144B2A34BE3536C844C2C9 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D689D273D37007ED622990E1 /* DashboardView.swift */; };
 		FA1CFBEAF3B9C3F70DEFE331 /* LyricsTicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49CFCBE4B35D330FB05BD5E /* LyricsTicker.swift */; };
+		FAF609504877CEF9FBFB1FB8 /* VolumeMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E55A261F6CF1B66857B520B /* VolumeMonitor.swift */; };
 		FB8A981216B67649B07A7D4A /* Placeholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C48864F05F8FB04487850E /* Placeholder.swift */; };
 /* End PBXBuildFile section */
 
@@ -116,6 +121,7 @@
 		15A14A22DB46EB6254A26AA1 /* CloudKitMapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitMapping.swift; sourceTree = "<group>"; };
 		1A423F8D9BB22E46CA097007 /* NotchySnapshotTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NotchySnapshotTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C3034B9AB977A1751561A17 /* HotZoneMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotZoneMonitor.swift; sourceTree = "<group>"; };
+		1E55A261F6CF1B66857B520B /* VolumeMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeMonitor.swift; sourceTree = "<group>"; };
 		2110AAECFFF10B27041EF2B3 /* NotchyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NotchyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		27C48864F05F8FB04487850E /* Placeholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Placeholder.swift; sourceTree = "<group>"; };
 		297FF7D4F6B046616C6364E4 /* ItemKindDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemKindDetector.swift; sourceTree = "<group>"; };
@@ -147,6 +153,7 @@
 		6B72C57C5C358F93B591E5A1 /* AirPodsViewSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirPodsViewSnapshots.swift; sourceTree = "<group>"; };
 		6F15C234362B1F696258D424 /* EventVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventVM.swift; sourceTree = "<group>"; };
 		6FB6232EA0DD78B03ECCBE55 /* SyncEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncEngine.swift; sourceTree = "<group>"; };
+		7201C96F6CD85CEE15F21A53 /* HUDWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDWindowController.swift; sourceTree = "<group>"; };
 		72DA93FE7F9028530835F1EC /* AudioOutputBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioOutputBridge.swift; sourceTree = "<group>"; };
 		75197809ED6A9E7CC86445BD /* TimerViewSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewSnapshots.swift; sourceTree = "<group>"; };
 		78ACFB47B00A482E040584F8 /* Data+Append.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Append.swift"; sourceTree = "<group>"; };
@@ -157,6 +164,7 @@
 		8947D82465DDF1474C3C2E4D /* NotchState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchState.swift; sourceTree = "<group>"; };
 		8BDCFC40324F50CA77E2C4E9 /* ClipboardCapturer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardCapturer.swift; sourceTree = "<group>"; };
 		8C3D7AB1CDC0C20683D95BE7 /* ScreenGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenGeometry.swift; sourceTree = "<group>"; };
+		8D4D65D46E45936BFE0ADDF6 /* HUDFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDFeature.swift; sourceTree = "<group>"; };
 		8E72D4A2A3104EC93AF373FD /* MediaControl */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MediaControl; path = Notchy/Resources/MediaControl; sourceTree = SOURCE_ROOT; };
 		8E8D50074A898F05304A0532 /* DropViewSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropViewSnapshots.swift; sourceTree = "<group>"; };
 		8EB110EA11D24C6907762BAF /* AirPodsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirPodsView.swift; sourceTree = "<group>"; };
@@ -174,6 +182,7 @@
 		B8D73E5D88FE0299E1D90ABC /* BatteryReadingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryReadingTests.swift; sourceTree = "<group>"; };
 		B9A8751CBEB8419A976C9866 /* MediaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaView.swift; sourceTree = "<group>"; };
 		BB75579F5D02B1886B70C9CD /* BatteryReading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryReading.swift; sourceTree = "<group>"; };
+		BDEFAFF78FCE7EB0DF56720C /* HUDEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDEvent.swift; sourceTree = "<group>"; };
 		C392C6E5409579A1E5477CC7 /* CalendarFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarFeature.swift; sourceTree = "<group>"; };
 		C49CFCBE4B35D330FB05BD5E /* LyricsTicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricsTicker.swift; sourceTree = "<group>"; };
 		C5BF2C7B3BA24BABF10B7FEE /* MediaFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaFeature.swift; sourceTree = "<group>"; };
@@ -195,6 +204,7 @@
 		EEC3E0563BD6694DA94F039A /* NotchyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchyApp.swift; sourceTree = "<group>"; };
 		F20F2178CBDA32615E6263FE /* CalendarViewSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewSnapshots.swift; sourceTree = "<group>"; };
 		F444436267456B4A7969E2BF /* NotchStateMachineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchStateMachineTests.swift; sourceTree = "<group>"; };
+		F88B41A52C4259635F93B399 /* HUDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDView.swift; sourceTree = "<group>"; };
 		F8C132AC85ACAD2523542DE3 /* ClipboardItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardItem.swift; sourceTree = "<group>"; };
 		FB94675DE7AE9014D56A645B /* NotchTabBarSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchTabBarSnapshots.swift; sourceTree = "<group>"; };
 		FD3A3278F5F109DD0119B52A /* ItemCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCard.swift; sourceTree = "<group>"; };
@@ -361,6 +371,17 @@
 			path = NotchySnapshotTests;
 			sourceTree = "<group>";
 		};
+		6D2988F796927AEEB1A20E29 /* HUD */ = {
+			isa = PBXGroup;
+			children = (
+				BDEFAFF78FCE7EB0DF56720C /* HUDEvent.swift */,
+				8D4D65D46E45936BFE0ADDF6 /* HUDFeature.swift */,
+				F88B41A52C4259635F93B399 /* HUDView.swift */,
+				7201C96F6CD85CEE15F21A53 /* HUDWindowController.swift */,
+			);
+			path = HUD;
+			sourceTree = "<group>";
+		};
 		70635849FAB5CD4211B8F25D /* System */ = {
 			isa = PBXGroup;
 			children = (
@@ -373,6 +394,7 @@
 				5D9705394CEBEC362E7C42D2 /* MediaRemoteBridge.swift */,
 				8C3D7AB1CDC0C20683D95BE7 /* ScreenGeometry.swift */,
 				AE253DEBEF1D9E40C4A71E01 /* SystemMonitorBridge.swift */,
+				1E55A261F6CF1B66857B520B /* VolumeMonitor.swift */,
 			);
 			path = System;
 			sourceTree = "<group>";
@@ -393,6 +415,7 @@
 				0AA5D412AAB1C4D5C2004657 /* Clipboard */,
 				8E8491B3A385E984296E8EFF /* Dashboard */,
 				271D7F760B84B33810FEA1EB /* Drop */,
+				6D2988F796927AEEB1A20E29 /* HUD */,
 				5C9BC34A47007BEBFE712CEB /* Lyrics */,
 				2135213ACED6312E4D7643C4 /* Media */,
 				57C0DE170022192A4163EEA0 /* Mirror */,
@@ -644,6 +667,10 @@
 				BAE0142C3BCCC72B8D47B4AC /* EventKitBridge.swift in Sources */,
 				35B9950815B5A629A9506A9C /* EventVM.swift in Sources */,
 				D4CCDBE2BB9605168AF1C05E /* GaugePill.swift in Sources */,
+				ECFB624F24C62DD97AB018A6 /* HUDEvent.swift in Sources */,
+				717A666DF540A0818B8A2C3A /* HUDFeature.swift in Sources */,
+				DC6F38B78AB7B8100D05FC8A /* HUDView.swift in Sources */,
+				0004721435D460BC904035BA /* HUDWindowController.swift in Sources */,
 				CCC2A8579A49417C9BF8DCAB /* HotKeyCenter.swift in Sources */,
 				892BD16133C0CB804E94B701 /* HotZoneMonitor.swift in Sources */,
 				D05424E64997786D698811A8 /* IOBluetoothBridge.swift in Sources */,
@@ -680,6 +707,7 @@
 				5735921B02AF0F53A22A2E7A /* TapCatcher.swift in Sources */,
 				811A8EC798FAF3DF30D4C712 /* TimerFeature.swift in Sources */,
 				CD0691F820505A12B0D49DDE /* TimerView.swift in Sources */,
+				FAF609504877CEF9FBFB1FB8 /* VolumeMonitor.swift in Sources */,
 				9A679225CD48E228159FBAE2 /* WelcomeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

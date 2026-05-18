@@ -39,6 +39,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private(set) var systemMonitor: SystemMonitorFeature!
     let mirrorFeature = MirrorFeature()
     let audioOutput = AudioOutputBridge()
+    let hudFeature = HUDFeature()
+    private var volumeMonitor: VolumeMonitor?
+    private var hudWindowController: HUDWindowController?
     let lyricsBridge = LyricsBridge()
     private(set) var lyricsFeature: LyricsFeature!
     private(set) var clipboardStore: ClipboardStore!
@@ -75,6 +78,21 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         systemMonitor.start()
 
         audioOutput.start()
+
+        // Dedicated HUD panel — sits above the main notch panel as a separate
+        // always-present transparent NSPanel. The HUDFeature stream drives it
+        // via @Bindable; main panel doesn't have to know about HUD events.
+        hudWindowController = HUDWindowController(feature: hudFeature)
+        hudWindowController?.show()
+
+        // Volume HUD takeover — listen for default-output volume + mute
+        // changes and forward to HUDFeature.
+        let vm = VolumeMonitor()
+        vm.onChange = { [weak self] level, muted in
+            self?.hudFeature.show(HUDEvent(kind: .volume, level: level, muted: muted))
+        }
+        vm.start()
+        volumeMonitor = vm
 
         lyricsFeature = LyricsFeature(bridge: lyricsBridge, mediaFeature: mediaFeature)
         lyricsFeature.start()
@@ -167,6 +185,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let ao = audioOutput
         let lyrics = lyricsFeature!
         let clip = clipboardFeature!
+        let hud = hudFeature
         windowController = NotchWindowController { [weak self] in
             NotchShell(
                 stateMachine: sm,
@@ -187,7 +206,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 },
                 onClipboardDismiss: { [weak self] in
                     self?.dismissClipboardPanel()
-                }
+                },
+                hudFeature: hud
             )
         }
         windowController?.show()
