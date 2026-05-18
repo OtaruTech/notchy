@@ -187,9 +187,10 @@ struct DashboardView: View {
     @ViewBuilder
     private func btDevicesRow(status: SystemStatusFeature) -> some View {
         let enabled = UserDefaults.standard.object(forKey: "notchy.indicatorBTDevicesEnabled") as? Bool ?? true
-        if enabled, !status.btDevices.isEmpty {
+        let visible = status.btDevices.filter { hasAnyBattery($0) }
+        if enabled, !visible.isEmpty {
             HStack(spacing: 10) {
-                ForEach(status.btDevices) { device in
+                ForEach(visible) { device in
                     HStack(spacing: 4) {
                         Image(systemName: btIcon(device.kind))
                             .font(.system(size: 10))
@@ -216,14 +217,21 @@ struct DashboardView: View {
         }
     }
 
+    private func hasAnyBattery(_ d: SystemStatusFeature.BTDeviceBattery) -> Bool {
+        d.main != nil || d.left != nil || d.right != nil || d.caseLevel != nil
+    }
+
     private func formatBattery(_ d: SystemStatusFeature.BTDeviceBattery) -> String {
-        if d.kind == .airpods {
+        // If the device reports per-side / case levels (typical for AirPods,
+        // BT earbuds, BeatsBuds, Sony WF, etc.), show all three even when
+        // the kind classifier said "headphones" generically.
+        let hasStereo = d.left != nil || d.right != nil || d.caseLevel != nil
+        if hasStereo {
             let parts = [d.left, d.right, d.caseLevel]
-                .map { $0.map(String.init) ?? "—" }
+                .map { $0.map { "\($0)" } ?? "—" }
             return parts.joined(separator: "/")
         }
         if let m = d.main { return "\(m)%" }
-        if let l = d.left { return "\(l)%" }
         return "—"
     }
 

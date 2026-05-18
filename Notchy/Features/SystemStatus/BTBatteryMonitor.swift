@@ -1,11 +1,30 @@
 import Foundation
 import IOBluetooth
 
-/// Polls IOBluetooth for the battery level of every connected paired device.
-/// Pushes the list into SystemStatusFeature.btDevices.
+fileprivate func _btLog(_ msg: String) {
+    guard UserDefaults.standard.bool(forKey: "notchy.debugLogging") else { return }
+    let line = "\(Date()) [Notchy.BT] \(msg)\n"
+    let path = "/tmp/notchy.log"
+    if let data = line.data(using: .utf8) {
+        if FileManager.default.fileExists(atPath: path),
+           let h = try? FileHandle(forWritingTo: URL(fileURLWithPath: path)) {
+            h.seekToEndOfFile(); try? h.write(contentsOf: data); try? h.close()
+        } else {
+            try? data.write(to: URL(fileURLWithPath: path))
+        }
+    }
+}
+
+/// Polls `system_profiler SPBluetoothDataType -json` every 30 s for the
+/// battery level of every currently-connected paired device.
 ///
-/// Cadence: 30s (battery levels change slowly), plus immediate refresh on
-/// connect/disconnect notifications.
+/// `system_profiler` is slower than IORegistry (~300 ms subprocess) but
+/// reliably exposes the `device_batteryLevelMain` / `device_batteryLevelLeft`
+/// / `device_batteryLevelRight` / `device_batteryLevelCase` keys for both
+/// Apple devices (AirPods, Magic Mouse, Magic Keyboard, Watch) AND
+/// third-party Bluetooth peripherals.
+///
+/// Cadence: 30 s timer + immediate refresh on connect/disconnect.
 @MainActor
 final class BTBatteryMonitor {
 
@@ -51,74 +70,84 @@ final class BTBatteryMonitor {
     // MARK: refresh
 
     private func refresh() {
-        let raw = IOBluetoothDevice.pairedDevices() as? [IOBluetoothDevice] ?? []
-        let connected = raw.filter { $0.isConnected() }
-        let snapshots = connected.map { snapshot(for: $0) }
-        status.btDevices = snapshots
+        Task.detached(priority: .utility) {
+            let devices = Self.querySystemProfiler()
+            await MainActor.run { [weak self] in
+                self?.status.btDevices = devices
+                _btLog("refresh → \(devices.count) device(s) [\(devices.map { $0.name }.joined(separator: ", "))]")
+            }
+        }
     }
 
-    private func snapshot(for device: IOBluetoothDevice) -> SystemStatusFeature.BTDeviceBattery {
-        let address = device.addressString ?? device.name ?? UUID().uuidString
-        let name = device.name ?? "Bluetooth Device"
-        let kind = classify(name: name)
-        let battery = readBattery(address: address)
+    // MARK: system_profiler
+
+    nonisolated private static func querySystemProfiler() -> [SystemStatusFeature.BTDeviceBattery] {
+        let task = Process()
+        task.executableURL = URL(fileURLWithPath: "/usr/sbin/system_profiler")
+        task.arguments = ["SPBluetoothDataType", "-json"]
+        let pipe = Pipe()
+        task.standardOutput = pipe
+        task.standardError = Pipe()
+        do { try task.run() } catch { return [] }
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        task.waitUntilExit()
+
+        guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let array = json["SPBluetoothDataType"] as? [[String: Any]]
+        else { return [] }
+
+        var devices: [SystemStatusFeature.BTDeviceBattery] = []
+        for top in array {
+            // Connected devices live under either "device_connected" (Big Sur+)
+            // or "device_paired" with a connected flag (older).
+            let connected = (top["device_connected"] as? [Any]) ?? []
+            for entry in connected {
+                guard let entryDict = entry as? [String: Any] else { continue }
+                for (name, info) in entryDict {
+                    guard let dict = info as? [String: Any] else { continue }
+                    devices.append(parse(name: name, info: dict))
+                }
+            }
+        }
+        return devices
+    }
+
+    nonisolated private static func parse(name: String, info: [String: Any]) -> SystemStatusFeature.BTDeviceBattery {
+        let main  = pct(info["device_batteryLevelMain"]) ?? pct(info["device_batteryLevel"]) ?? pct(info["device_batteryPercent"])
+        let left  = pct(info["device_batteryLevelLeft"])
+        let right = pct(info["device_batteryLevelRight"])
+        let case_ = pct(info["device_batteryLevelCase"])
+        let address = (info["device_address"] as? String) ?? name
+        let minor = (info["device_minorType"] as? String)?.lowercased() ?? ""
+        let kind = classify(name: name.lowercased(), minor: minor)
         return SystemStatusFeature.BTDeviceBattery(
             id: address,
             name: name,
             kind: kind,
-            main: battery.main,
-            left: battery.left,
-            right: battery.right,
-            caseLevel: battery.caseLevel
+            main: main,
+            left: left,
+            right: right,
+            caseLevel: case_
         )
     }
 
-    private func classify(name: String) -> SystemStatusFeature.BTDeviceBattery.Kind {
-        let n = name.lowercased()
-        if n.contains("airpod") { return .airpods }
-        if n.contains("mouse") { return .mouse }
-        if n.contains("keyboard") { return .keyboard }
-        if n.contains("watch") { return .watch }
-        if n.contains("beats") || n.contains("headphone") || n.contains("耳机") { return .headphones }
+    /// Parses "64%" → 64. Handles bare integers + strings without %.
+    nonisolated private static func pct(_ raw: Any?) -> Int? {
+        if let n = raw as? NSNumber { return n.intValue }
+        if let s = raw as? String {
+            let digits = s.filter { $0.isNumber }
+            return Int(digits)
+        }
+        return nil
+    }
+
+    nonisolated private static func classify(name: String, minor: String) -> SystemStatusFeature.BTDeviceBattery.Kind {
+        let combined = "\(name) \(minor)"
+        if combined.contains("airpod") { return .airpods }
+        if combined.contains("mouse") { return .mouse }
+        if combined.contains("keyboard") { return .keyboard }
+        if combined.contains("watch") { return .watch }
+        if combined.contains("beats") || combined.contains("headphone") || combined.contains("耳机") { return .headphones }
         return .generic
-    }
-
-    // MARK: IORegistry battery reading
-
-    private struct Battery { let main: Int?; let left: Int?; let right: Int?; let caseLevel: Int? }
-
-    private func readBattery(address: String) -> Battery {
-        // Walk the BluetoothHCIControllerService IORegistry for entries
-        // matching the device address; read BatteryPercent / BatteryPercentLeft
-        // / BatteryPercentRight / BatteryPercentCase.
-        let normalised = address.replacingOccurrences(of: ":", with: "-").lowercased()
-        var iterator: io_iterator_t = 0
-        let match = IOServiceMatching("IOBluetoothDevice")
-        guard IOServiceGetMatchingServices(kIOMainPortDefault, match, &iterator) == KERN_SUCCESS else {
-            return Battery(main: nil, left: nil, right: nil, caseLevel: nil)
-        }
-        defer { IOObjectRelease(iterator) }
-
-        while case let service = IOIteratorNext(iterator), service != 0 {
-            defer { IOObjectRelease(service) }
-            let addrProp = IORegistryEntryCreateCFProperty(service, "DeviceAddress" as CFString, kCFAllocatorDefault, 0)?.takeRetainedValue() as? String
-            if let addr = addrProp?.lowercased().replacingOccurrences(of: ":", with: "-"),
-               addr == normalised {
-                return Battery(
-                    main: intProperty(service, "BatteryPercent"),
-                    left: intProperty(service, "BatteryPercentLeft"),
-                    right: intProperty(service, "BatteryPercentRight"),
-                    caseLevel: intProperty(service, "BatteryPercentCase")
-                )
-            }
-        }
-        return Battery(main: nil, left: nil, right: nil, caseLevel: nil)
-    }
-
-    private func intProperty(_ service: io_object_t, _ key: String) -> Int? {
-        guard let v = IORegistryEntryCreateCFProperty(service, key as CFString, kCFAllocatorDefault, 0)?.takeRetainedValue() as? NSNumber else {
-            return nil
-        }
-        return v.intValue
     }
 }
