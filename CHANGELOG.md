@@ -2,6 +2,22 @@
 
 All notable changes to Notchy. Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [0.5.0] — 2026-05-18
+
+### Added — Workflow copilot
+
+- **🗓 Meeting copilot** — calendar events get a "Starts in N min" countdown and a one-click **Join** button in the dashboard. Auto-detects Zoom / Google Meet / Lark (飞书) / Microsoft Teams / 腾讯会议 / Webex URLs in event.location, event.notes, and event.url.
+  - Countdown switches to yellow within 5 min, orange within 1 min, red while in progress.
+  - URL opens with the system handler — Lark/Feishu deep links route to the desktop app, others open in the browser.
+- **💻 IDE context** — when VSCode / Cursor / Xcode / Windsurf is frontmost, dashboard shows the project name + git branch (`projectName · main`). Project parsed from window title via Accessibility; git branch read from `<projectPath>/.git/HEAD` after walking common project roots (`~/workspace`, `~/Code`, `~/Developer`, `~/Projects`, `~/Documents`, `~`). 30-second branch cache.
+- **🔒 SSH session indicator** — periodic `ps -axo pid,etime,command` scan finds active `ssh` / `mosh` processes. Dashboard shows the target hostname + duration as a pill (e.g., `example.com · 2h`). Hostname matching the danger regex (default `prod|production|live`) renders in red. Up to 3 sessions shown; more get `+N` overflow badge.
+
+### Added — Settings → System → Workflow
+
+- `notchy.indicatorIDEContextEnabled` (default true)
+- `notchy.indicatorSSHEnabled` (default true)
+- `notchy.indicatorSSHDangerPattern` (default `prod|production|live`, user-editable regex)
+
 ## [0.4.0] — 2026-05-18
 
 ### Added — HUD takeover (signature feature)

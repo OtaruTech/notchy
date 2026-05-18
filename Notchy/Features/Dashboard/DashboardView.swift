@@ -66,9 +66,22 @@ struct DashboardView: View {
                                 .font(.system(size: 13, weight: .semibold))
                                 .foregroundStyle(.white)
                                 .lineLimit(1)
-                            Text("\(ev.startTime) – \(ev.endTime)")
-                                .font(.system(size: 10, design: .monospaced))
-                                .foregroundStyle(.white.opacity(0.55))
+                            HStack(spacing: 5) {
+                                Text(eventTimeLabel(ev))
+                                    .font(.system(size: 10, design: .monospaced))
+                                    .foregroundStyle(eventTimeColor(ev))
+                                if let url = ev.joinURL, ev.isJoinable(now: now) {
+                                    Button { NSWorkspace.shared.open(url) } label: {
+                                        Text("Join")
+                                            .font(.system(size: 9, weight: .bold))
+                                            .padding(.horizontal, 6)
+                                            .padding(.vertical, 2)
+                                            .background(Capsule().fill(.green))
+                                            .foregroundStyle(.black)
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                            }
                         }
                     }
                 } else {
@@ -137,11 +150,88 @@ struct DashboardView: View {
     var extrasSection: some View {
         if let status {
             VStack(spacing: 4) {
+                ideContextRow(status: status)
+                sshSessionsRow(status: status)
                 chargingRow(status: status)
                 networkRow(status: status)
                 btDevicesRow(status: status)
                 caffeineRow(status: status)
             }
+        }
+    }
+
+    @ViewBuilder
+    private func ideContextRow(status: SystemStatusFeature) -> some View {
+        let enabled = UserDefaults.standard.object(forKey: "notchy.indicatorIDEContextEnabled") as? Bool ?? true
+        if enabled, let ctx = status.ideContext {
+            HStack(spacing: 6) {
+                Image(systemName: ideIcon(ctx.editor))
+                    .font(.system(size: 11))
+                    .foregroundStyle(.cyan)
+                Text(ctx.projectName)
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .lineLimit(1)
+                if let branch = ctx.branch {
+                    HStack(spacing: 3) {
+                        Image(systemName: "arrow.triangle.branch")
+                            .font(.system(size: 9))
+                        Text(branch)
+                            .font(.system(size: 10, design: .monospaced))
+                    }
+                    .foregroundStyle(.white.opacity(0.55))
+                }
+                Spacer(minLength: 0)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func sshSessionsRow(status: SystemStatusFeature) -> some View {
+        let enabled = UserDefaults.standard.object(forKey: "notchy.indicatorSSHEnabled") as? Bool ?? true
+        if enabled, !status.sshSessions.isEmpty {
+            HStack(spacing: 6) {
+                Image(systemName: "lock.shield")
+                    .font(.system(size: 11))
+                    .foregroundStyle(status.sshSessions.contains(where: { $0.isDangerous }) ? .red : .white.opacity(0.7))
+                ForEach(status.sshSessions.prefix(3)) { session in
+                    Text(sshLabel(session))
+                        .font(.system(size: 10, design: .monospaced))
+                        .foregroundStyle(session.isDangerous ? .red : .white.opacity(0.8))
+                        .padding(.horizontal, 5)
+                        .padding(.vertical, 1)
+                        .background(
+                            RoundedRectangle(cornerRadius: 4)
+                                .fill(session.isDangerous ? .red.opacity(0.12) : .white.opacity(0.06))
+                        )
+                }
+                if status.sshSessions.count > 3 {
+                    Text("+\(status.sshSessions.count - 3)")
+                        .font(.system(size: 9))
+                        .foregroundStyle(.white.opacity(0.45))
+                }
+                Spacer(minLength: 0)
+            }
+        }
+    }
+
+    private func sshLabel(_ s: SystemStatusFeature.SSHSession) -> String {
+        let host = s.host.contains("@") ? String(s.host.split(separator: "@").last ?? "") : s.host
+        let durationLabel: String
+        switch s.elapsedSeconds {
+        case ..<60:    durationLabel = "\(s.elapsedSeconds)s"
+        case 60..<3600: durationLabel = "\(s.elapsedSeconds / 60)m"
+        default:        durationLabel = "\(s.elapsedSeconds / 3600)h"
+        }
+        return "\(host) · \(durationLabel)"
+    }
+
+    private func ideIcon(_ editor: SystemStatusFeature.IDEContext.Editor) -> String {
+        switch editor {
+        case .vscode:   return "chevron.left.forwardslash.chevron.right"
+        case .cursor:   return "cursorarrow.rays"
+        case .xcode:    return "hammer.fill"
+        case .windsurf: return "wind"
         }
     }
 
@@ -281,6 +371,37 @@ struct DashboardView: View {
         case 50..<70: return "PD fast"
         default:     return "PD max"
         }
+    }
+
+    /// Formats the time label depending on how close the event is.
+    /// >5 min:  "10:30 AM – 11:00 AM"
+    /// ≤5 min:  "Starts in 3 min"
+    /// In progress: "Ends in 27 min"
+    private func eventTimeLabel(_ ev: EventVM) -> String {
+        let secs = Int(ev.secondsUntilStart(now: now).rounded())
+        if secs > 300 {
+            return "\(ev.startTime) – \(ev.endTime)"
+        }
+        if secs > 0 {
+            let mins = max(1, secs / 60)
+            return "Starts in \(mins) min"
+        }
+        // Already started: how long until end?
+        let untilEnd = Int(ev.endDate.timeIntervalSince(now).rounded())
+        if untilEnd > 60 {
+            return "Ends in \(untilEnd / 60) min"
+        } else if untilEnd > 0 {
+            return "Ending now"
+        }
+        return "\(ev.startTime) – \(ev.endTime)"
+    }
+
+    private func eventTimeColor(_ ev: EventVM) -> Color {
+        let secs = ev.secondsUntilStart(now: now)
+        if secs <= 60 && secs > -1 { return .orange }   // about to start
+        if ev.isInProgress { return .red.opacity(0.85) }
+        if secs <= 300 { return .yellow.opacity(0.85) } // soon
+        return .white.opacity(0.55)
     }
 
     private var liveBadge: some View {

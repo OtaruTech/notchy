@@ -35,12 +35,34 @@ final class SystemStatusFeature {
     // Phase 8 — BT devices
     var btDevices: [BTDeviceBattery] = []
 
+    // v0.5 — IDE context (VSCode / Cursor / Xcode frontmost)
+    var ideContext: IDEContext?
+
+    // v0.5 — active SSH sessions
+    var sshSessions: [SSHSession] = []
+
     init() {}
 
     // MARK: nested data types
 
     struct PrivacyConsumer: Equatable, Sendable {
         var appName: String?  // Phase 5 nameless; Phase B adds attribution
+    }
+
+    struct IDEContext: Equatable, Sendable {
+        enum Editor: String, Sendable {
+            case vscode, cursor, xcode, windsurf
+        }
+        let editor: Editor
+        let projectName: String
+        let branch: String?
+    }
+
+    struct SSHSession: Identifiable, Equatable, Sendable {
+        let id: Int32  // pid
+        let host: String          // e.g. "user@example.com" or "example.com"
+        let elapsedSeconds: Int   // process etime in seconds
+        let isDangerous: Bool     // matches prod/production/live regex
     }
 
     struct BTDeviceBattery: Identifiable, Equatable, Sendable {
@@ -70,5 +92,7 @@ extension SystemStatusFeature {
             || networkUp > 0
             || networkDown > 0
             || !btDevices.isEmpty
+            || ideContext != nil
+            || !sshSessions.isEmpty
     }
 }

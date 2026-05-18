@@ -46,6 +46,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private(set) var caffeineController: CaffeineController!
     private var networkMonitor: NetworkMonitor?
     private var btBatteryMonitor: BTBatteryMonitor?
+    private var ideContextMonitor: IDEContextMonitor?
+    private var sshMonitor: SSHMonitor?
     private var volumeMonitor: VolumeMonitor?
     private var mediaKeyMonitor: MediaKeyMonitor?
     private var hudWindowController: HUDWindowController?
@@ -113,6 +115,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let btm = BTBatteryMonitor(status: systemStatus)
         btm.start()
         btBatteryMonitor = btm
+
+        let idem = IDEContextMonitor(status: systemStatus)
+        idem.start()
+        ideContextMonitor = idem
+
+        let sshm = SSHMonitor(status: systemStatus)
+        sshm.start()
+        sshMonitor = sshm
 
         // Volume HUD takeover — listen for default-output volume + mute
         // changes and forward to HUDFeature.

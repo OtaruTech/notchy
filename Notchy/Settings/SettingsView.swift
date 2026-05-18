@@ -29,6 +29,9 @@ struct SettingsView: View {
     @AppStorage("notchy.indicatorNetworkEnabled")   private var indNetwork = true
     @AppStorage("notchy.indicatorNetworkHideIdle")  private var indNetworkHideIdle = true
     @AppStorage("notchy.indicatorBTDevicesEnabled") private var indBTDevices = true
+    @AppStorage("notchy.indicatorIDEContextEnabled") private var indIDE = true
+    @AppStorage("notchy.indicatorSSHEnabled")        private var indSSH = true
+    @AppStorage("notchy.indicatorSSHDangerPattern")  private var sshDangerPattern = SSHMonitor.defaultDangerPattern
 
     @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
     @State private var clearConfirmShown = false
@@ -198,6 +201,28 @@ struct SettingsView: View {
                 }
                 Toggle("Bluetooth multi-device battery", isOn: $indBTDevices)
             }
+            Section("Workflow (new in v0.5)") {
+                Toggle("Meeting copilot — show countdown + Join button", isOn: .constant(true))
+                    .disabled(true)
+                Text("Auto-detects Zoom / Google Meet / Lark / Feishu / Teams / Tencent / Webex URLs in calendar events.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Toggle("VSCode / Cursor / Xcode project context", isOn: $indIDE)
+                VStack(alignment: .leading, spacing: 4) {
+                    Toggle("SSH session indicator", isOn: $indSSH)
+                    if indSSH {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Highlight in red when hostname matches:")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            TextField("danger pattern (regex)", text: $sshDangerPattern)
+                                .textFieldStyle(.roundedBorder)
+                                .font(.system(size: 11, design: .monospaced))
+                        }
+                        .padding(.leading, 18)
+                    }
+                }
+            }
         }
         .formStyle(.grouped)
         .tabItem { Label("System", systemImage: "switch.2") }
@@ -253,6 +278,8 @@ struct SettingsView: View {
             "notchy.indicatorChargingEnabled", "notchy.indicatorPrivacyEnabled",
             "notchy.indicatorCaffeineEnabled", "notchy.indicatorNetworkEnabled",
             "notchy.indicatorNetworkHideIdle", "notchy.indicatorBTDevicesEnabled",
+            "notchy.indicatorIDEContextEnabled", "notchy.indicatorSSHEnabled",
+            "notchy.indicatorSSHDangerPattern",
             "notchy.hasPromptedAccessibilityV1", "notchy.welcomeShown",
         ]
         for k in keys { UserDefaults.standard.removeObject(forKey: k) }
