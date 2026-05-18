@@ -16,6 +16,7 @@ final class HotKeyCenter {
         case toggleDashboard = 1
         case toggleMirror    = 2
         case toggleClipboard = 3
+        case toggleCaffeine  = 4
     }
 
     /// Fired on the main actor when a registered hotkey fires.
@@ -35,6 +36,7 @@ final class HotKeyCenter {
         register(keyCode: UInt32(kVK_ANSI_N), modifiers: UInt32(cmdKey | optionKey), id: .toggleDashboard)
         register(keyCode: UInt32(kVK_ANSI_M), modifiers: UInt32(cmdKey | optionKey), id: .toggleMirror)
         register(keyCode: UInt32(kVK_ANSI_V), modifiers: UInt32(cmdKey | shiftKey), id: .toggleClipboard)
+        register(keyCode: UInt32(kVK_ANSI_K), modifiers: UInt32(cmdKey | optionKey), id: .toggleCaffeine)
     }
 
     func stop() {

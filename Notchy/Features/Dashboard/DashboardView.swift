@@ -22,11 +22,14 @@ struct DashboardView: View {
         HStack(spacing: 18) {
             // ── Time + date column ──────────────────────────────
             VStack(alignment: .leading, spacing: 2) {
-                Text(timeString)
-                    .font(.system(size: 48, weight: .light, design: .rounded))
-                    .foregroundStyle(.white)
-                    .monospacedDigit()
-                    .lineLimit(1)
+                HStack(spacing: 8) {
+                    Text(timeString)
+                        .font(.system(size: 48, weight: .light, design: .rounded))
+                        .foregroundStyle(.white)
+                        .monospacedDigit()
+                        .lineLimit(1)
+                    privacyDots
+                }
                 HStack(spacing: 6) {
                     Image(systemName: "calendar")
                         .font(.system(size: 10))
@@ -104,8 +107,27 @@ struct DashboardView: View {
         .onReceive(timer) { now = $0 }
     }
 
-    private var bodyDummy: some View {  // (kept private structure simple)
-        EmptyView()
+    /// Two coloured dots next to the clock — mic (orange) + camera (green) —
+    /// gated by Settings and only visible when the device is in use.
+    @ViewBuilder
+    private var privacyDots: some View {
+        let enabled = UserDefaults.standard.object(forKey: "notchy.indicatorPrivacyEnabled") as? Bool ?? true
+        if enabled, let status {
+            VStack(spacing: 4) {
+                if status.micInUse != nil {
+                    Circle()
+                        .fill(.orange)
+                        .frame(width: 7, height: 7)
+                        .help("Microphone in use")
+                }
+                if status.camInUse != nil {
+                    Circle()
+                        .fill(.green)
+                        .frame(width: 7, height: 7)
+                        .help("Camera in use")
+                }
+            }
+        }
     }
 
     /// Extras section — system status rows added in v0.4 Phase 4–8.
@@ -116,7 +138,110 @@ struct DashboardView: View {
         if let status {
             VStack(spacing: 4) {
                 chargingRow(status: status)
-                // Future rows land here, one per phase.
+                networkRow(status: status)
+                btDevicesRow(status: status)
+                caffeineRow(status: status)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func networkRow(status: SystemStatusFeature) -> some View {
+        let enabled = UserDefaults.standard.object(forKey: "notchy.indicatorNetworkEnabled") as? Bool ?? true
+        let hideIdle = UserDefaults.standard.object(forKey: "notchy.indicatorNetworkHideIdle") as? Bool ?? true
+        let idleThresholdBps = 50_000.0  // 50 KB/s
+        let isBusy = status.networkDown > idleThresholdBps || status.networkUp > idleThresholdBps
+        if enabled, (!hideIdle || isBusy) {
+            HStack(spacing: 10) {
+                HStack(spacing: 4) {
+                    Image(systemName: "arrow.down")
+                        .font(.system(size: 9, weight: .bold))
+                        .foregroundStyle(.blue)
+                    Text(formatRate(status.networkDown))
+                        .font(.system(size: 11, weight: .medium, design: .monospaced))
+                        .foregroundStyle(.white)
+                        .monospacedDigit()
+                }
+                HStack(spacing: 4) {
+                    Image(systemName: "arrow.up")
+                        .font(.system(size: 9, weight: .bold))
+                        .foregroundStyle(.purple)
+                    Text(formatRate(status.networkUp))
+                        .font(.system(size: 11, weight: .medium, design: .monospaced))
+                        .foregroundStyle(.white)
+                        .monospacedDigit()
+                }
+                Spacer(minLength: 0)
+            }
+        }
+    }
+
+    private func formatRate(_ bps: Double) -> String {
+        switch bps {
+        case ..<1024:           return "\(Int(bps)) B/s"
+        case 1024..<1_048_576:  return String(format: "%.1f KB/s", bps / 1024)
+        default:                return String(format: "%.1f MB/s", bps / 1_048_576)
+        }
+    }
+
+    @ViewBuilder
+    private func btDevicesRow(status: SystemStatusFeature) -> some View {
+        let enabled = UserDefaults.standard.object(forKey: "notchy.indicatorBTDevicesEnabled") as? Bool ?? true
+        if enabled, !status.btDevices.isEmpty {
+            HStack(spacing: 10) {
+                ForEach(status.btDevices) { device in
+                    HStack(spacing: 4) {
+                        Image(systemName: btIcon(device.kind))
+                            .font(.system(size: 10))
+                            .foregroundStyle(.white.opacity(0.7))
+                        Text(formatBattery(device))
+                            .font(.system(size: 10, weight: .medium, design: .monospaced))
+                            .foregroundStyle(.white.opacity(0.8))
+                            .monospacedDigit()
+                    }
+                }
+                Spacer(minLength: 0)
+            }
+        }
+    }
+
+    private func btIcon(_ kind: SystemStatusFeature.BTDeviceBattery.Kind) -> String {
+        switch kind {
+        case .mouse:      return "computermouse.fill"
+        case .keyboard:   return "keyboard.fill"
+        case .watch:      return "applewatch"
+        case .airpods:    return "airpods"
+        case .headphones: return "headphones"
+        case .generic:    return "antenna.radiowaves.left.and.right"
+        }
+    }
+
+    private func formatBattery(_ d: SystemStatusFeature.BTDeviceBattery) -> String {
+        if d.kind == .airpods {
+            let parts = [d.left, d.right, d.caseLevel]
+                .map { $0.map(String.init) ?? "—" }
+            return parts.joined(separator: "/")
+        }
+        if let m = d.main { return "\(m)%" }
+        if let l = d.left { return "\(l)%" }
+        return "—"
+    }
+
+    @ViewBuilder
+    private func caffeineRow(status: SystemStatusFeature) -> some View {
+        let enabled = UserDefaults.standard.object(forKey: "notchy.indicatorCaffeineEnabled") as? Bool ?? true
+        if enabled, status.isCaffeinated {
+            HStack(spacing: 6) {
+                Image(systemName: "cup.and.saucer.fill")
+                    .font(.system(size: 11))
+                    .foregroundStyle(.orange)
+                Text("Keep awake")
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(.white)
+                Text("⌘⌥K to toggle")
+                    .font(.system(size: 10))
+                    .foregroundStyle(.white.opacity(0.45))
+                Spacer(minLength: 0)
             }
         }
     }

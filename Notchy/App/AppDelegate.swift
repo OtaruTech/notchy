@@ -42,6 +42,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     let hudFeature = HUDFeature()
     let systemStatus = SystemStatusFeature()
     private var powerMonitor: PowerMonitor?
+    private var privacyMonitor: PrivacyMonitor?
+    private(set) var caffeineController: CaffeineController!
+    private var networkMonitor: NetworkMonitor?
+    private var btBatteryMonitor: BTBatteryMonitor?
     private var volumeMonitor: VolumeMonitor?
     private var mediaKeyMonitor: MediaKeyMonitor?
     private var hudWindowController: HUDWindowController?
@@ -95,6 +99,20 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let pm = PowerMonitor(status: systemStatus)
         pm.start()
         powerMonitor = pm
+
+        let priv = PrivacyMonitor(status: systemStatus)
+        priv.start()
+        privacyMonitor = priv
+
+        caffeineController = CaffeineController(status: systemStatus)
+
+        let nm = NetworkMonitor(status: systemStatus)
+        nm.start()
+        networkMonitor = nm
+
+        let btm = BTBatteryMonitor(status: systemStatus)
+        btm.start()
+        btBatteryMonitor = btm
 
         // Volume HUD takeover — listen for default-output volume + mute
         // changes and forward to HUDFeature.
@@ -290,6 +308,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 } else {
                     self.openClipboardPanel()
                 }
+            case .toggleCaffeine:
+                self.caffeineController.toggle()
             }
         }
         hk.start()
