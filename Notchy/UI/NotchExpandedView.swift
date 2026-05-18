@@ -174,7 +174,8 @@ struct NotchExpandedView: View {
                 items: dropFeature.items,
                 onClear: { dropFeature.clearAll() },
                 onAirDrop: onAirDrop,
-                onEmail: onEmail
+                onEmail: onEmail,
+                onRemove: { id in dropFeature.remove(id) }
             )
         case .airpods:
             if let vm = btFeature.connected {

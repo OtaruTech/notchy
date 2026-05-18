@@ -25,6 +25,11 @@ final class HotZoneMonitor {
     /// dismiss it. This flag flips both behaviours.
     var isClipboardPanel: Bool = false
 
+    /// True while the drop tray is open. Behaves like clipboard panel —
+    /// don't auto-collapse when the cursor leaves. The user explicitly
+    /// closes via Esc, click-outside, or Clear all.
+    var isDropPanel: Bool = false
+
     /// Expanded keep-alive zone width/height (matches NotchWindowController.expandedFrame).
     private let expandedWidth: CGFloat = 540
     private let expandedHeight: CGFloat = 220
@@ -160,11 +165,11 @@ final class HotZoneMonitor {
         } else if !nowInside, isInside {
             isInside = false
             hoverWorkItem?.cancel()
-            // Clipboard panel ignores hover-leave entirely — it stays open
-            // until the user explicitly clicks outside or presses Esc / paste.
-            // Without this, moving the cursor to the search field or to a
-            // far-right card collapses the panel.
-            if isClipboardPanel { return }
+            // Clipboard / drop panels ignore hover-leave entirely — they stay
+            // open until the user explicitly clicks outside or presses Esc.
+            // Without this, moving the cursor to the search field, a far-right
+            // card, or the action column collapses the panel mid-task.
+            if isClipboardPanel || isDropPanel { return }
             let work = DispatchWorkItem { [weak self] in
                 guard let self, !self.isInside else { return }
                 self.onExit()

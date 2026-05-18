@@ -244,12 +244,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             self?.stateMachine.send(.dragEntered)
             self?.dropDismissTimer?.cancel()
         }
-        drag.onExit = { [weak self] in
-            self?.scheduleDropDismiss()
-        }
+        // Intentionally do NOT auto-dismiss on drag-exit or post-drop. The
+        // drop tray stays open until the user explicitly closes it (Esc /
+        // click outside / Clear all when empty). Matches the clipboard
+        // panel's "no surprise dismiss" behaviour.
+        drag.onExit = { /* no-op */ }
         drag.onDrop = { [weak self] urls in
             self?.dropFeature.add(urls: urls)
-            self?.scheduleDropDismiss()
         }
         if let cv = windowController?.contentView {
             drag.attach(to: cv)
@@ -296,6 +297,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // it should only dismiss on Esc / click-outside / paste, never on
         // cursor movement.
         hotZone?.isClipboardPanel = stateMachine.state == .clipboard
+        // Drop tray also stays open until explicitly closed.
+        hotZone?.isDropPanel = stateMachine.state == .drop
 
         // Live-activity wings widen the collapsed hover zone whenever a track is
         // loaded (playing or paused), so cursor can hover the album art / waveform.
