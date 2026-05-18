@@ -11,12 +11,17 @@ final class NotchWindowController {
     var contentView: NSView? { panel?.contentView }
 
     /// Closure used by the hosting view's `hitTest` override. Returns the rect
-    /// (in hosting-view coords) inside which clicks should be claimed. Anything
-    /// outside falls through to the desktop. Set by AppDelegate on every state
-    /// change so click-through tracks the visible panel size.
+    /// (in hosting-view coords) inside which clicks should be claimed.
+    /// Defence-in-depth on top of the dynamic panel resize.
     var activeClickRectProvider: (() -> CGRect)? {
         didSet { hostingView?.activeRectProvider = activeClickRectProvider }
     }
+
+    /// Size of the maximum possible panel. We allocate the panel at this
+    /// size on first show, then `setFrame(_:display:animate:)` shrinks it on
+    /// every state change so the panel only physically covers the currently
+    /// visible area. Anything outside is genuinely click-through.
+    private static let maxSize = CGSize(width: 920, height: 320)
 
     /// `rootView` is a factory so the panel can reattach to a new screen.
     init(@ViewBuilder rootView: @escaping () -> some View) {
@@ -72,9 +77,7 @@ final class NotchWindowController {
     }
 
     /// Bring the panel key when entering an expanded state so SwiftUI button
-    /// clicks fire. Click-through in collapsed state is handled by the SwiftUI
-    /// `.allowsHitTesting(false)` modifier — we don't toggle ignoresMouseEvents
-    /// any more because doing so disables drag-and-drop detection too.
+    /// clicks fire.
     func setIgnoresMouseEvents(_ ignore: Bool) {
         if !ignore {
             panel?.makeKeyAndOrderFront(nil)
@@ -88,15 +91,37 @@ final class NotchWindowController {
         panel?.resignKey()
     }
 
-    /// Expanded panel area is wider/taller than the notch — we always allocate the
-    /// max expansion box so SwiftUI can animate within it.
+    /// Resize the panel to match the currently-visible area so the surrounding
+    /// pixels are genuinely click-through (not just hit-test-nil). Called on
+    /// every state change.
+    func resize(toLocalSize size: CGSize, animated: Bool) {
+        guard let panel,
+              let screen = ScreenGeometry.notchedScreen(),
+              let hot = ScreenGeometry.hotZone(
+                safeAreaTop: screen.safeAreaInsets.top,
+                screenFrame: screen.frame
+              )
+        else { return }
+        let clamped = CGSize(
+            width: min(size.width, Self.maxSize.width),
+            height: min(size.height, Self.maxSize.height)
+        )
+        let local = CGRect(
+            x: hot.midX - clamped.width / 2,
+            y: 0,
+            width: clamped.width,
+            height: clamped.height
+        )
+        let frame = convertToScreenCoordinates(localRect: local, screen: screen)
+        panel.setFrame(frame, display: true, animate: animated)
+    }
+
+    /// Initial allocation — uses the maximum possible size so SwiftUI can
+    /// animate within it. `resize(toLocalSize:animated:)` shrinks it as soon
+    /// as the first state change comes through.
     private func expandedFrame(hot: CGRect) -> CGRect {
-        // Wide enough to host the clipboard panel's horizontal card strip.
-        // Other states render centered within and clip to their own width.
-        let expandedWidth: CGFloat = 920
-        let expandedHeight: CGFloat = 320
-        let x = hot.midX - expandedWidth / 2
-        return CGRect(x: x, y: 0, width: expandedWidth, height: expandedHeight)
+        let x = hot.midX - Self.maxSize.width / 2
+        return CGRect(x: x, y: 0, width: Self.maxSize.width, height: Self.maxSize.height)
     }
 
     /// NSScreen coords have origin at bottom-left; ScreenGeometry uses top-left.

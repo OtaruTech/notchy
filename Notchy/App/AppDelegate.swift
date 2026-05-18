@@ -290,12 +290,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // through to the desktop; expanded states need to receive clicks.
         windowController?.setIgnoresMouseEvents(!stateMachine.state.isExpanded)
 
-        // Track the active click rect so the hosting view's hitTest only
-        // claims pixels inside the currently-rendered panel area. Without
-        // this the 920×320 panel canvas swallows clicks everywhere.
+        // Defence-in-depth: hit-test ignores hits outside the rendered area.
+        // The PRIMARY click-through mechanism is the panel resize below.
         windowController?.activeClickRectProvider = { [weak self] in
             self?.activeClickRect() ?? .zero
         }
+
+        // Resize the panel itself so the surrounding pixels are physically
+        // free for the underlying app to receive clicks.
+        let rect = activeClickRect()
+        windowController?.resize(
+            toLocalSize: CGSize(width: rect.width, height: rect.height),
+            animated: stateMachine.state.isExpanded
+        )
 
         // Grow / shrink hover keep-alive zone so cursor can move INTO the expanded
         // panel content (buttons, scrubber, etc.) without triggering collapse.
