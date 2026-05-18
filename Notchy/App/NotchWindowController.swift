@@ -5,9 +5,18 @@ import SwiftUI
 final class NotchWindowController {
 
     private var panel: NSPanel?
+    private var hostingView: FirstMouseHostingView<AnyView>?
     private let rootView: () -> AnyView
 
     var contentView: NSView? { panel?.contentView }
+
+    /// Closure used by the hosting view's `hitTest` override. Returns the rect
+    /// (in hosting-view coords) inside which clicks should be claimed. Anything
+    /// outside falls through to the desktop. Set by AppDelegate on every state
+    /// change so click-through tracks the visible panel size.
+    var activeClickRectProvider: (() -> CGRect)? {
+        didSet { hostingView?.activeRectProvider = activeClickRectProvider }
+    }
 
     /// `rootView` is a factory so the panel can reattach to a new screen.
     init(@ViewBuilder rootView: @escaping () -> some View) {
@@ -46,7 +55,10 @@ final class NotchWindowController {
             p.ignoresMouseEvents = false
             p.isMovable = false
             p.isReleasedWhenClosed = false
-            p.contentView = FirstMouseHostingView(rootView: rootView())
+            let host = FirstMouseHostingView(rootView: rootView())
+            host.activeRectProvider = activeClickRectProvider
+            p.contentView = host
+            hostingView = host
             panel = p
         } else {
             panel?.setFrame(frame, display: true)
@@ -95,11 +107,28 @@ final class NotchWindowController {
     }
 }
 
-/// NSHostingView subclass that accepts first-mouse so SwiftUI buttons inside
-/// our `nonactivatingPanel` receive their click events without requiring the
-/// host window to be the key window.
+/// NSHostingView subclass that:
+/// 1. Accepts first-mouse so SwiftUI buttons inside our `nonactivatingPanel`
+///    receive their click events without requiring the host window to be the
+///    key window.
+/// 2. Overrides `hitTest` to claim clicks ONLY inside the rect returned by
+///    `activeRectProvider`. Anywhere outside (the empty area of the 920×320
+///    panel canvas when collapsed) returns nil so AppKit treats that point
+///    as `ignoresMouseEvents`, letting the underlying app receive the click.
+///    Drag-and-drop is unaffected — it routes through NSDraggingDestination
+///    independent of hit-testing.
 private final class FirstMouseHostingView<C: View>: NSHostingView<C> {
+    var activeRectProvider: (() -> CGRect)?
+
     override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
+
+    override func hitTest(_ point: NSPoint) -> NSView? {
+        if let provider = activeRectProvider {
+            let active = provider()
+            guard active.contains(point) else { return nil }
+        }
+        return super.hitTest(point)
+    }
 }
 
 /// Borderless NSPanel subclass that allows becoming key so SwiftUI buttons

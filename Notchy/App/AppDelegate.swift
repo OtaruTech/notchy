@@ -290,6 +290,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // through to the desktop; expanded states need to receive clicks.
         windowController?.setIgnoresMouseEvents(!stateMachine.state.isExpanded)
 
+        // Track the active click rect so the hosting view's hitTest only
+        // claims pixels inside the currently-rendered panel area. Without
+        // this the 920×320 panel canvas swallows clicks everywhere.
+        windowController?.activeClickRectProvider = { [weak self] in
+            self?.activeClickRect() ?? .zero
+        }
+
         // Grow / shrink hover keep-alive zone so cursor can move INTO the expanded
         // panel content (buttons, scrubber, etc.) without triggering collapse.
         hotZone?.isExpanded = stateMachine.state.isExpanded
@@ -312,6 +319,46 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 await MainActor.run { self?.stateMachine.send(.dismissTimerFired) }
             }
         }
+    }
+
+    /// Returns the rect (in hosting-view coordinates) inside which the panel
+    /// should receive clicks. Everywhere else falls through to the underlying
+    /// app. The panel canvas is 920×320 at the top of the notched screen with
+    /// origin (0,0) at top-left; the active region varies by state:
+    ///   - expanded clipboard:  centered 880×320
+    ///   - expanded other:      centered 540×220
+    ///   - collapsed with media or timer: the live-activity strip area
+    ///   - collapsed bare:      just the hardware notch hot zone
+    private func activeClickRect() -> CGRect {
+        let panelW: CGFloat = 920
+        let panelH: CGFloat = 320
+
+        let state = stateMachine.state
+        if state == .clipboard {
+            let w: CGFloat = 880
+            let h: CGFloat = 320
+            return CGRect(x: (panelW - w) / 2, y: 0, width: w, height: h)
+        }
+        if state.isExpanded {
+            let w: CGFloat = 540
+            let h: CGFloat = 220
+            return CGRect(x: (panelW - w) / 2, y: 0, width: w, height: h)
+        }
+        // Collapsed: just the strip/notch area.
+        let notchW = ScreenGeometry.liveNotchWidth()
+        let notchH = ScreenGeometry.liveNotchHeight()
+        let hasMedia = mediaFeature?.current != nil
+        let hasTimer = timerFeature?.state != .idle
+        let wings: CGFloat = (hasMedia || hasTimer) ? 140 : 0
+        let activeW = notchW + wings
+        let extraBelow: CGFloat = (hasMedia || hasTimer) ? 28 : 0  // strip + small breathing room
+        let activeH = notchH + extraBelow
+        return CGRect(
+            x: (panelW - activeW) / 2,
+            y: 0,
+            width: activeW,
+            height: activeH
+        )
     }
 
     private func scheduleDropDismiss() {
