@@ -13,7 +13,7 @@
 [![Latest Release](https://img.shields.io/github/v/release/OtaruTech/notchy?label=Download)](https://github.com/OtaruTech/notchy/releases/latest)
 
 A free, open-source macOS notch utility for Apple-Silicon MacBooks.
-NotchNook-style — Now Playing, **clipboard manager (⌘⇧V)**, file drop tray, AirPods burst, calendar, timer, camera mirror, system stats — all from the notch.
+NotchNook-style — **HUD takeover (volume/brightness/keyboard)**, Now Playing, **clipboard manager (⌘⇧V)**, file drop tray, AirPods burst, calendar, timer, camera mirror, **system status indicators** (charging wattage, privacy dots, caffeine, network speed, BT batteries) — all from the notch.
 
 **🌐 [otarutech.github.io/notchy](https://otarutech.github.io/notchy/)** — visual tour, screenshots, download.
 
@@ -24,6 +24,26 @@ NotchNook-style — Now Playing, **clipboard manager (⌘⇧V)**, file drop tray
 ---
 
 ## ✨ Features
+
+### 🎚 HUD takeover (new in v0.4)
+
+Replace macOS's centre-screen volume / brightness / keyboard backlight HUD with a slim pill anchored on the notch. The signature notch-utility feature.
+
+- **Volume HUD** — F10/F11/F12 (or any system volume change, including Bluetooth headphone inline buttons). CoreAudio listener handles per-channel BT volume correctly.
+- **Brightness HUD** — F1/F2; level read via private `CoreDisplay_Display_GetUserBrightness` (dlopen-loaded, no hard framework dep).
+- **Keyboard backlight HUD** — F5/F6; level from `AppleHIDKeyboardEventDriverV2` IORegistry.
+- Dedicated transparent panel sits above the main notch panel — shows regardless of any other state (during music, clipboard, mirror…).
+- 1.5s auto-dismiss (configurable 0.5–4s in Settings).
+
+### 🧰 System status indicators (new in v0.4)
+
+Five small high-frequency glanceables in the dashboard, each individually toggleable in Settings:
+
+- **⚡ Charging wattage** — adapter classification (`MagSafe` / `PD fast` / `PD max` / `trickle`), auto-hides on battery
+- **🔴 Privacy dots** — orange mic / green camera dots next to the clock when in use
+- **☕ Caffeine** — `⌘⌥K` global hotkey spawns/kills `caffeinate -d -i -m` subprocess
+- **📡 Network speed** — `↓ MB/s ↑ KB/s` updated every 2s, hide-when-idle (< 50 KB/s) threshold
+- **🔋 BT multi-device battery** — AirPods (L/R/Case), Magic Mouse, Magic Keyboard, Apple Watch, etc. in one row
 
 ### 🎵 Now Playing
 
@@ -82,7 +102,7 @@ Open via the menu bar `🌒 → Mirror`. The camera turns off automatically when
 
 ### 📊 Dashboard
 
-Default hover view when nothing else is happening: big clock, today's date, next calendar event, and live CPU / battery readouts.
+Default hover view when nothing else is happening: big clock, today's date, next calendar event, live CPU / battery readouts, plus the new v0.4 indicators (charging / privacy / network / BT / caffeine) below — each gating on its own Settings toggle.
 
 ### 🎛 Tab Bar
 
@@ -172,10 +192,12 @@ If a prompt doesn't appear, add Notchy manually in **System Settings → Privacy
 
 | Action | Result |
 |---|---|
+| **F1 / F2 / F5 / F6 / F10 / F11 / F12** | Notchy HUD pill replaces the centre-screen system OSD |
 | Hover over the notch (with music playing) | Now Playing expands |
 | Hover over the notch (no music) | Dashboard expands |
 | **⌘⇧V** anywhere | Open clipboard panel |
 | **⌘⌥N** / **⌘⌥M** | Toggle Dashboard / Mirror |
+| **⌘⌥K** | Toggle Caffeine (keep Mac awake) |
 | In clipboard panel: `1`–`9` | Paste that item directly |
 | In clipboard panel: `↩` | Paste selected, restore prior clipboard |
 | In clipboard panel: type to search | Filter live across content + source app |
@@ -291,18 +313,19 @@ tail -f /tmp/notchy.log
 ## 🛣 Roadmap
 
 ### Shipped recently
+- [x] **HUD takeover** (v0.4) — volume / brightness / keyboard backlight pill replaces macOS OSD
+- [x] **System indicators** (v0.4) — charging wattage, privacy dots, caffeine (⌘⌥K), network speed, BT multi-device battery
 - [x] **Clipboard manager** (v0.3) — Paste.app-style ⌘⇧V panel anchored on the notch
-- [x] **Global hotkeys** (v0.2.3) — ⌘⌥N dashboard, ⌘⌥M mirror, ⌘⇧V clipboard
+- [x] **Global hotkeys** (v0.2.3) — ⌘⌥N dashboard, ⌘⌥M mirror, ⌘⇧V clipboard, ⌘⌥K caffeine
 - [x] **Audio output badge** (v0.2.4) — AirPods / speakers / device name on Now Playing
 - [x] **Live progress bar** + **global timer pill** (v0.2.4)
-- [x] **First-launch welcome screen** (v0.2.3)
 
-### Next
+### Next (v0.5)
+- [ ] **Lark / Feishu copilot** — unread badge, next meeting countdown, one-click join
+- [ ] **VSCode context** — current project + git branch in dashboard (frontmost-app aware)
+- [ ] **AI task indicator** — Claude Code / Cursor long-running task status
+- [ ] **SSH session panel** — active remote connections
 - [ ] **Clipboard v2** — pinboards, stack mode, edit-before-paste, plain-text paste hotkey, smart actions per kind
-- [ ] **HUD replacement** — volume / brightness sliders intercepted into the notch
-- [ ] **Charging indicator + wattage** in the live-activity strip
-- [ ] **Privacy indicators** — mic/camera-in-use dot in the notch
-- [ ] **Caffeine toggle** (keep-awake) in the dashboard
 - [ ] Custom widgets / extension SDK
 - [ ] Sparkle auto-updater
 - [ ] Mac App Store distribution path (constrained by private-API usage)

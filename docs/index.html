@@ -29,6 +29,7 @@
   </a>
   <nav class="nav__links">
     <a href="#features">Features</a>
+    <a href="#hud">HUD</a>
     <a href="#clipboard">Clipboard</a>
     <a href="#download">Download</a>
     <a href="https://github.com/OtaruTech/notchy" target="_blank" rel="noopener">GitHub ↗</a>
@@ -48,15 +49,16 @@
       <span class="hero__title-accent">but useful.</span>
     </h1>
     <p class="hero__sub">
-      Notchy turns the hardware notch into a tactile control surface — clipboard history,
-      Now Playing, a Pomodoro timer, file drop tray, mirror, calendar, AirPods battery,
-      and more. All anchored on the notch. None of it in your way.
+      Notchy turns the hardware notch into a tactile control surface — HUD takeover,
+      clipboard history, Now Playing, system status indicators, Pomodoro, drop tray,
+      mirror, calendar, AirPods battery, and more. All anchored on the notch. None of
+      it in your way.
     </p>
     <div class="hero__cta">
       <a class="btn btn--primary" href="#download">Download for macOS</a>
       <a class="btn btn--ghost" href="https://github.com/OtaruTech/notchy" target="_blank" rel="noopener">View on GitHub</a>
     </div>
-    <p class="hero__meta">Latest release: <a href="https://github.com/OtaruTech/notchy/releases/latest" target="_blank" rel="noopener">v0.3.0</a> · Apple Silicon · MIT licensed</p>
+    <p class="hero__meta">Latest release: <a href="https://github.com/OtaruTech/notchy/releases/latest" target="_blank" rel="noopener">v0.4.0</a> · Apple Silicon · MIT licensed</p>
   </div>
   <div class="hero__shot">
     <img src="images/01-live-activity.png" alt="Notchy's live-activity strip showing album art and waveform flanking the notch" loading="eager" fetchpriority="high">
@@ -65,8 +67,18 @@
 
 <section class="features" id="features">
   <h2 class="section-title">Everything you wish your notch did.</h2>
-  <p class="section-sub">One small surface. Eight things you actually do every day.</p>
+  <p class="section-sub">One small surface. Ten things you actually do every day.</p>
   <ul class="feature-grid">
+    <li class="feature">
+      <div class="feature__icon">🎚</div>
+      <h3>HUD takeover <span style="font-size:11px; padding:2px 6px; background:var(--accent); color:#000; border-radius:6px; vertical-align:middle">v0.4</span></h3>
+      <p>F11/F12/F1/F2/F5/F6 trigger a slim Notchy pill instead of the centre-screen system OSD. Volume, brightness, keyboard backlight — all anchored on the notch.</p>
+    </li>
+    <li class="feature">
+      <div class="feature__icon">⚡</div>
+      <h3>System indicators <span style="font-size:11px; padding:2px 6px; background:var(--accent); color:#000; border-radius:6px; vertical-align:middle">v0.4</span></h3>
+      <p>Charging wattage, mic/cam privacy dots, caffeine (⌘⌥K), live network speed, BT multi-device battery — all in the dashboard, individually toggleable.</p>
+    </li>
     <li class="feature">
       <div class="feature__icon">📋</div>
       <h3>Clipboard manager</h3>
@@ -108,6 +120,32 @@
       <p>Default hover view: big clock, today's date, next calendar event, live CPU and battery readouts. ⌘⌥N opens it instantly.</p>
     </li>
   </ul>
+</section>
+
+<section class="spotlight" id="hud">
+  <div class="spotlight__inner">
+    <div class="spotlight__copy">
+      <p class="spotlight__eyebrow">New in v0.4 — signature feature</p>
+      <h2 class="spotlight__title">Goodbye, giant mid-screen HUD.</h2>
+      <p class="spotlight__text">
+        Press <kbd>F11</kbd> or <kbd>F12</kbd> for volume. <kbd>F1</kbd>/<kbd>F2</kbd> for
+        brightness. <kbd>F5</kbd>/<kbd>F6</kbd> for keyboard backlight. A slim pill
+        drops out from under the notch with the new level instead of macOS's big
+        rounded rectangle covering your work.
+      </p>
+      <ul class="bullets">
+        <li><strong>Volume</strong> — CoreAudio listener handles built-in speakers, AirPods, USB DACs, generic BT headphones (per-channel scalars handled correctly)</li>
+        <li><strong>Brightness</strong> — CoreDisplay's <code>CoreDisplay_Display_GetUserBrightness</code>, dlopen-loaded</li>
+        <li><strong>Keyboard backlight</strong> — AppleHIDKeyboardEventDriverV2 IORegistry</li>
+        <li><strong>Dedicated panel</strong> sits above the main notch overlay — shows regardless of state (music playing, clipboard open, mirror running…)</li>
+        <li><strong>1.5s auto-dismiss</strong> — configurable 0.5–4s in Settings → System</li>
+      </ul>
+    </div>
+    <div class="spotlight__art" style="background:linear-gradient(135deg, rgba(200,155,255,0.20), rgba(108,184,255,0.10)); border-radius:20px; padding:48px; text-align:center;">
+      <div style="font-size:60px; margin-bottom:8px;">🎚</div>
+      <div style="font-family:ui-monospace, monospace; opacity:0.65; font-size:13px;">F11 · F12 · F1 · F2 · F5 · F6</div>
+    </div>
+  </div>
 </section>
 
 <section class="spotlight" id="clipboard">
