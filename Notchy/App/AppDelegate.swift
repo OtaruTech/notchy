@@ -244,17 +244,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             self?.stateMachine.send(.dragEntered)
             self?.dropDismissTimer?.cancel()
         }
-        // Intentionally do NOT auto-dismiss on drag-exit or post-drop. The
-        // drop tray stays open until the user explicitly closes it (Esc /
-        // click outside / Clear all when empty). Matches the clipboard
-        // panel's "no surprise dismiss" behaviour.
-        drag.onExit = { /* no-op */ }
+        drag.onExit = { /* no auto-dismiss */ }
         drag.onDrop = { [weak self] urls in
             self?.dropFeature.add(urls: urls)
         }
+        // Install both: the in-panel intermediary (catches drags once the
+        // panel is already expanded into .drop) AND a dedicated tiny
+        // always-on drag-target panel sitting over the hardware notch (catches
+        // the INITIAL drag-enter while the main panel is click-through).
         if let cv = windowController?.contentView {
             drag.attach(to: cv)
         }
+        windowController?.installDragTarget(handler: drag)
         dragSession = drag
 
         NotificationCenter.default.addObserver(
@@ -286,23 +287,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func handleStateChange() {
-        // Toggle click-through: idle/hint = transparent area must pass clicks
-        // through to the desktop; expanded states need to receive clicks.
+        // Toggle click-through on the main panel:
+        //   idle/hint → ignoresMouseEvents = true, full click-through.
+        //              Drag detection still works via the separate
+        //              `dragTargetPanel` that always receives mouse events.
+        //   expanded → ignoresMouseEvents = false, SwiftUI captures clicks.
         windowController?.setIgnoresMouseEvents(!stateMachine.state.isExpanded)
-
-        // Defence-in-depth: hit-test ignores hits outside the rendered area.
-        // The PRIMARY click-through mechanism is the panel resize below.
-        windowController?.activeClickRectProvider = { [weak self] in
-            self?.activeClickRect() ?? .zero
-        }
-
-        // Resize the panel itself so the surrounding pixels are physically
-        // free for the underlying app to receive clicks.
-        let rect = activeClickRect()
-        windowController?.resize(
-            toLocalSize: CGSize(width: rect.width, height: rect.height),
-            animated: stateMachine.state.isExpanded
-        )
 
         // Grow / shrink hover keep-alive zone so cursor can move INTO the expanded
         // panel content (buttons, scrubber, etc.) without triggering collapse.
