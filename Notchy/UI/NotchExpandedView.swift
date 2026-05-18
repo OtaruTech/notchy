@@ -153,7 +153,13 @@ struct NotchExpandedView: View {
             DashboardView(
                 nextEvent: calendarFeature.events.first,
                 snapshot: systemMonitor.snapshot,
-                status: systemStatus
+                status: systemStatus,
+                pomodoro: PomodoroStats(
+                    totalToday: timerFeature.log.count(on: Date()),
+                    minutesToday: timerFeature.log.minutes(on: Date()),
+                    last7: timerFeature.log.dailyCounts(lastDays: 7),
+                    streak: timerFeature.log.streak()
+                )
             )
         case .media:
             if let vm = mediaVM {
@@ -199,6 +205,12 @@ struct NotchExpandedView: View {
             TimerView(
                 state: timerFeature.state,
                 progress: timerFeature.progress,
+                stats: PomodoroStats(
+                    totalToday: timerFeature.log.count(on: Date()),
+                    minutesToday: timerFeature.log.minutes(on: Date()),
+                    last7: timerFeature.log.dailyCounts(lastDays: 7),
+                    streak: timerFeature.log.streak()
+                ),
                 onStart: { timerFeature.start(seconds: $0) },
                 onPause: { timerFeature.pause() },
                 onResume: { timerFeature.resume() },

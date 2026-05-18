@@ -42,6 +42,7 @@
 		513E97F3E39579F6C8CC364A /* LiveActivityStrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5EB720D8D42405DE7F6F10 /* LiveActivityStrip.swift */; };
 		51F5DC8A60F9A31A0F60D9FD /* TimerFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681D16180B1B4DF163605087 /* TimerFeatureTests.swift */; };
 		52F7BE5899E9B9BED6E4A3E7 /* NotchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8947D82465DDF1474C3C2E4D /* NotchState.swift */; };
+		5396DAB0F7ACDF600C49D422 /* PomodoroLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244AABFB62BDFA6D96C1321A /* PomodoroLog.swift */; };
 		551E7B961D39A3EFC0EBC7BD /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F293D4B6E0C68019AAA9E33 /* CalendarView.swift */; };
 		5735921B02AF0F53A22A2E7A /* TapCatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE2ADC19DBC393F59AF69C4A /* TapCatcher.swift */; };
 		5A48F3EBB9F12FAB4DF284AB /* DropViewSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8D50074A898F05304A0532 /* DropViewSnapshots.swift */; };
@@ -73,6 +74,7 @@
 		9E631D722C37C2996A5690B0 /* SemVer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E00D818AE833226C59E307 /* SemVer.swift */; };
 		9F1E5F1E5684C182D7EF4C9A /* ItemCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3A3278F5F109DD0119B52A /* ItemCard.swift */; };
 		A9616755EA9FE40F36717C23 /* MeetingURLExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED52CB1C501A9376608C42D6 /* MeetingURLExtractor.swift */; };
+		AE5E569382057FFA90EAF8A8 /* PomodoroStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CBE9F4AF3BF9A8E8A4814B0 /* PomodoroStats.swift */; };
 		B17102BEF2E5EE30EA6B5A03 /* CaffeineController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0B2A5D84AF88FC31E6E407 /* CaffeineController.swift */; };
 		B410B694159C4D693BB0B4A5 /* NotchStateMachineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F444436267456B4A7969E2BF /* NotchStateMachineTests.swift */; };
 		B4E75597701A81337D41387E /* CalendarFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854599C0C8ADAC528D1D0203 /* CalendarFeatureTests.swift */; };
@@ -84,6 +86,7 @@
 		BFB14CE7E4D058520A76C2B8 /* NoopSyncEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30377D8A669AA2CF8E5675F0 /* NoopSyncEngine.swift */; };
 		C2A9949FB637D6415D275AE6 /* PrivacyMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9A875C7C37E3A05EFAFB78 /* PrivacyMonitor.swift */; };
 		C2C75C7AF305D4241130A962 /* MediaFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5BF2C7B3BA24BABF10B7FEE /* MediaFeature.swift */; };
+		CC14DC09EAEA10427C878CB1 /* HotKeyRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C46AC392D184D0CDCAA878 /* HotKeyRecorderView.swift */; };
 		CCC2A8579A49417C9BF8DCAB /* HotKeyCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F3D20E20F15D4FDCC34106 /* HotKeyCenter.swift */; };
 		CD0691F820505A12B0D49DDE /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BAA3AE68D1DC95427E890C /* TimerView.swift */; };
 		CFA0463E19C9AA436CE04086 /* IDEContextMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB8B6DB706FF15304C60408 /* IDEContextMonitor.swift */; };
@@ -105,6 +108,7 @@
 		EBB565BFDB9DD4B035BA2677 /* MirrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502A1D39A74B73C64CB48E2A /* MirrorView.swift */; };
 		EC64E85441B1385E7A5BC17E /* PowerMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90D7B2C43C9C1F00F7B3098 /* PowerMonitor.swift */; };
 		ECFB624F24C62DD97AB018A6 /* HUDEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDEFAFF78FCE7EB0DF56720C /* HUDEvent.swift */; };
+		EF5B502EBBDF84A772036DCD /* LarkBadgeMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE7B01CA06E35797B95285D /* LarkBadgeMonitor.swift */; };
 		F29841C20EF81367D1331F67 /* ScreenGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB210D67BB9058034F788290 /* ScreenGeometryTests.swift */; };
 		F30CA51FFDECAEEC718505C0 /* LrcLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF80D35E0458C579AC543D9 /* LrcLine.swift */; };
 		F5144B2A34BE3536C844C2C9 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D689D273D37007ED622990E1 /* DashboardView.swift */; };
@@ -137,9 +141,11 @@
 		15A14A22DB46EB6254A26AA1 /* CloudKitMapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitMapping.swift; sourceTree = "<group>"; };
 		1A423F8D9BB22E46CA097007 /* NotchySnapshotTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NotchySnapshotTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C3034B9AB977A1751561A17 /* HotZoneMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotZoneMonitor.swift; sourceTree = "<group>"; };
+		1CE7B01CA06E35797B95285D /* LarkBadgeMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LarkBadgeMonitor.swift; sourceTree = "<group>"; };
 		1E55A261F6CF1B66857B520B /* VolumeMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeMonitor.swift; sourceTree = "<group>"; };
 		2110AAECFFF10B27041EF2B3 /* NotchyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NotchyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		22B8E9AAE1D26D658843294B /* BTBatteryMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BTBatteryMonitor.swift; sourceTree = "<group>"; };
+		244AABFB62BDFA6D96C1321A /* PomodoroLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PomodoroLog.swift; sourceTree = "<group>"; };
 		27C48864F05F8FB04487850E /* Placeholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Placeholder.swift; sourceTree = "<group>"; };
 		297FF7D4F6B046616C6364E4 /* ItemKindDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemKindDetector.swift; sourceTree = "<group>"; };
 		2A27399F0C16B05551598DF9 /* Notchy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notchy.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -180,6 +186,7 @@
 		75197809ED6A9E7CC86445BD /* TimerViewSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewSnapshots.swift; sourceTree = "<group>"; };
 		78ACFB47B00A482E040584F8 /* Data+Append.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Append.swift"; sourceTree = "<group>"; };
 		7A5EB720D8D42405DE7F6F10 /* LiveActivityStrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivityStrip.swift; sourceTree = "<group>"; };
+		7CBE9F4AF3BF9A8E8A4814B0 /* PomodoroStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PomodoroStats.swift; sourceTree = "<group>"; };
 		7DF1C15FA437D2C40E1EDBAC /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		80F3D20E20F15D4FDCC34106 /* HotKeyCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotKeyCenter.swift; sourceTree = "<group>"; };
 		854599C0C8ADAC528D1D0203 /* CalendarFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarFeatureTests.swift; sourceTree = "<group>"; };
@@ -206,6 +213,7 @@
 		AE253DEBEF1D9E40C4A71E01 /* SystemMonitorBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMonitorBridge.swift; sourceTree = "<group>"; };
 		B17D845897E3385277807C80 /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
 		B4E00D818AE833226C59E307 /* SemVer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemVer.swift; sourceTree = "<group>"; };
+		B5C46AC392D184D0CDCAA878 /* HotKeyRecorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotKeyRecorderView.swift; sourceTree = "<group>"; };
 		B8D73E5D88FE0299E1D90ABC /* BatteryReadingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryReadingTests.swift; sourceTree = "<group>"; };
 		B90D7B2C43C9C1F00F7B3098 /* PowerMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerMonitor.swift; sourceTree = "<group>"; };
 		B9A8751CBEB8419A976C9866 /* MediaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaView.swift; sourceTree = "<group>"; };
@@ -361,6 +369,8 @@
 		514B170601E05FFED71CEE19 /* Timer */ = {
 			isa = PBXGroup;
 			children = (
+				244AABFB62BDFA6D96C1321A /* PomodoroLog.swift */,
+				7CBE9F4AF3BF9A8E8A4814B0 /* PomodoroStats.swift */,
 				E4B2176394FA4A39E56579A2 /* TimerFeature.swift */,
 				A7BAA3AE68D1DC95427E890C /* TimerView.swift */,
 			);
@@ -480,6 +490,7 @@
 				22B8E9AAE1D26D658843294B /* BTBatteryMonitor.swift */,
 				3B0B2A5D84AF88FC31E6E407 /* CaffeineController.swift */,
 				ADB8B6DB706FF15304C60408 /* IDEContextMonitor.swift */,
+				1CE7B01CA06E35797B95285D /* LarkBadgeMonitor.swift */,
 				7DF1C15FA437D2C40E1EDBAC /* NetworkMonitor.swift */,
 				B90D7B2C43C9C1F00F7B3098 /* PowerMonitor.swift */,
 				9F9A875C7C37E3A05EFAFB78 /* PrivacyMonitor.swift */,
@@ -545,6 +556,7 @@
 		CCEF6C65B9FBA0C60AF15BAB /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				B5C46AC392D184D0CDCAA878 /* HotKeyRecorderView.swift */,
 				9100CBB2EF123484F00E26CF /* SettingsView.swift */,
 				63ACAEC959171F6D5E21EF15 /* WelcomeView.swift */,
 			);
@@ -739,12 +751,14 @@
 				DC6F38B78AB7B8100D05FC8A /* HUDView.swift in Sources */,
 				0004721435D460BC904035BA /* HUDWindowController.swift in Sources */,
 				CCC2A8579A49417C9BF8DCAB /* HotKeyCenter.swift in Sources */,
+				CC14DC09EAEA10427C878CB1 /* HotKeyRecorderView.swift in Sources */,
 				892BD16133C0CB804E94B701 /* HotZoneMonitor.swift in Sources */,
 				CFA0463E19C9AA436CE04086 /* IDEContextMonitor.swift in Sources */,
 				D05424E64997786D698811A8 /* IOBluetoothBridge.swift in Sources */,
 				9F1E5F1E5684C182D7EF4C9A /* ItemCard.swift in Sources */,
 				BE239F1D0BB01371BC99A6B3 /* ItemKindDetector.swift in Sources */,
 				FED81A8F46644B601E98CEB1 /* KeyboardBacklightReader.swift in Sources */,
+				EF5B502EBBDF84A772036DCD /* LarkBadgeMonitor.swift in Sources */,
 				513E97F3E39579F6C8CC364A /* LiveActivityStrip.swift in Sources */,
 				F30CA51FFDECAEEC718505C0 /* LrcLine.swift in Sources */,
 				81D7868D4FA2A62F2E7619EC /* LyricsBridge.swift in Sources */,
@@ -771,6 +785,8 @@
 				DB3BC1673D33C876EDD8ADD3 /* NotchyApp.swift in Sources */,
 				BB64406D197C5E4FD7F1143B /* NowPlayingVM.swift in Sources */,
 				42912963CD05DEB6E9E6A87A /* PasteEngine.swift in Sources */,
+				5396DAB0F7ACDF600C49D422 /* PomodoroLog.swift in Sources */,
+				AE5E569382057FFA90EAF8A8 /* PomodoroStats.swift in Sources */,
 				EC64E85441B1385E7A5BC17E /* PowerMonitor.swift in Sources */,
 				C2A9949FB637D6415D275AE6 /* PrivacyMonitor.swift in Sources */,
 				2235C17B933D54C3D1A58CE0 /* SSHMonitor.swift in Sources */,
@@ -880,7 +896,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 0.5.0;
+				MARKETING_VERSION = 0.6.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1032,7 +1048,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 0.5.0;
+				MARKETING_VERSION = 0.6.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";

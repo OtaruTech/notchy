@@ -6,6 +6,7 @@ struct DashboardView: View {
     let nextEvent: EventVM?
     let snapshot: SystemSnapshot
     var status: SystemStatusFeature? = nil
+    var pomodoro: PomodoroStats? = nil
     @AppStorage("notchy.gaugeEnabled") private var gaugeEnabled = true
     @State private var now = Date()
 
@@ -151,11 +152,63 @@ struct DashboardView: View {
         if let status {
             VStack(spacing: 4) {
                 ideContextRow(status: status)
+                larkRow(status: status)
                 sshSessionsRow(status: status)
                 chargingRow(status: status)
                 networkRow(status: status)
                 btDevicesRow(status: status)
                 caffeineRow(status: status)
+                pomodoroRow
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func larkRow(status: SystemStatusFeature) -> some View {
+        let enabled = UserDefaults.standard.object(forKey: "notchy.indicatorLarkEnabled") as? Bool ?? true
+        if enabled, status.larkUnread > 0 {
+            Button {
+                LarkBadgeMonitor.activateLark()
+            } label: {
+                HStack(spacing: 6) {
+                    Text("🔔")
+                        .font(.system(size: 11))
+                    Text("飞书")
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundStyle(.white)
+                    Text("\(status.larkUnread)")
+                        .font(.system(size: 11, weight: .bold, design: .rounded))
+                        .monospacedDigit()
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 1)
+                        .background(.red.opacity(0.85), in: Capsule())
+                    Spacer(minLength: 0)
+                }
+            }
+            .buttonStyle(.plain)
+        }
+    }
+
+    @ViewBuilder
+    private var pomodoroRow: some View {
+        let enabled = UserDefaults.standard.object(forKey: "notchy.indicatorPomodoroEnabled") as? Bool ?? true
+        if enabled, let p = pomodoro, p.totalToday > 0 {
+            HStack(spacing: 6) {
+                Text("🍅")
+                    .font(.system(size: 11))
+                Text("\(p.totalToday) today")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(.white)
+                Text("· \(p.minutesToday)m")
+                    .font(.system(size: 10, design: .monospaced))
+                    .foregroundStyle(.white.opacity(0.55))
+                if p.streak > 1 {
+                    Text("· 🔥 \(p.streak)d")
+                        .font(.system(size: 10))
+                        .foregroundStyle(.orange.opacity(0.85))
+                }
+                Spacer(minLength: 0)
             }
         }
     }

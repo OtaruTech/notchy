@@ -14,6 +14,7 @@ final class TimerFeature {
     private(set) var state: State = .idle
     private weak var stateMachine: NotchStateMachine?
     private var tickTask: Task<Void, Never>?
+    let log = PomodoroLog()
 
     init(stateMachine: NotchStateMachine) {
         self.stateMachine = stateMachine
@@ -67,6 +68,12 @@ final class TimerFeature {
             if nr <= 0 {
                 tickTask?.cancel()
                 state = .idle
+                // Log the completed session so the dashboard + TimerView
+                // stats can update. Only log presets that match a focus
+                // session (>= 3 min) so accidental short-test runs don't
+                // pollute the streak.
+                let minutes = Int((t / 60).rounded())
+                if minutes >= 3 { log.append(durationMin: minutes) }
                 stateMachine?.send(.timerCompleted)
                 fireCompletionNotification()
             } else {

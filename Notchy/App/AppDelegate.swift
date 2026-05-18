@@ -25,7 +25,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private(set) var mediaFeature: MediaFeature!
     private var windowController: NotchWindowController?
     private var hotZone: HotZoneMonitor?
-    private var hotKeys: HotKeyCenter?
+    private(set) var hotKeys: HotKeyCenter?
     let dropFeature = DropFeature()
     private var dragSession: DragSession?
     private var airpodsDismissTimer: Task<Void, Never>?
@@ -48,6 +48,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var btBatteryMonitor: BTBatteryMonitor?
     private var ideContextMonitor: IDEContextMonitor?
     private var sshMonitor: SSHMonitor?
+    private var larkBadgeMonitor: LarkBadgeMonitor?
     private(set) var updateController = UpdateController()
     private var volumeMonitor: VolumeMonitor?
     private var mediaKeyMonitor: MediaKeyMonitor?
@@ -127,6 +128,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let sshm = SSHMonitor(status: systemStatus)
         sshm.start()
         sshMonitor = sshm
+
+        let larkm = LarkBadgeMonitor(status: systemStatus)
+        larkm.start()
+        larkBadgeMonitor = larkm
 
         // Volume HUD takeover — listen for default-output volume + mute
         // changes and forward to HUDFeature.

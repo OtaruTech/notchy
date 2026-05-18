@@ -2,6 +2,20 @@
 
 All notable changes to Notchy. Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [0.6.0] — 2026-05-18
+
+### Added — Daily polish
+
+- **🍅 Pomodoro stats** — every completed focus session (≥ 3 min) is logged to `~/Library/Application Support/tech.otaru.Notchy/pomodoro-log.json`. TimerView's idle state shows a stats footer with today's count, total minutes, current streak, and a 7-day heat-map of dot indicators. Dashboard gets a `🍅 N today · Mm` row + `🔥 streak` chip when streak ≥ 2.
+- **🔔 Lark / 飞书 unread badge** — Dock's accessibility tree is polled every 5s to find the Lark / 飞书 tile and parse its badge value. Dashboard shows `🔔 飞书 <N>` row when there are unread messages; clicking activates Lark.
+- **⌨️ Customisable global hotkeys** — every shortcut (`toggleDashboard`, `toggleMirror`, `toggleClipboard`, `toggleCaffeine`) can be remapped from Settings → General. Click the binding chip → press a new chord → applies instantly with `HotKeyCenter.reloadBindings()`. Each row has a one-click "reset to default" button, and a `Reset all to defaults` action in the section footer. Rejects empty modifiers and known system reservations (⌘Q, ⌘W, ⌘Tab, ⌘Space).
+
+### Added — Settings → System → Daily polish
+
+- `notchy.indicatorLarkEnabled` (default true)
+- `notchy.indicatorPomodoroEnabled` (default true)
+- Per-action hotkey bindings under `notchy.hotkey.<action>` (`{keyCode, modifiers}` dict, Carbon flags)
+
 ## [0.5.0] — 2026-05-18
 
 ### Added — Workflow copilot

@@ -33,6 +33,10 @@ struct SettingsView: View {
     @AppStorage("notchy.indicatorSSHEnabled")        private var indSSH = true
     @AppStorage("notchy.indicatorSSHDangerPattern")  private var sshDangerPattern = SSHMonitor.defaultDangerPattern
 
+    // v0.6 — Indicators
+    @AppStorage("notchy.indicatorLarkEnabled")     private var indLark = true
+    @AppStorage("notchy.indicatorPomodoroEnabled") private var indPomodoro = true
+
     // Auto-update
     @AppStorage("notchy.checkForUpdates") private var checkForUpdates = true
 
@@ -93,15 +97,23 @@ struct SettingsView: View {
             }
             Section("Keyboard shortcuts") {
                 Toggle("Enable global hotkeys", isOn: $hotkeysEnabled)
-                VStack(alignment: .leading, spacing: 4) {
-                    Label("⌘⌥N  toggle dashboard", systemImage: "square.grid.2x2.fill")
-                    Label("⌘⌥M  toggle Mirror", systemImage: "video.fill")
-                    Label("⌘⇧V  open clipboard panel", systemImage: "doc.on.clipboard")
-                    Label("⌘⌥K  toggle Caffeine (keep awake)", systemImage: "cup.and.saucer.fill")
+                VStack(spacing: 6) {
+                    ForEach(HotKeyCenter.Action.allCases, id: \.self) { action in
+                        HotKeyRecorderView(action: action) {
+                            reloadHotKeys()
+                        }
+                    }
                 }
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                Text("Changes take effect on next launch.")
+                .disabled(!hotkeysEnabled)
+                HStack {
+                    Spacer()
+                    Button("Reset all to defaults") {
+                        HotKeyCenter.resetAllToDefaults()
+                        reloadHotKeys()
+                    }
+                    .controlSize(.small)
+                }
+                Text("Changes apply instantly. Click a shortcut, then press a new key chord.")
                     .font(.caption2)
                     .foregroundStyle(.tertiary)
             }
@@ -204,6 +216,10 @@ struct SettingsView: View {
                 }
                 Toggle("Bluetooth multi-device battery", isOn: $indBTDevices)
             }
+            Section("Daily polish (v0.6)") {
+                Toggle("Lark / 飞书 unread badge", isOn: $indLark)
+                Toggle("Pomodoro stats + streak", isOn: $indPomodoro)
+            }
             Section("Workflow (new in v0.5)") {
                 Toggle("Meeting copilot — show countdown + Join button", isOn: .constant(true))
                     .disabled(true)
@@ -275,6 +291,13 @@ struct SettingsView: View {
 
     private var appVersion: String {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "?"
+    }
+
+    /// Push new bindings into the running HotKeyCenter so the user sees instant
+    /// effect without a restart.
+    private func reloadHotKeys() {
+        let appDelegate = NSApp.delegate as? AppDelegate
+        appDelegate?.hotKeys?.reloadBindings()
     }
 
     private func resetAll() {

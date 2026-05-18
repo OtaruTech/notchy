@@ -320,14 +320,21 @@ tail -f /tmp/notchy.log
 - [x] **Audio output badge** (v0.2.4) — AirPods / speakers / device name on Now Playing
 - [x] **Live progress bar** + **global timer pill** (v0.2.4)
 
-### Next (v0.5)
-- [ ] **Lark / Feishu copilot** — unread badge, next meeting countdown, one-click join
-- [ ] **VSCode context** — current project + git branch in dashboard (frontmost-app aware)
-- [ ] **AI task indicator** — Claude Code / Cursor long-running task status
-- [ ] **SSH session panel** — active remote connections
+### Shipped in v0.5
+- [x] **Meeting copilot** — next-meeting countdown + one-click Join (Zoom/Meet/Lark/Teams/Tencent/Webex)
+- [x] **IDE context** — VSCode/Cursor/Xcode/Windsurf project + branch
+- [x] **SSH session indicator** — active remote shells with danger regex
+
+### Shipped in v0.6
+- [x] **🍅 Pomodoro stats** — persistent log, today/streak/7-day heatmap, dashboard row
+- [x] **🔔 Lark / 飞书 unread badge** — Dock AX badge readout in dashboard
+- [x] **⌨️ Customisable hotkeys** — record any chord in Settings, instant apply
+
+### Next
 - [ ] **Clipboard v2** — pinboards, stack mode, edit-before-paste, plain-text paste hotkey, smart actions per kind
+- [ ] **AI task indicator** — Claude Code / Cursor long-running task status
 - [ ] Custom widgets / extension SDK
-- [ ] Sparkle auto-updater
+- [ ] Sparkle auto-updater (currently we do a manual GitHub Releases check)
 - [ ] Mac App Store distribution path (constrained by private-API usage)
 - [ ] Localization
 

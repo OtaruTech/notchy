@@ -41,6 +41,10 @@ final class SystemStatusFeature {
     // v0.5 — active SSH sessions
     var sshSessions: [SSHSession] = []
 
+    // v0.6 — Lark / 飞书 dock badge
+    var larkUnread: Int = 0
+    var larkBundleID: String? = nil  // tracked for click-through to activate
+
     init() {}
 
     // MARK: nested data types
@@ -94,5 +98,6 @@ extension SystemStatusFeature {
             || !btDevices.isEmpty
             || ideContext != nil
             || !sshSessions.isEmpty
+            || larkUnread > 0
     }
 }
