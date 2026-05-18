@@ -48,6 +48,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var btBatteryMonitor: BTBatteryMonitor?
     private var ideContextMonitor: IDEContextMonitor?
     private var sshMonitor: SSHMonitor?
+    private(set) var updateController = UpdateController()
     private var volumeMonitor: VolumeMonitor?
     private var mediaKeyMonitor: MediaKeyMonitor?
     private var hudWindowController: HUDWindowController?
@@ -73,6 +74,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         installSignalHandlers()
         promptAccessibilityIfNeeded()
         showWelcomeIfFirstLaunch()
+        // Auto-check for a newer GitHub release. Debounced to 1×/day; silent
+        // when up-to-date. Gated by `notchy.checkForUpdates` (default true).
+        updateController.checkOnLaunchIfDue()
 
         mediaFeature = MediaFeature(bridge: mediaBridge, stateMachine: stateMachine)
         mediaFeature.start()
@@ -201,6 +205,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let menu = NSMenu()
         menu.addItem(NSMenuItem(title: "Settings…", action: #selector(openSettings), keyEquivalent: ","))
         menu.addItem(NSMenuItem(title: "Welcome…", action: #selector(openWelcome), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "Check for Updates…", action: #selector(checkForUpdates), keyEquivalent: ""))
         menu.addItem(.separator())
         let pauseItem = NSMenuItem(
             title: UserDefaults.standard.bool(forKey: "notchy.clipboardPaused")
@@ -610,6 +615,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 self.hudFeature.show(HUDEvent(kind: .keyboardBacklight, level: level))
             }
         }
+    }
+
+    @objc func checkForUpdates() {
+        updateController.checkNow()
     }
 
     @objc func toggleClipboardPaused() {

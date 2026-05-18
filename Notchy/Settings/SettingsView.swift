@@ -33,6 +33,9 @@ struct SettingsView: View {
     @AppStorage("notchy.indicatorSSHEnabled")        private var indSSH = true
     @AppStorage("notchy.indicatorSSHDangerPattern")  private var sshDangerPattern = SSHMonitor.defaultDangerPattern
 
+    // Auto-update
+    @AppStorage("notchy.checkForUpdates") private var checkForUpdates = true
+
     @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
     @State private var clearConfirmShown = false
 
@@ -238,6 +241,15 @@ struct SettingsView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
+            Section("Updates") {
+                Toggle("Check for updates automatically", isOn: $checkForUpdates)
+                Text("Notchy compares your version to the latest GitHub release on launch (max once per day) and lets you know when there's a newer build.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Button("Check for updates now…") {
+                    (NSApp.delegate as? AppDelegate)?.checkForUpdates()
+                }
+            }
             Section("Reset") {
                 Button("Reset all preferences") { resetAll() }
                     .foregroundStyle(.red)
@@ -280,6 +292,7 @@ struct SettingsView: View {
             "notchy.indicatorNetworkHideIdle", "notchy.indicatorBTDevicesEnabled",
             "notchy.indicatorIDEContextEnabled", "notchy.indicatorSSHEnabled",
             "notchy.indicatorSSHDangerPattern",
+            "notchy.checkForUpdates", "notchy.lastUpdateCheck", "notchy.updateSkippedVersion",
             "notchy.hasPromptedAccessibilityV1", "notchy.welcomeShown",
         ]
         for k in keys { UserDefaults.standard.removeObject(forKey: k) }
