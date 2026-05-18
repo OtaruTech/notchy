@@ -198,12 +198,23 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         monitor.onEscape = { [weak self] in self?.stateMachine.send(.escapeKeyPressed) }
         monitor.onClickOutside = { [weak self] in self?.stateMachine.send(.outsideClicked) }
         monitor.onHorizontalSwipe = { [weak self] direction in
+            guard let self else { return }
             // Gated by Settings → Now Playing → swipe toggle.
             let enabled = UserDefaults.standard.object(forKey: "notchy.swipeEnabled") as? Bool ?? true
             guard enabled else { return }
-            guard self?.mediaFeature.current != nil else { return }
-            if direction > 0 { self?.mediaFeature.next() }
-            else { self?.mediaFeature.prev() }
+            guard self.mediaFeature.current != nil else { return }
+            // Only act on swipes while the user is actually looking at music:
+            //   - .media (expanded player)
+            //   - .idle / .hint (collapsed with live-activity strip visible)
+            // Any other expanded state (dashboard, clipboard, drop, calendar,
+            // timer, mirror, airpods) should ignore the swipe — otherwise the
+            // user accidentally skips tracks while interacting with another
+            // widget over the notch area.
+            let state = self.stateMachine.state
+            let allowed = state == .media || state == .idle || state == .hint
+            guard allowed else { return }
+            if direction > 0 { self.mediaFeature.next() }
+            else { self.mediaFeature.prev() }
         }
         monitor.start()
         hotZone = monitor
