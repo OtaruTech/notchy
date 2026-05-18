@@ -2,6 +2,30 @@
 
 All notable changes to Notchy. Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [0.4.0] — 2026-05-18
+
+### Added — HUD takeover (signature feature)
+- **Volume HUD** — F10/F11/F12 (or any system volume change) drops a pill with the new level out from under the notch. CoreAudio listener on `kAudioDevicePropertyVolumeScalar` covers all output devices including Bluetooth headphones with per-channel scalars.
+- **Brightness HUD** — F1/F2 trigger via NSEvent.systemDefined media-key monitor; level read through CoreDisplay's private `CoreDisplay_Display_GetUserBrightness` (dlopen-loaded, no hard dep).
+- **Keyboard backlight HUD** — F5/F6; level probed from `AppleHIDKeyboardEventDriverV2` IORegistry service.
+- Dedicated transparent `NSPanel` above the main notch panel hosts the HUD, so it shows regardless of the notch's current state (clipboard / dashboard / mirror etc).
+- Auto-dismiss timer with proper `Task.isCancelled` handling — multi-listener races no longer wipe the HUD prematurely.
+
+### Added — System status indicators (5×)
+- **⚡ Charging wattage** — `IOPSCopyPowerSourcesInfo` + `AdapterDetails.Watts`; adaptive 1s/5s polling. Pill shows "67W · PD fast" classification.
+- **🔴 Privacy indicators** — orange mic dot + green camera dot beside the dashboard clock. CoreAudio listener on default input device + AVCaptureDevice `isInUseByAnotherApplication` poll.
+- **☕ Caffeine** — spawns `caffeinate -d -i -m` subprocess; toggled by ⌘⌥K global hotkey or dashboard. Survives the panel being closed.
+- **📡 Network speed** — `getifaddrs` sampler at 2s cadence, aggregates en* + utun* + bridge* interfaces. Hide-when-idle threshold of 50 KB/s.
+- **🔋 BT multi-device battery** — `IOBluetoothDevice.pairedDevices()` filtered by `isConnected`; reads `BatteryPercent` / `BatteryPercentLeft` / `BatteryPercentRight` / `BatteryPercentCase` from IORegistry by `DeviceAddress` match. Auto-classifies airpods / mouse / keyboard / watch / headphones / generic. 30s cadence + immediate refresh on connect/disconnect notifications.
+
+### Added — Settings → System tab
+Per-feature toggles for everything above:
+- `notchy.hudVolumeEnabled`, `notchy.hudBrightnessEnabled`, `notchy.hudKeyboardEnabled`, `notchy.hudDuration`
+- `notchy.indicatorChargingEnabled`, `notchy.indicatorPrivacyEnabled`, `notchy.indicatorCaffeineEnabled`, `notchy.indicatorNetworkEnabled` (+ `notchy.indicatorNetworkHideIdle`), `notchy.indicatorBTDevicesEnabled`
+
+### Fixed
+- **Two-finger swipe** no longer skips tracks when interacting with any expanded panel other than `.media` (dashboard / clipboard / mirror / etc). Previously the swipe handler only checked "media loaded" → switching cards in the clipboard panel accidentally skipped the song playing in the background.
+
 ## [0.3.1] — 2026-05-18
 
 ### Fixed
