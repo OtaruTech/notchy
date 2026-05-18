@@ -1,0 +1,28 @@
+# Custom domain — placeholder
+#
+# When you own a domain (e.g. notchy.dev / notchy.app / notchy.otaru.tech),
+# rename this file to `CNAME` (no extension) and put a single line in it
+# with your domain name:
+#
+#     notchy.dev
+#
+# Then add the DNS records at your registrar:
+#
+#   For an apex domain (notchy.dev):
+#     A   @   185.199.108.153
+#     A   @   185.199.109.153
+#     A   @   185.199.110.153
+#     A   @   185.199.111.153
+#
+#   For a subdomain (www.notchy.dev or notchy.otaru.tech):
+#     CNAME  www  otarutech.github.io.
+#
+# GitHub Pages will issue a free Let's Encrypt cert automatically once
+# DNS resolves (~15 min after change). After that the site is live at
+# https://notchy.dev/ with the same content currently at
+# https://otarutech.github.io/notchy/.
+#
+# Don't forget to update:
+#   - <meta property="og:url"> in docs/index.html
+#   - og:image URL and twitter:image URL in docs/index.html
+#   - README link

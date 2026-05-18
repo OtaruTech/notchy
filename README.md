@@ -15,6 +15,8 @@
 A free, open-source macOS notch utility for Apple-Silicon MacBooks.
 NotchNook-style — Now Playing, **clipboard manager (⌘⇧V)**, file drop tray, AirPods burst, calendar, timer, camera mirror, system stats — all from the notch.
 
+**🌐 [otarutech.github.io/notchy](https://otarutech.github.io/notchy/)** — visual tour, screenshots, download.
+
 <img src="docs/images/01-live-activity.png" width="500" alt="Live Activity strip in the notch">
 
 </div>
