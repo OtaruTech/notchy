@@ -2,6 +2,28 @@
 
 All notable changes to Notchy. Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [0.3.1] — 2026-05-18
+
+### Fixed
+- **True click-through** outside the notch panel — desktop / menu bar / app windows underneath the notch area now receive clicks normally. Two-window architecture: main panel uses `ignoresMouseEvents` toggling for full transparency, a separate tiny invisible panel sits only over the hardware notch to detect dragged files.
+- **Drag-and-drop** detection restored — previously broken because `ignoresMouseEvents = true` was disabling drag events too. The new dedicated drag-target panel solves this without sacrificing click-through.
+- **Drop tray no longer auto-dismisses** when cursor leaves the area. Stays open until you press Esc, click outside, or hit Clear all.
+- **Per-file delete (×)** button on each drop chip (hover to reveal). One-click removal of a single file without "Clear all".
+- **Real Finder icons** on drop chips instead of generic gray placeholders.
+- **Clipboard panel** kind-filter chips: All / Text / Links / Images / Files / Colors / Code / Rich with live counts. Click a chip to scope the card row.
+- **Clipboard panel** widened to 880×320 with bigger 152×180pt cards and accent-coloured stripes per kind.
+- **Clipboard panel** hover-leave no longer collapses the panel mid-interaction (matches Paste.app behaviour).
+- **Clipboard panel** correct top padding via `ScreenGeometry.liveNotchHeight()` — search field no longer hides behind the notch.
+- **Clipboard 1-9 / Enter / Esc** now reliably trigger paste; root cause was Notchy not being frontmost. Now temporarily becomes a regular activation-policy app while the panel is open.
+- **Tab bar suppressed** when the clipboard panel is the active state (it has its own footer hint row).
+
+### Added
+- **Phase-A CloudKit prep** — SQLite schema v1 → v2 with `cloud_record_id`, `cloud_modified_at`, `needs_sync` columns. `SyncEngine` protocol + `NoopSyncEngine` (active) + dormant `CloudKitSyncEngine` stub + `CloudKitMapping` for `CKRecord` ↔ `ClipboardItem`. Activation is a one-line swap in AppDelegate once a paid Apple Developer account is provisioned.
+- **GitHub Pages landing site** at [`otarutech.github.io/notchy`](https://otarutech.github.io/notchy/) — hero, 8-card feature grid, three spotlight sections, trust strip, download with Gatekeeper bypass tip.
+- **Custom og-image** (1200×630) for social sharing — crescent moon + notch shape + Notchy wordmark.
+- **Favicon set** (32 / 180 / 512px).
+- **README**: clearer first-launch Gatekeeper bypass instructions for users downloading the release zip.
+
 ## [0.3.0] — 2026-05-17
 
 ### Added
