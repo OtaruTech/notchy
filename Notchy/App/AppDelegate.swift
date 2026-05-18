@@ -41,7 +41,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     let audioOutput = AudioOutputBridge()
     let hudFeature = HUDFeature()
     private var volumeMonitor: VolumeMonitor?
+    private var mediaKeyMonitor: MediaKeyMonitor?
     private var hudWindowController: HUDWindowController?
+    private var lastBrightness: Double = 0.5
+    private var lastKeyboardBacklight: Double = 0.5
     let lyricsBridge = LyricsBridge()
     private(set) var lyricsFeature: LyricsFeature!
     private(set) var clipboardStore: ClipboardStore!
@@ -93,6 +96,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         vm.start()
         volumeMonitor = vm
+
+        // Brightness + keyboard backlight HUDs — system media keys do the
+        // actual adjustment (we can't suppress the system OSD), we just
+        // mirror it in the notch HUD.
+        let mk = MediaKeyMonitor()
+        mk.onKey = { [weak self] key in self?.handleMediaKey(key) }
+        mk.start()
+        mediaKeyMonitor = mk
+        // Seed last-known values so the very first key press shows a
+        // reasonable level even before the read settles.
+        if let b = BrightnessReader.currentBrightness() { lastBrightness = b }
+        if let kb = KeyboardBacklightReader.currentLevel() { lastKeyboardBacklight = kb }
 
         lyricsFeature = LyricsFeature(bridge: lyricsBridge, mediaFeature: mediaFeature)
         lyricsFeature.start()
@@ -533,6 +548,28 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.setActivationPolicy(.accessory)
         let restore = UserDefaults.standard.object(forKey: "notchy.clipboardRestore") as? Bool ?? true
         PasteEngine.paste(item: item, to: target, restorePrevious: restore)
+    }
+
+    /// Read the new brightness / backlight level after a short delay so the
+    /// system has time to apply the change, then push to HUDFeature. We don't
+    /// know the exact value at key-down; reading immediately would race.
+    private func handleMediaKey(_ key: MediaKeyMonitor.Key) {
+        switch key {
+        case .brightnessUp, .brightnessDown:
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) { [weak self] in
+                guard let self else { return }
+                let level = BrightnessReader.currentBrightness() ?? self.lastBrightness
+                self.lastBrightness = level
+                self.hudFeature.show(HUDEvent(kind: .brightness, level: level))
+            }
+        case .keyboardBacklightUp, .keyboardBacklightDown:
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) { [weak self] in
+                guard let self else { return }
+                let level = KeyboardBacklightReader.currentLevel() ?? self.lastKeyboardBacklight
+                self.lastKeyboardBacklight = level
+                self.hudFeature.show(HUDEvent(kind: .keyboardBacklight, level: level))
+            }
+        }
     }
 
     @objc func toggleClipboardPaused() {
