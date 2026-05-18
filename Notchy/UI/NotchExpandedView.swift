@@ -88,6 +88,11 @@ struct NotchExpandedView: View {
                 style: .continuous
             )
         )
+        // Click-through while collapsed so the panel doesn't trap mouse events
+        // over the desktop. Drag-and-drop is unaffected because the
+        // DragInterceptView intercepts drags via NSDraggingDestination, which
+        // bypasses hit-testing entirely.
+        .allowsHitTesting(state.isExpanded)
     }
 
     private var width: CGFloat {

@@ -37,9 +37,13 @@ final class NotchWindowController {
             p.isOpaque = false
             p.backgroundColor = .clear
             p.hasShadow = false
-            // Start opaque-to-events false; AppDelegate toggles based on state.
-            // Initial state is .idle so set true here.
-            p.ignoresMouseEvents = true
+            // Panel mouse events MUST stay enabled even when collapsed so the
+            // drag-and-drop intermediary can detect files dragged over the
+            // notch. The SwiftUI content uses `.allowsHitTesting(false)` in
+            // collapsed states to let clicks fall through to the desktop, and
+            // DragInterceptView's hitTest returns nil to pass clicks to
+            // SwiftUI rather than trapping them.
+            p.ignoresMouseEvents = false
             p.isMovable = false
             p.isReleasedWhenClosed = false
             p.contentView = FirstMouseHostingView(rootView: rootView())
@@ -55,13 +59,12 @@ final class NotchWindowController {
         panel?.orderOut(nil)
     }
 
-    /// Toggle whether the panel intercepts mouse events. When idle the panel
-    /// should let clicks pass through to the desktop / menu-bar; when expanded
-    /// it needs to receive button clicks, scrubber drags, etc.
+    /// Bring the panel key when entering an expanded state so SwiftUI button
+    /// clicks fire. Click-through in collapsed state is handled by the SwiftUI
+    /// `.allowsHitTesting(false)` modifier — we don't toggle ignoresMouseEvents
+    /// any more because doing so disables drag-and-drop detection too.
     func setIgnoresMouseEvents(_ ignore: Bool) {
-        panel?.ignoresMouseEvents = ignore
         if !ignore {
-            // Become key so SwiftUI buttons fire on click.
             panel?.makeKeyAndOrderFront(nil)
         }
     }
@@ -71,7 +74,6 @@ final class NotchWindowController {
     /// rather than getting eaten by Notchy.
     func resignKey() {
         panel?.resignKey()
-        panel?.ignoresMouseEvents = true
     }
 
     /// Expanded panel area is wider/taller than the notch — we always allocate the
