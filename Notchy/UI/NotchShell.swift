@@ -16,6 +16,7 @@ struct NotchShell: View {
     let systemStatus: SystemStatusFeature
     let clipboardFeature: ClipboardFeature
     let onClipboardPaste: (ClipboardItem) -> Void
+    let onClipboardCopy: (ClipboardItem) -> Void
     let onClipboardDismiss: () -> Void
     let hudFeature: HUDFeature
     @AppStorage("notchy.gaugeEnabled") private var gaugeEnabled = true
@@ -48,6 +49,7 @@ struct NotchShell: View {
                 systemStatus: systemStatus,
                 clipboardFeature: clipboardFeature,
                 onClipboardPaste: onClipboardPaste,
+                onClipboardCopy: onClipboardCopy,
                 onClipboardDismiss: onClipboardDismiss,
                 hudFeature: hudFeature,
                 availableTabs: availableTabs,

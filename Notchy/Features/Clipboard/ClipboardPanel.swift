@@ -6,6 +6,7 @@ import SwiftUI
 struct ClipboardPanel: View {
     @Bindable var feature: ClipboardFeature
     let onPaste: (ClipboardItem) -> Void
+    let onCopy: (ClipboardItem) -> Void
     let onDismiss: () -> Void
 
     private static let allKinds: [ClipboardItem.Kind?] =
@@ -78,13 +79,22 @@ struct ClipboardPanel: View {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 10) {
                             ForEach(Array(feature.displayed.enumerated()), id: \.element.id) { idx, item in
-                                Button { onPaste(item) } label: {
-                                    ItemCard(item: item,
-                                             slot: idx < 9 ? idx + 1 : nil,
-                                             selected: idx == feature.selectedIndex)
+                                Button { onCopy(item) } label: {
+                                    ZStack {
+                                        ItemCard(item: item,
+                                                 slot: idx < 9 ? idx + 1 : nil,
+                                                 selected: idx == feature.selectedIndex)
+                                        if feature.lastCopiedID == item.id {
+                                            copiedBadge
+                                                .transition(.opacity.combined(with: .scale(scale: 0.85)))
+                                        }
+                                    }
+                                    .animation(.easeOut(duration: 0.15),
+                                               value: feature.lastCopiedID == item.id)
                                 }
                                 .buttonStyle(.plain)
                                 .id(idx)
+                                .help("Click to copy · ↩ to paste")
                                 .onHover { hovering in
                                     if hovering { feature.selectedIndex = idx }
                                 }
@@ -123,6 +133,7 @@ struct ClipboardPanel: View {
 
     private var footerHints: some View {
         HStack(spacing: 12) {
+            hint("click", "copy")
             hint("↩", "paste")
             hint("1–9", "quick paste")
             hint("← →", "select")
@@ -132,6 +143,26 @@ struct ClipboardPanel: View {
         .font(.system(size: 10))
         .foregroundStyle(.white.opacity(0.35))
         .padding(.horizontal, 2)
+    }
+
+    /// Centered "Copied" pill that overlays the card for ~1.2s after click.
+    /// Subtle so it doesn't feel like a modal — just a confirmation that the
+    /// pasteboard now holds this item.
+    private var copiedBadge: some View {
+        HStack(spacing: 4) {
+            Image(systemName: "checkmark")
+                .font(.system(size: 10, weight: .bold))
+            Text("Copied")
+                .font(.system(size: 11, weight: .semibold))
+        }
+        .foregroundStyle(.white)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 5)
+        .background(
+            Capsule()
+                .fill(.green.opacity(0.85))
+                .shadow(color: .black.opacity(0.3), radius: 4, y: 1)
+        )
     }
 
     private func hint(_ key: String, _ label: String) -> some View {

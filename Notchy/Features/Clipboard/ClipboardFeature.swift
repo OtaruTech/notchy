@@ -15,6 +15,26 @@ final class ClipboardFeature {
     /// (←/→ arrows) and the panel itself (hover / direct click).
     var selectedIndex: Int = 0
 
+    /// ID of the most recently clicked-to-copy item, cleared after ~1.2s.
+    /// Used by the panel to show a transient "Copied" badge on the card.
+    var lastCopiedID: UUID? = nil
+
+    private var copyClearTask: Task<Void, Never>?
+
+    /// Marks `id` as just-copied and schedules a clear after `seconds`.
+    /// Idempotent — calling again resets the timer.
+    func markCopied(_ id: UUID, after seconds: Double = 1.2) {
+        copyClearTask?.cancel()
+        lastCopiedID = id
+        copyClearTask = Task { [weak self] in
+            try? await Task.sleep(for: .seconds(seconds))
+            guard !Task.isCancelled else { return }
+            await MainActor.run {
+                if self?.lastCopiedID == id { self?.lastCopiedID = nil }
+            }
+        }
+    }
+
     var query: String = "" {
         didSet {
             selectedIndex = 0

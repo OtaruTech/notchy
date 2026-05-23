@@ -18,6 +18,7 @@ struct NotchExpandedView: View {
     let systemStatus: SystemStatusFeature
     let clipboardFeature: ClipboardFeature
     let onClipboardPaste: (ClipboardItem) -> Void
+    let onClipboardCopy: (ClipboardItem) -> Void
     let onClipboardDismiss: () -> Void
     let hudFeature: HUDFeature
     let availableTabs: [NotchState]
@@ -222,6 +223,7 @@ struct NotchExpandedView: View {
             ClipboardPanel(
                 feature: clipboardFeature,
                 onPaste: onClipboardPaste,
+                onCopy: onClipboardCopy,
                 onDismiss: onClipboardDismiss
             )
         default: EmptyView()

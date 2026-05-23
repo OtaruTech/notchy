@@ -58,6 +58,15 @@ enum PasteEngine {
         return true
     }
 
+    /// Writes the item to the system pasteboard WITHOUT synthesising a paste
+    /// or stealing focus. Used by the panel's click handler — the user can
+    /// then paste manually wherever they choose. Keyboard ↩ / 1-9 still go
+    /// through `paste(item:to:restorePrevious:)` for one-shot "paste and
+    /// dismiss" behaviour.
+    static func copy(item: ClipboardItem) {
+        writeToPasteboard(item)
+    }
+
     // MARK: pasteboard I/O
 
     private static func writeToPasteboard(_ item: ClipboardItem) {

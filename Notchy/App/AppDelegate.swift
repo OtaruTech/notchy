@@ -53,6 +53,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var volumeMonitor: VolumeMonitor?
     private var mediaKeyMonitor: MediaKeyMonitor?
     private var hudWindowController: HUDWindowController?
+    let notificationFeature = NotificationFeature()
+    private var notificationCenter: ExternalNotificationCenter?
+    private var notificationWindowController: NotificationWindowController?
     private var lastBrightness: Double = 0.5
     private var lastKeyboardBacklight: Double = 0.5
     let lyricsBridge = LyricsBridge()
@@ -100,6 +103,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // via @Bindable; main panel doesn't have to know about HUD events.
         hudWindowController = HUDWindowController(feature: hudFeature)
         hudWindowController?.show()
+
+        // External notification inbox — Claude Code hook (and other producers)
+        // drop JSON files into ~/Library/Application Support/tech.otaru.Notchy/
+        // inbox/; the watcher routes them into the pill panel.
+        let nwc = NotificationWindowController(feature: notificationFeature)
+        nwc.show()
+        notificationWindowController = nwc
+        let nc = ExternalNotificationCenter()
+        nc.onReceive = { [weak self] note in
+            self?.notificationFeature.push(note)
+        }
+        nc.start()
+        notificationCenter = nc
 
         // System status monitors — populate SystemStatusFeature in the
         // background; dashboard reads from it.
@@ -266,6 +282,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 clipboardFeature: clip,
                 onClipboardPaste: { [weak self] item in
                     self?.performClipboardPaste(item)
+                },
+                onClipboardCopy: { [weak self] item in
+                    self?.performClipboardCopy(item)
                 },
                 onClipboardDismiss: { [weak self] in
                     self?.dismissClipboardPanel()
@@ -585,6 +604,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // Drop back to accessory so we don't appear in Cmd-Tab.
         NSApp.setActivationPolicy(.accessory)
         target?.activate(options: [.activateAllWindows])
+    }
+
+    /// Click-to-copy: just writes the item to the system pasteboard.
+    /// Keeps the panel open and doesn't switch focus — the user can copy
+    /// multiple items in succession or paste manually wherever they want.
+    /// Hard "paste-and-dismiss" still lives on ↩ / 1-9 (performClipboardPaste).
+    private func performClipboardCopy(_ item: ClipboardItem) {
+        _clipLog("performCopy kind=\(item.kind.rawValue)")
+        PasteEngine.copy(item: item)
+        clipboardFeature.markCopied(item.id)
     }
 
     private func performClipboardPaste(_ item: ClipboardItem) {
