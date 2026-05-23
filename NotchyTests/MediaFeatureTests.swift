@@ -1,15 +1,16 @@
 import Testing
+import Foundation
 @testable import Notchy
 
 @MainActor
 struct MediaFeatureTests {
     @Test func progressZeroWhenNoDuration() {
-        let vm = NowPlayingVM(title: "x", artist: "", album: "", elapsed: 5, duration: 0, isPlaying: true)
+        let vm = NowPlayingVM(title: "x", artist: "", album: "", elapsed: 5, duration: 0, isPlaying: true, snapshotDate: Date())
         #expect(vm.progress == 0)
     }
 
     @Test func progressHalfway() {
-        let vm = NowPlayingVM(title: "x", artist: "", album: "", elapsed: 5, duration: 10, isPlaying: true)
+        let vm = NowPlayingVM(title: "x", artist: "", album: "", elapsed: 5, duration: 10, isPlaying: true, snapshotDate: Date())
         #expect(vm.progress == 0.5)
     }
 

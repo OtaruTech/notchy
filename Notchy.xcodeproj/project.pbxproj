@@ -77,6 +77,7 @@
 		9E3AA5B20ED3797BCF116768 /* NotificationWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7078ACFAB62BC203B324093A /* NotificationWindowController.swift */; };
 		9E631D722C37C2996A5690B0 /* SemVer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E00D818AE833226C59E307 /* SemVer.swift */; };
 		9F1E5F1E5684C182D7EF4C9A /* ItemCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3A3278F5F109DD0119B52A /* ItemCard.swift */; };
+		A6AA078ADBE005E4522C3B9A /* NotificationWindowControllerClickThroughTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FF13311F9EDA62DD35CC1B4 /* NotificationWindowControllerClickThroughTests.swift */; };
 		A9616755EA9FE40F36717C23 /* MeetingURLExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED52CB1C501A9376608C42D6 /* MeetingURLExtractor.swift */; };
 		AE5E569382057FFA90EAF8A8 /* PomodoroStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CBE9F4AF3BF9A8E8A4814B0 /* PomodoroStats.swift */; };
 		B17102BEF2E5EE30EA6B5A03 /* CaffeineController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0B2A5D84AF88FC31E6E407 /* CaffeineController.swift */; };
@@ -178,6 +179,7 @@
 		5D9705394CEBEC362E7C42D2 /* MediaRemoteBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaRemoteBridge.swift; sourceTree = "<group>"; };
 		5EBC17BE3C8BA0AA132DA193 /* DropFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropFeature.swift; sourceTree = "<group>"; };
 		5ED71AE5031B1A0A16CD8609 /* PasteEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteEngine.swift; sourceTree = "<group>"; };
+		5FF13311F9EDA62DD35CC1B4 /* NotificationWindowControllerClickThroughTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationWindowControllerClickThroughTests.swift; sourceTree = "<group>"; };
 		63ACAEC959171F6D5E21EF15 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		63EABB2063931DFB30DAC6DB /* DropFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropFeatureTests.swift; sourceTree = "<group>"; };
 		6633BDBED265ECF9E7B5D9E0 /* NotchShell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchShell.swift; sourceTree = "<group>"; };
@@ -357,6 +359,7 @@
 				D45A277B816298254CE708D9 /* MediaFeatureTests.swift */,
 				987883E6E877E89AC16FBF27 /* MediaRemoteBridgeTests.swift */,
 				F444436267456B4A7969E2BF /* NotchStateMachineTests.swift */,
+				5FF13311F9EDA62DD35CC1B4 /* NotificationWindowControllerClickThroughTests.swift */,
 				5A477BB9F4F3C4290E5196ED /* Placeholder.swift */,
 				EB210D67BB9058034F788290 /* ScreenGeometryTests.swift */,
 				E3442410EB733AC1751A9511 /* SystemMonitorTests.swift */,
@@ -846,6 +849,7 @@
 				5D6B9A13CA6B3BC91D023208 /* MediaFeatureTests.swift in Sources */,
 				0E614FC36B1E07D76EF6AF98 /* MediaRemoteBridgeTests.swift in Sources */,
 				B410B694159C4D693BB0B4A5 /* NotchStateMachineTests.swift in Sources */,
+				A6AA078ADBE005E4522C3B9A /* NotificationWindowControllerClickThroughTests.swift in Sources */,
 				D75585D988EBF9575F091BE8 /* Placeholder.swift in Sources */,
 				F29841C20EF81367D1331F67 /* ScreenGeometryTests.swift in Sources */,
 				D810728D8C29AB9C479A9B94 /* SystemMonitorTests.swift in Sources */,

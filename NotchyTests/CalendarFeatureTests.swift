@@ -1,4 +1,5 @@
 import Testing
+import Foundation
 @testable import Notchy
 
 @MainActor
@@ -7,8 +8,10 @@ struct CalendarFeatureTests {
         let vm = EventVM(
             id: "x", title: "Standup",
             startTime: "10:00 AM", endTime: "10:30 AM",
+            startDate: Date(), endDate: Date().addingTimeInterval(1800),
             calendarColorRGBA: [0, 1, 0, 1],
-            isInProgress: false
+            isInProgress: false,
+            joinURL: nil
         )
         #expect(vm.title == "Standup")
         #expect(vm.startTime == "10:00 AM")
@@ -18,8 +21,10 @@ struct CalendarFeatureTests {
         let vm = EventVM(
             id: "x", title: "T",
             startTime: "10:00 AM", endTime: "10:30 AM",
+            startDate: Date(), endDate: Date().addingTimeInterval(1800),
             calendarColorRGBA: [0.2, 0.4, 0.8, 1],
-            isInProgress: true
+            isInProgress: true,
+            joinURL: nil
         )
         let color = vm.calendarColor
         #expect(color.components?[0] == 0.2)

@@ -1,9 +1,26 @@
 import AppKit
 import SwiftUI
+import Observation
 
 /// Dedicated NSPanel that hosts the notification pill. Sits at statusBar+1
-/// level (same as HUD) but receives mouse events so the user can click to
-/// focus the source terminal / dismiss.
+/// level (same as HUD).
+///
+/// ## Click-through behaviour
+///
+/// **The panel must NOT consume mouse events when no notification is visible.**
+/// Otherwise the panel's frame (420 × ~148 pt under the notch) silently swallows
+/// every click in that region, even though SwiftUI is drawing nothing — apps
+/// behind the panel become un-interactive. We hit this once and lost an afternoon
+/// to it; the regression test `NotificationWindowControllerClickThroughTests`
+/// catches a re-occurrence.
+///
+/// Implementation: `panel.ignoresMouseEvents` is **bound** to `feature.current`
+/// via `withObservationTracking`. When `feature.current == nil` the panel is
+/// transparent to events; when a pill is showing it captures clicks so the user
+/// can dismiss / focus the source terminal. The SwiftUI-level
+/// `.allowsHitTesting` on the root view is NOT sufficient — AppKit's window-
+/// level hit testing claims the event for the panel's NSWindow before SwiftUI
+/// gets to decide.
 ///
 /// Repositioned on every `show()` to handle multi-display setups + display
 /// reconfiguration.
@@ -49,12 +66,11 @@ final class NotificationWindowController {
             p.isOpaque = false
             p.backgroundColor = .clear
             p.hasShadow = false
-            // Mouse events ENABLED — user clicks the pill to focus terminal.
-            // The empty space around the pill stays click-through via the
-            // root view's hit-testing (pill itself draws the only opaque area).
-            p.ignoresMouseEvents = false
             p.becomesKeyOnlyIfNeeded = true
             p.isReleasedWhenClosed = false
+
+            // Default: click-through. Toggled to false only while a pill is up.
+            p.ignoresMouseEvents = true
 
             let root = NotificationPanelRoot(feature: feature, topPadding: notchH + 8)
             let host = NSHostingView(rootView: root)
@@ -62,10 +78,49 @@ final class NotificationWindowController {
             host.autoresizingMask = [.width, .height]
             p.contentView = host
             panel = p
+
+            startObserving()
         } else {
             panel?.setFrame(frame, display: true)
         }
         panel?.orderFront(nil)
+    }
+
+    /// Observe `feature.current` and keep `panel.ignoresMouseEvents` inverted
+    /// to its non-nil-ness. Re-arms itself on every change — that's how
+    /// `withObservationTracking` works with the `@Observable` macro.
+    ///
+    /// Exposed `internal` for the unit test to drive deterministically.
+    func startObserving() {
+        applyMouseGate()
+        withObservationTracking { [weak self] in
+            // Read the property INSIDE the tracking block so the dependency
+            // is registered. Storing it nowhere is fine.
+            _ = self?.feature.current
+        } onChange: { [weak self] in
+            // onChange fires once per change, on the calling actor's queue.
+            Task { @MainActor [weak self] in
+                self?.applyMouseGate()
+                self?.startObserving()      // re-arm
+            }
+        }
+    }
+
+    /// Single source of truth for the mouse-event gate. Exposed `internal` so
+    /// the unit test can force-recompute after pushing a notification without
+    /// having to drive the observation runtime.
+    func applyMouseGate() {
+        let showing = feature.current != nil
+        panel?.ignoresMouseEvents = !showing
+    }
+
+    /// `true` ⇒ the panel passes mouse events through to apps below.
+    /// `false` ⇒ the pill is up and the panel is capturing clicks.
+    /// Backed by `NSPanel.ignoresMouseEvents`. The regression test
+    /// `NotificationWindowControllerClickThroughTests` asserts this returns
+    /// `true` when there is no current notification (the bug we fixed).
+    var isClickThrough: Bool {
+        panel?.ignoresMouseEvents ?? true
     }
 }
 
@@ -92,9 +147,5 @@ struct NotificationPanelRoot: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .animation(.spring(response: 0.4, dampingFraction: 0.78), value: feature.current?.id)
-        // Block hit-testing outside the pill so the rest of the panel stays
-        // click-through. The pill itself is a SwiftUI Button so it consumes
-        // its own clicks.
-        .allowsHitTesting(feature.current != nil)
     }
 }

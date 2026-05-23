@@ -1,4 +1,5 @@
 import Testing
+import Foundation
 import SwiftUI
 import SnapshotTesting
 @testable import Notchy
@@ -6,11 +7,14 @@ import SnapshotTesting
 @MainActor
 struct CalendarViewSnapshots {
     @Test func twoEvents() {
+        let now = Date()
         let evs = [
             EventVM(id: "a", title: "Standup", startTime: "10:00 AM", endTime: "10:30 AM",
-                    calendarColorRGBA: [0.2, 0.7, 1, 1], isInProgress: true),
+                    startDate: now, endDate: now.addingTimeInterval(1800),
+                    calendarColorRGBA: [0.2, 0.7, 1, 1], isInProgress: true, joinURL: nil),
             EventVM(id: "b", title: "Design review with team", startTime: "2:00 PM", endTime: "3:00 PM",
-                    calendarColorRGBA: [1, 0.4, 0.3, 1], isInProgress: false)
+                    startDate: now.addingTimeInterval(14400), endDate: now.addingTimeInterval(18000),
+                    calendarColorRGBA: [1, 0.4, 0.3, 1], isInProgress: false, joinURL: nil)
         ]
         let v = CalendarView(events: evs, onEventTap: { _ in })
             .frame(width: 540, height: 180)
