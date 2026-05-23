@@ -81,8 +81,8 @@
     </li>
     <li class="feature">
       <div class="feature__icon">📋</div>
-      <h3>Clipboard manager</h3>
-      <p>⌘⇧V opens a Paste-style horizontal card strip with your last 100 copies. Text, URLs, images, files, colours, code. Privacy by design.</p>
+      <h3>Clipboard manager <span style="font-size:11px; padding:2px 6px; background:var(--accent); color:#000; border-radius:6px; vertical-align:middle">v0.7</span></h3>
+      <p>⌘⇧V opens a Paste-style horizontal card strip with your last 100 copies. <strong>Click → copies</strong>, <strong>↩ / 1–9 → pastes</strong> into the previous app. Text, URLs, images, files, colours, code. Local SQLite, zero network, default-blocks password managers.</p>
     </li>
     <li class="feature">
       <div class="feature__icon">🎵</div>
@@ -161,17 +161,19 @@
 <section class="spotlight" id="clipboard">
   <div class="spotlight__inner spotlight__inner--reverse">
     <div class="spotlight__copy">
-      <p class="spotlight__eyebrow">New in v0.3</p>
-      <h2 class="spotlight__title">A clipboard manager that lives in your notch.</h2>
+      <p class="spotlight__eyebrow">Clipboard · refined in v0.7</p>
+      <h2 class="spotlight__title">Paste, on your terms.</h2>
       <p class="spotlight__text">
-        Press <kbd>⌘</kbd>+<kbd>⇧</kbd>+<kbd>V</kbd>. The panel drops out from under
-        the notch with your last 100 copies as a horizontal card strip. Filter by
-        kind, hit a number key to paste, hit Enter to paste what you're hovering on.
+        Press <kbd>⌘</kbd>+<kbd>⇧</kbd>+<kbd>V</kbd>. The panel drops out from
+        under the notch with your last 100 copies as a horizontal card strip.
+        Two interaction modes, both fast — pick whichever fits the moment.
       </p>
       <ul class="bullets">
-        <li><strong>Six item kinds</strong> — text, URL, image, file, colour, code — each with a tailored preview.</li>
-        <li><strong>Smart paste</strong> — pastes back into the previously-focused app, then restores your prior clipboard 80 ms later.</li>
-        <li><strong>Privacy first</strong> — local SQLite, zero network. Default-excludes 1Password, Bitwarden, Keychain, LastPass.</li>
+        <li><strong>🖱 Click a card → just copies.</strong> Panel stays open, focus stays put. A green ✓ Copied badge flashes on the card. Use this when you want to copy several things, or paste manually in a non-trivial way.</li>
+        <li><strong>⌨️ <kbd>↩</kbd> or <kbd>1</kbd>–<kbd>9</kbd> → copies AND pastes</strong> into the previously-focused app, then dismisses. The fire-and-forget power path.</li>
+        <li><strong>Six item kinds with previews</strong> — text, URL, image, file, colour, code. Code is auto-detected by line count + punctuation density.</li>
+        <li><strong>Previous clipboard restored</strong> ~80 ms after a real paste so your workflow doesn't lose context (toggleable).</li>
+        <li><strong>Privacy first</strong> — local SQLite, zero network. Default-excludes 1Password, Bitwarden, Keychain, LastPass. Respects <code>org.nspasteboard.ConcealedType</code>.</li>
         <li><strong>SHA-256 dedupe</strong> — copying the same string twice bumps the row; doesn't duplicate.</li>
         <li><strong>Retention purge</strong> — 7 / 30 / 90 days or never. Pause toggle in the menu bar.</li>
       </ul>

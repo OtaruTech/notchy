@@ -2,6 +2,21 @@
 
 All notable changes to Notchy. Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [Unreleased] — v0.7
+
+### Changed — Clipboard interaction model
+
+- **Click a card → copies only**, panel stays open. The hard "paste & dismiss" path now lives exclusively on the keyboard (`↩` and `1`–`9`). Rationale: clicks were ambiguous — sometimes you just want the item on the clipboard to paste manually elsewhere, not blindly into the previously-focused app. Mouse and keyboard now serve two distinct, predictable workflows.
+- A transient green **"✓ Copied"** badge flashes on the card after a click so the action is acknowledged without a modal or focus shift.
+- Footer hint row now starts with `click  copy` to surface the new behavior alongside the existing `↩ paste · 1–9 quick paste · ← → select · esc close`.
+
+### Added — External notification inbox
+
+- Notchy now watches `~/Library/Application Support/tech.otaru.Notchy/inbox/` for JSON files dropped by external producers and renders them as pills below the notch.
+- Five notification kinds (`info` / `inputNeeded` / `toolApproval` / `complete` / `error`) drive color, icon, and default sticky/TTL behaviour. Click a pill to dismiss and (if a `cwd` was attached) focus the originating terminal at that directory.
+- First integration: a **Claude Code Notification hook** bridge that surfaces "Claude is waiting for your input" / tool-approval / errors as pills under the notch instead of (or alongside) system notifications. Hook script lives in the `everything-claude-code` repo; users register it in `~/.claude/settings.json`.
+- The inbox is producer-agnostic — any CLI, cron job, or build watcher can drop a JSON file and Notchy will render it.
+
 ## [0.6.0] — 2026-05-18
 
 ### Added — Daily polish

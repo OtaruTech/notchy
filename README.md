@@ -57,13 +57,19 @@ Album art + waveform flank the physical notch while music plays. Hover to expand
 - **Two-finger horizontal swipe** over the notch → next / previous track
 - **Pause keeps controls visible** so you can re-play without re-summoning
 
-### 📋 Clipboard manager (new in v0.3)
+### 📋 Clipboard manager (new in v0.3, refined in v0.7)
 
 Press **⌘⇧V** anywhere — the panel drops down from under the notch with your last 100 copies as a horizontal card row. Paste-app workflow, anchored on the notch instead of floating mid-screen.
 
+**Two interaction modes — pick whichever fits the moment:**
+
+- 🖱 **Click a card → just copies** to the system clipboard. The panel stays open and focus stays put. A green "✓ Copied" badge flashes on the card so you know it landed. Use this when you want to copy several things in succession, or when you'll paste manually in a non-trivial way (e.g. into a specific text field, with formatting changes, into a different app than the previously-focused one).
+- ⌨️ **`↩` or `1`–`9` → copies AND pastes** into the previously-focused app, then dismisses. The "fire and forget" power-user path.
+- **Previous clipboard restored** ~80 ms after a real paste so your workflow doesn't lose context (toggleable).
+
+**Everything else:**
+
 - **Six item kinds with kind-aware previews** — text, URL, image, file, colour (hex/rgb), code (auto-detected by line count + punctuation density)
-- **Quick paste** — `1`–`9` slots on each card; press the number or click to paste back into the previously-focused app
-- **Previous clipboard restored** ~80 ms after the paste so your workflow doesn't lose context (toggleable)
 - **Privacy by design** — default-excludes 1Password, Bitwarden, Keychain Access, LastPass; respects the `org.nspasteboard.ConcealedType` UTI hint; all data lives in a local SQLite file (`~/Library/Application Support/tech.otaru.Notchy/clipboard.sqlite`, mode 0600); zero network
 - **SHA-256 dedupe** — copy the same string twice and the row is bumped, not duplicated
 - **Retention** — auto-purge items older than 7 / 30 / 90 days, or never delete
@@ -198,7 +204,11 @@ If a prompt doesn't appear, add Notchy manually in **System Settings → Privacy
 | **⌘⇧V** anywhere | Open clipboard panel |
 | **⌘⌥N** / **⌘⌥M** | Toggle Dashboard / Mirror |
 | **⌘⌥K** | Toggle Caffeine (keep Mac awake) |
-| In clipboard panel: `1`–`9` | Paste that item directly |
+| In clipboard panel: click a card | **Copy** to clipboard (panel stays open) |
+| In clipboard panel: `↩` | Copy + paste into previous app, then dismiss |
+| In clipboard panel: `1`–`9` | Same as ↩, but on the numbered slot |
+| In clipboard panel: `← / →` | Move selection |
+| In clipboard panel: `esc` | Close panel |
 | In clipboard panel: `↩` | Paste selected, restore prior clipboard |
 | In clipboard panel: type to search | Filter live across content + source app |
 | Click ▶ / ⏸ / ⏪ / ⏩ | Control playback |
